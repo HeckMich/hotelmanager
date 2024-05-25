@@ -8,6 +8,7 @@ public class Main {
 //YOLO
     public static void main(String[] args) {
         System.out.println("Test");
+        System.out.println("Test22222");
         /* TO DO
             -) Connect Database
             -) Klasse zur Tabelle erstellen!
