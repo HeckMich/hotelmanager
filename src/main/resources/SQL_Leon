@@ -1,3 +1,4 @@
+DROP TABLE if exists invoice;
 DROP TABLE if exists reservation;
 DROP TABLE if exists will_attend;
 
@@ -40,9 +41,28 @@ CREATE TABLE guest (
 CREATE TABLE reservation (
 	guest_id int,
 	reservation_id serial,
-	start_date int,
-	end_date int,
+	start_date date,
+	end_date date,
 	room_nr int,
 	PRIMARY KEY(reservation_id),
 	FOREIGN KEY(guest_id) REFERENCES guest(guest_id)
+);
+
+CREATE TABLE invoice (
+	guest_id int,
+	reservation_id int,
+	invoice_id serial,
+	sum decimal(10,2),
+	PRIMARY KEY(reservation_id),
+	FOREIGN KEY(guest_id) REFERENCES guest(guest_id),
+	FOREIGN KEY(reservation_id) REFERENCES reservation(reservation_id)
+);
+
+
+CREATE TABLE will_attend (
+	reservation_id int,
+	event_id int,
+	PRIMARY KEY(reservation_id, event_id),
+	FOREIGN KEY(reservation_id) REFERENCES reservation(reservation_id),
+	FOREIGN KEY(event_id) REFERENCES event(event_id)
 );
