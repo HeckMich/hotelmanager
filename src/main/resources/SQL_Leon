@@ -1,0 +1,48 @@
+DROP TABLE if exists reservation;
+DROP TABLE if exists will_attend;
+
+DROP TABLE if exists event;
+DROP TABLE if exists guest;
+DROP TABLE if exists plz;
+DROP TABLE if exists room;
+
+CREATE TABLE room (
+	room_nr int, --In format 101, 102, 201, ... (no leading 0s)
+	max_occupants int not null,
+	cost decimal(5,2) not null,
+	PRIMARY KEY(room_nr)
+);
+
+CREATE TABLE event (
+	event_id serial,
+	name varchar(100) not null,
+	date date not null,
+	PRIMARY KEY(event_id)
+);
+
+CREATE TABLE plz (
+	plz varchar(10), -- Leading 0s (e.g. germany), up to 10 digits (e.g. USA)
+	city varchar(100) not null,
+	PRIMARY KEY(plz)
+);
+
+CREATE TABLE guest (
+	plz varchar(10) not null,
+	guest_id serial,
+	last_name varchar(50),
+	first_name varchar(50),
+	house_number int,
+	street varchar(100),
+	PRIMARY KEY(guest_id),
+	FOREIGN KEY(plz) REFERENCES plz(plz)
+);
+
+CREATE TABLE reservation (
+	guest_id int,
+	reservation_id serial,
+	start_date int,
+	end_date int,
+	room_nr int,
+	PRIMARY KEY(reservation_id),
+	FOREIGN KEY(guest_id) REFERENCES guest(guest_id)
+);
