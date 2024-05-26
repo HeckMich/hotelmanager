@@ -95,3 +95,78 @@ INSERT INTO will_attend(
 	(1,1)
 	;
 
+////////////////////////////////
+
+INSERT INTO service(
+	name, cost)
+	VALUES
+	('Massage', 65),
+	('Eoom Service', 39),
+	('Wake Up Call', 5),
+	('Breakfast in Room', 25),
+	('Golf-Lesson', 60),
+	('Tennis-Lesson', 50),
+	('Private Dinner', 90.99),
+	('Bird Watching', 39.99),
+	('Relax Spa', 44.44),
+	('Washing Machine', 9.99)
+	;
+
+INSERT INTO maintenance_type(
+	maintenance_type)
+	VALUES
+	('Room Cleaning'),
+	('Climate Repair'),
+	('Lighting Change'),
+	('Ventilation Repair'),
+	('Bathroom Restock'),
+	('Carpet Renewal'),
+	('Furniture Renewal'),
+	('Bed Deep Cleaning'),
+	('Plumbing'),
+	('Window Cleaning')
+	;
+
+INSERT INTO job(
+	name)
+	VALUES
+	('Receptionist'),
+	('Cleaner'),
+	('Masseur'),
+	('Mechanic'),
+	('Waiter')
+;
+
+
+
+INSERT INTO employee(
+	job_id, first_name, last_name)
+	VALUES
+	(1, 'Marie', 'Obergruber'),
+	(2, 'Anna', 'Schneider'),
+	(3, 'Jakob', 'Hoffmann'),
+	(4, 'David', 'Fischer'),
+	(5, 'Paul', 'Schneider'),
+	(1, 'Franz', 'Peters'),
+	(2, 'Ulrike', 'Obergruber'),
+	(3, 'Jost', 'Verstappen'),
+	(4, 'Marie', 'Hiroki'),
+	(5, 'Walter', 'Obrist')
+
+;
+
+INSERT INTO maintenance(
+	m_type_id, start_date, end_date, room_nr)
+	VALUES
+	(1, '2024-04-01', '2024-04-01', 206),
+	(2, '2024-04-02', '2024-04-03', 201),
+	(1, '2024-04-06', '2024-04-09', 203),
+	(4, '2024-04-06', '2024-04-10', 204),
+	(7, '2024-04-11', '2024-04-12', 204),
+	(7, '2024-04-12', '2024-04-13', 203),
+	(9, '2024-07-12', '2024-07-12', 101),
+	(2, '2024-08-12', '2024-04-13', 101),
+	(2, '2024-09-01', '2024-09-04', 102),
+	(2, '2024-09-10', '2024-09-13', 107)
+;
+
