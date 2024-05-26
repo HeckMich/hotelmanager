@@ -104,22 +104,6 @@ INSERT INTO will_attend(
 	(5,11)
 	;
 
-INSERT INTO invoice(
-	guest_id, reservation_id, sum)
-	VALUES
-		(1,1,1)
-
-	;
-
--- select * from reservation a
--- join guest b on a.guest_id = b.guest_id
-
--- select a.reservation_id, r.start_date, r.end_date, e.date, a.event_id
--- from will_attend a
--- join reservation r on a.reservation_id = r.reservation_id
--- join event e on a.event_id = e.event_id
-
-
 INSERT INTO service(
 	name, cost)
 	VALUES
@@ -242,3 +226,14 @@ INSERT INTO service_is_booked(
 	(10, 10)
 ;
 
+INSERT INTO invoice(
+	guest_id, reservation_id, sum)
+		(select a.guest_id,
+				a.reservation_id,
+				sum(d.cost) + sum(e.cost) --* (a.end_date::date - a.start_date::date)
+			from reservation a
+			join service_is_booked c on a.reservation_id = c.reservation_id
+			join service d on d.service_id = c.service_id
+			join room e on a.room_nr = e.room_nr
+			group by a.guest_id, a.reservation_id)
+	;
