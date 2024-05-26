@@ -92,16 +92,39 @@ INSERT INTO reservation(
 INSERT INTO will_attend(
 	reservation_id, event_id)
 	VALUES
-	(1,1)
+	(1,1),
+	(2,1),
+	(3,1),
+	(3,7),
+	(3,10),
+	(4,2),
+	(3,4),
+	(10,9),
+	(6,8),
+	(5,11)
 	;
 
-////////////////////////////////
+INSERT INTO invoice(
+	guest_id, reservation_id, sum)
+	VALUES
+		(1,1,1)
+
+	;
+
+-- select * from reservation a
+-- join guest b on a.guest_id = b.guest_id
+
+-- select a.reservation_id, r.start_date, r.end_date, e.date, a.event_id
+-- from will_attend a
+-- join reservation r on a.reservation_id = r.reservation_id
+-- join event e on a.event_id = e.event_id
+
 
 INSERT INTO service(
 	name, cost)
 	VALUES
 	('Massage', 65),
-	('Eoom Service', 39),
+	('Room Service', 39),
 	('Wake Up Call', 5),
 	('Breakfast in Room', 25),
 	('Golf-Lesson', 60),
@@ -160,7 +183,7 @@ INSERT INTO employee(
 INSERT INTO maintenance(
 	m_type_id, start_date, end_date, room_nr)
 	VALUES
-	(1, '2024-04-01', '2024-04-01', 206),
+	(1, '2024-04-01', '2024-04-01', 205),
 	(2, '2024-04-02', '2024-04-03', 201),
 	(1, '2024-04-06', '2024-04-09', 203),
 	(4, '2024-04-06', '2024-04-10', 204),
