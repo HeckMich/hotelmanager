@@ -1,20 +1,21 @@
--- DROP TABLE if exists invoice;
--- DROP TABLE if exists reservation;
--- DROP TABLE if exists will_attend;
+DROP TABLE if exists invoice;
+drop table if exists service_is_booked;
+DROP TABLE if exists will_attend;
+DROP TABLE if exists reservation;
 
--- DROP TABLE if exists event;
--- DROP TABLE if exists guest;
--- DROP TABLE if exists plz;
--- DROP TABLE if exists room;
+drop table if exists can_do_service;
+drop table if exists can_do_maintenance;
+drop table if exists service;
+drop table if exists employee;
+drop table if exists job;
+drop table if exists maintenance;
+drop table if exists maintenance_type;
 
--- drop table service_is_booked if exists;
--- drop table can_do_service if exists;
--- drop table can_do_maintenance if exists;
--- drop table service if exists;
--- drop table employee if exists;
--- drop table job if exists;
--- drop table maintenance if exists;
--- drop table maintenance_type if exists;
+
+DROP TABLE if exists event;
+DROP TABLE if exists guest;
+DROP TABLE if exists plz;
+DROP TABLE if exists room;
 
 CREATE TABLE room (
 	room_nr int, --In format 101, 102, 201, ... (no leading 0s)
