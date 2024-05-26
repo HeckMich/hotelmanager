@@ -1,6 +1,19 @@
-delete from room;
-delete from event;
-
+TRUNCATE TABLE
+	invoice,
+	service_is_booked,
+	will_attend,
+	reservation,
+	can_do_service,
+	can_do_maintenance,
+	service,
+	employee,
+	job,
+	maintenance,
+	maintenance_type,
+	guest,
+	plz,
+	room
+	RESTART IDENTITY;
 
 INSERT INTO room(
 	room_nr, max_occupants, cost)
