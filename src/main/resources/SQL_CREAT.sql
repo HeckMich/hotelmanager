@@ -18,7 +18,7 @@ DROP TABLE if exists plz;
 DROP TABLE if exists room;
 
 CREATE TABLE room (
-	room_nr int, --In format 101, 102, 201, ... (no leading 0s)
+	room_nr int not null, --In format 101, 102, 201, ... (no leading 0s)
 	max_occupants int not null,
 	cost decimal(5,2) not null,
 	PRIMARY KEY(room_nr)
@@ -32,7 +32,7 @@ CREATE TABLE event (
 );
 
 CREATE TABLE plz (
-	plz varchar(10), -- Leading 0s (e.g. germany), up to 10 digits (e.g. USA)
+	plz varchar(10) not null, -- Leading 0s (e.g. germany), up to 10 digits (e.g. USA)
 	city varchar(100) not null,
 	PRIMARY KEY(plz)
 );
@@ -40,29 +40,29 @@ CREATE TABLE plz (
 CREATE TABLE guest (
 	plz varchar(10) not null,
 	guest_id serial,
-	last_name varchar(50),
-	first_name varchar(50),
-	house_number int,
-	street varchar(100),
+	last_name varchar(50) not null,
+	first_name varchar(50) not null,
+	house_number int not null,
+	street varchar(100) not null,
 	PRIMARY KEY(guest_id),
 	FOREIGN KEY(plz) REFERENCES plz(plz)
 );
 
 CREATE TABLE reservation (
-	guest_id int,
+	guest_id int not null,
 	reservation_id serial,
-	start_date date,
-	end_date date,
-	room_nr int,
+	start_date date not null,
+	end_date date not null,
+	room_nr int not null,
 	PRIMARY KEY(reservation_id),
 	FOREIGN KEY(guest_id) REFERENCES guest(guest_id)
 );
 
 CREATE TABLE invoice (
-	guest_id int,
-	reservation_id int,
+	guest_id int not null,
+	reservation_id int not null,
 	invoice_id serial,
-	sum decimal(10,2),
+	sum decimal(10,2) not null,
 	PRIMARY KEY(reservation_id),
 	FOREIGN KEY(guest_id) REFERENCES guest(guest_id),
 	FOREIGN KEY(reservation_id) REFERENCES reservation(reservation_id)
@@ -70,8 +70,8 @@ CREATE TABLE invoice (
 
 
 CREATE TABLE will_attend (
-	reservation_id int,
-	event_id int,
+	reservation_id int not null,
+	event_id int not null,
 	PRIMARY KEY(reservation_id, event_id),
 	FOREIGN KEY(reservation_id) REFERENCES reservation(reservation_id),
 	FOREIGN KEY(event_id) REFERENCES event(event_id)
