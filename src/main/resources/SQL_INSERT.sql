@@ -134,7 +134,9 @@ INSERT INTO job(
 	('Cleaner'),
 	('Masseur'),
 	('Mechanic'),
-	('Waiter')
+	('Waiter'),
+	('Tennis Coach'),
+	('Golf Coach')
 ;
 
 
@@ -147,8 +149,8 @@ INSERT INTO employee(
 	(3, 'Jakob', 'Hoffmann'),
 	(4, 'David', 'Fischer'),
 	(5, 'Paul', 'Schneider'),
-	(1, 'Franz', 'Peters'),
-	(2, 'Ulrike', 'Obergruber'),
+	(6, 'Franz', 'Peters'),
+	(7, 'Ulrike', 'Obergruber'),
 	(3, 'Jost', 'Verstappen'),
 	(4, 'Marie', 'Hiroki'),
 	(5, 'Walter', 'Obrist')
@@ -168,5 +170,52 @@ INSERT INTO maintenance(
 	(2, '2024-08-12', '2024-04-13', 101),
 	(2, '2024-09-01', '2024-09-04', 102),
 	(2, '2024-09-10', '2024-09-13', 107)
+;
+
+INSERT INTO can_do_maintenance(
+	job_id, m_type_id)
+	VALUES
+	(2, 1),
+	(2, 8),
+	(2, 5),
+	(2, 10),
+	(3, 2),
+	(3, 3),
+	(3, 4),
+	(3, 6),
+	(3, 7),
+	(3, 9)
+;
+
+INSERT INTO can_do_service(
+	service_id, job_id)
+	VALUES
+	(1, 3),
+	(2, 5),
+	(3, 1),
+	(4, 5),
+	(5, 7),
+	(6, 6),
+	(7, 5),
+	(8, 3),
+	(8, 6),
+	(8, 7),
+	(9, 3),
+	(10, 2)
+;
+
+INSERT INTO service_is_booked(
+	reservation_id, service_id)
+	VALUES
+	(1, 9),
+	(2, 8),
+	(3, 8),
+	(3, 7),
+	(3, 9),
+	(6, 7),
+	(6, 8),
+	(7, 2),
+	(7, 3),
+	(10, 10)
 ;
 
