@@ -14,8 +14,11 @@ sum(cost) expected_earnings,
 	join room b on a.room_nr = b.room_nr
 where '2024-07-09' between start_date and end_date
 
---Query 3 --NOT FINISHED!!
-select *
-	from reservation a
-	right outer join room b on a.room_nr = b.room_nr
-where '2024-07-09' between start_date and end_date
+--Query 3
+	--Part 1 - see available rooms for date
+select distinct(a.room_nr), a.max_occupants, a.cost
+	from room a
+	full outer join reservation b on a.room_nr = b.room_nr
+where '2024-07-02' not between b.start_date and b.end_date
+or reservation_id is null
+order by room_nr
