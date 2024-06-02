@@ -130,17 +130,19 @@ CREATE TABLE maintenance(
 	start_date date not null,
 	end_date date not null,
 	room_nr int not null,
+	employee_id int not null,
 	PRIMARY KEY(maint_id),
 	FOREIGN KEY(m_type_id) REFERENCES maintenance_type(m_type_id),
-	FOREIGN KEY(room_nr) REFERENCES room(room_nr)
+	FOREIGN KEY(room_nr) REFERENCES room(room_nr),
+	FOREIGN KEY(employee_id) REFERENCES employee(employee_id)
 );
 
 CREATE TABLE service_is_booked(
 	reservation_id int not null,
 	service_id int not null,
+	employee_id int not null,
 	PRIMARY KEY(reservation_id, service_id),
 	FOREIGN KEY (reservation_id) REFERENCES reservation,
-	FOREIGN KEY (service_id) REFERENCES service
+	FOREIGN KEY (service_id) REFERENCES service,
+    FOREIGN KEY(employee_id) REFERENCES employee(employee_id)
 );
-
-select * from service_is_booked
