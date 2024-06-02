@@ -1,16 +1,15 @@
 DROP TABLE if exists invoice;
-drop table if exists service_is_booked;
+drop table if exists booked_service;
 DROP TABLE if exists will_attend;
 DROP TABLE if exists reservation;
 
 drop table if exists can_do_service;
 drop table if exists can_do_maintenance;
-drop table if exists service;
+drop table if exists service_type;
+drop table if exists planned_maintenance;
+drop table if exists maintenance_type;
 drop table if exists employee;
 drop table if exists job;
-drop table if exists maintenance;
-drop table if exists maintenance_type;
-
 
 DROP TABLE if exists event;
 DROP TABLE if exists guest;
@@ -100,19 +99,11 @@ CREATE TABLE can_do_maintenance(
 	FOREIGN KEY (m_type_id) REFERENCES maintenance_type (m_type_id)
 );
 
-CREATE TABLE service(
+CREATE TABLE service_type(
 	service_id Serial,
 	name varchar(30) not null,
 	cost decimal(5,2) not null,
 	PRIMARY KEY (service_id)
-);
-
-CREATE TABLE can_do_service(
-	service_id int not null,
-	job_id int not null,
-	PRIMARY KEY(service_id, job_id),
-	FOREIGN KEY(service_id) REFERENCES service (service_id),
-	FOREIGN KEY(job_id) REFERENCES job(job_id)
 );
 
 CREATE TABLE employee(
@@ -124,7 +115,25 @@ CREATE TABLE employee(
 	FOREIGN KEY(job_id) REFERENCES job(job_id)
 );
 
-CREATE TABLE maintenance(
+CREATE TABLE booked_service(
+	reservation_id int not null,
+	service_id int not null,
+	employee_id int not null,
+	PRIMARY KEY(reservation_id, service_id),
+	FOREIGN KEY (reservation_id) REFERENCES reservation,
+	FOREIGN KEY (service_id) REFERENCES service_type,
+    FOREIGN KEY(employee_id) REFERENCES employee(employee_id)
+);
+
+CREATE TABLE can_do_service(
+	service_id int not null,
+	job_id int not null,
+	PRIMARY KEY(service_id, job_id),
+	FOREIGN KEY(service_id) REFERENCES service_type(service_id),
+	FOREIGN KEY(job_id) REFERENCES job(job_id)
+);
+
+CREATE TABLE planned_maintenance(
 	m_type_id int not null,
 	maint_id Serial,
 	start_date date not null,
@@ -135,14 +144,4 @@ CREATE TABLE maintenance(
 	FOREIGN KEY(m_type_id) REFERENCES maintenance_type(m_type_id),
 	FOREIGN KEY(room_nr) REFERENCES room(room_nr),
 	FOREIGN KEY(employee_id) REFERENCES employee(employee_id)
-);
-
-CREATE TABLE service_is_booked(
-	reservation_id int not null,
-	service_id int not null,
-	employee_id int not null,
-	PRIMARY KEY(reservation_id, service_id),
-	FOREIGN KEY (reservation_id) REFERENCES reservation,
-	FOREIGN KEY (service_id) REFERENCES service,
-    FOREIGN KEY(employee_id) REFERENCES employee(employee_id)
 );

@@ -1,14 +1,14 @@
 TRUNCATE TABLE
 	invoice,
-	service_is_booked,
+	booked_service,
 	will_attend,
 	reservation,
 	can_do_service,
 	can_do_maintenance,
-	service,
+	service_type,
 	employee,
 	job,
-	maintenance,
+	planned_maintenance,
 	maintenance_type,
 	guest,
 	plz,
@@ -104,7 +104,7 @@ INSERT INTO will_attend(
 	(5,11)
 	;
 
-INSERT INTO service(
+INSERT INTO service_type(
 	name, cost)
 	VALUES
 	('Massage', 65),
@@ -164,7 +164,7 @@ INSERT INTO employee(
 
 ;
 
-INSERT INTO maintenance(
+INSERT INTO planned_maintenance(
 	m_type_id, start_date, end_date, room_nr, employee_id)
 	VALUES
 	(1, '2024-04-01', '2024-04-01', 205, 2),
@@ -211,7 +211,7 @@ INSERT INTO can_do_service(
 	(10, 2)
 ;
 
-INSERT INTO service_is_booked(
+INSERT INTO booked_service(
 	reservation_id, service_id, employee_id)
 	VALUES
 	(1, 9, 3),
@@ -232,8 +232,8 @@ INSERT INTO invoice(
 				a.reservation_id,
 				sum(d.cost) + sum(e.cost) --* (a.end_date::date - a.start_date::date)
 			from reservation a
-			join service_is_booked c on a.reservation_id = c.reservation_id
-			join service d on d.service_id = c.service_id
+			join booked_service c on a.reservation_id = c.reservation_id
+			join service_type d on d.service_id = c.service_id
 			join room e on a.room_nr = e.room_nr
 			group by a.guest_id, a.reservation_id)
 	;
