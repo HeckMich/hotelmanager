@@ -1,4 +1,4 @@
-package at.fhburgenland;
+package at.fhburgenland.entities;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

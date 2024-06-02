@@ -8,7 +8,7 @@
     <!-- Create Persistence-Unit -->
     <persistence-unit name="Hotelmanagement" transaction-type="RESOURCE_LOCAL">
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
-        <class>at.fhburgenland.Room</class>
+        <class>at.fhburgenland.entities.Room</class>
         <class>at.fhburgenland.Reservation</class>
         <properties>
             <property name="jakarta.persistence.jdbc.driver" value="org.postgresql.Driver"/>
