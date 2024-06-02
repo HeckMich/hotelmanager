@@ -6,12 +6,13 @@
              xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
 
     <!-- Create Persistence-Unit -->
-    <persistence-unit name="unsereunit" transaction-type="RESOURCE_LOCAL">
+    <persistence-unit name="Hotelmanagement" transaction-type="RESOURCE_LOCAL">
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
-        <class>at.fhburgenland.Person</class>
+        <class>at.fhburgenland.Room</class>
+        <class>at.fhburgenland.Reservation</class>
         <properties>
             <property name="jakarta.persistence.jdbc.driver" value="org.postgresql.Driver"/>
-            <property name="jakarta.persistence.jdbc.url" value="jdbc:postgresql://127.0.0.1:5432/gruppe11805"/>
+            <property name="jakarta.persistence.jdbc.url" value="jdbc:postgresql://127.0.0.1:5432/Gruppe12"/>
             <property name="jakarta.persistence.jdbc.user" value="bswe"/>
             <property name="jakarta.persistence.jdbc.password" value="fogl"/>
         </properties>
