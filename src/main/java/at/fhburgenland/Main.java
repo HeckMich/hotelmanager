@@ -1,5 +1,7 @@
 package at.fhburgenland;
 
+import at.fhburgenland.entities.Event;
+import at.fhburgenland.entities.Reservation;
 import at.fhburgenland.entities.Room;
 import jakarta.persistence.*;
 
@@ -11,10 +13,12 @@ public class Main {
 
     public static void main(String[] args) {
         System.out.println("Test");
-        readAllPersons();
+        readAllRooms();
+        readAllEvents();
+        readAllReservations();
     }
 
-    public static void readAllPersons(){
+    public static void readAllRooms(){
         EntityManager em = EMF.createEntityManager();
         String query = "SELECT x FROM room x";
         List<Room> list = null;
@@ -25,6 +29,38 @@ public class Main {
                     "Nr: " + room.getRoom_nr() + "\n" +
                             "Capacity: " + room.getMax_occupants() + "\n" +
                             "Cost: " + room.getCost() + "\n"
+            ));
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+            em.close();
+        }
+    }
+    public static void readAllEvents(){
+        EntityManager em = EMF.createEntityManager();
+        String query = "SELECT x FROM event x";
+        List<Event> list = null;
+        try {
+            TypedQuery<Event> tq = em.createQuery(query, Event.class);
+            list = tq.getResultList();
+            list.forEach(event -> System.out.println(
+                    event.toString()
+            ));
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+            em.close();
+        }
+    }
+    public static void readAllReservations(){
+        EntityManager em = EMF.createEntityManager();
+        String query = "SELECT x FROM reservation x";
+        List<Reservation> list = null;
+        try {
+            TypedQuery<Reservation> tq = em.createQuery(query, Reservation.class);
+            list = tq.getResultList();
+            list.forEach(reservation -> System.out.println(
+                    reservation.toString()
             ));
         } catch (Exception ex) {
             ex.printStackTrace();
