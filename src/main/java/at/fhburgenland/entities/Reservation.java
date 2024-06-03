@@ -3,6 +3,8 @@ package at.fhburgenland.entities;
 import jakarta.persistence.*;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity(name = "reservation")
 @Table(name = "reservation")
@@ -26,9 +28,11 @@ public class Reservation {
     @Column(name = "room_nr", nullable = false)
     private int room_nr;
 
-//    @OneToMany(mappedBy = "reservation")
-//    private Set<Will_Attend> will_attendSet = new HashSet<>();
+    @ManyToMany(mappedBy = "reservation")
+    private Set<Event> event = new HashSet<>();
 
+    @OneToOne(mappedBy = "reservation")
+    private Room room;
 
     public Reservation() {
         // TODO Initialization of fields of reservation

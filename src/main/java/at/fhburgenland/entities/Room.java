@@ -1,11 +1,8 @@
 package at.fhburgenland.entities;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
-@Entity(name = "Room")
+@Entity(name = "room")
 @Table( name = "room")
 public class Room {
 
@@ -18,6 +15,10 @@ public class Room {
 
     @Column(name = "cost", nullable = false)
     private double cost;
+
+    @OneToOne
+    @JoinColumn(name = "room_nr")
+    private Reservation reservation;
 
 
     public Room() {
