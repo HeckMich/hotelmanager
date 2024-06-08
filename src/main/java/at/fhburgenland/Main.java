@@ -3,8 +3,12 @@ package at.fhburgenland;
 import at.fhburgenland.entities.Event;
 import at.fhburgenland.entities.Reservation;
 import at.fhburgenland.entities.Room;
+import at.fhburgenland.handlers.ReservationHandler;
+import at.fhburgenland.handlers.RoomHandler;
 import jakarta.persistence.*;
 
+import java.math.BigDecimal;
+import java.sql.Date;
 import java.util.List;
 
 public class Main {
@@ -13,6 +17,10 @@ public class Main {
 
     public static void main(String[] args) {
         System.out.println("Test");
+        //RoomHandler.createRoom(202,9, BigDecimal.valueOf(999.10));
+        //RoomHandler.deleteRoom(77);
+        //ReservationHandler.createReservation(101,1, Date.valueOf("2024-01-01"),Date.valueOf("2024-01-02"));
+        ReservationHandler.deleteReservation(11);
         readAllRooms();
         readAllEvents();
         readAllReservations();

@@ -2,6 +2,10 @@ package at.fhburgenland.entities;
 
 import jakarta.persistence.*;
 
+import java.math.BigDecimal;
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity(name = "room")
 @Table( name = "room")
 public class Room {
@@ -13,19 +17,18 @@ public class Room {
     @Column(name = "max_occupants", nullable = false)
     private int max_occupants;
 
-    @Column(name = "cost", nullable = false)
-    private double cost;
+    @Column(name = "cost", nullable = false, precision = 5, scale = 2)
+    private BigDecimal cost;
 
-    @OneToOne
-    @JoinColumn(name = "room_nr")
-    private Reservation reservation;
+    @OneToMany(mappedBy = "room")
+    private Set<Reservation> reservations = new HashSet<>();
 
 
     public Room() {
         // TODO Initialization of fields of Room
     }
 
-    public Room(int room_nr, int max_occupants, double cost) {
+    public Room(int room_nr, int max_occupants, BigDecimal cost) {
         this.room_nr = room_nr;
         this.max_occupants = max_occupants;
         this.cost = cost;
@@ -56,11 +59,11 @@ public class Room {
         this.max_occupants = max_occupants;
     }
 
-    public double getCost() {
+    public BigDecimal getCost() {
         return cost;
     }
 
-    public void setCost(double cost) {
+    public void setCost(BigDecimal cost) {
         this.cost = cost;
     }
 }

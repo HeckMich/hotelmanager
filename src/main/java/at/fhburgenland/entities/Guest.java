@@ -2,6 +2,9 @@ package at.fhburgenland.entities;
 
 import jakarta.persistence.*;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity(name = "guest")
 @Table(name = "guest")
 public class Guest {
@@ -26,6 +29,8 @@ public class Guest {
     @Column(name = "street", length = 100, nullable = false)
     private String street;
 
+    @OneToMany(mappedBy = "guest")
+    private Set<Reservation> reservations = new HashSet<>();
 
     public Guest() {
         // TODO Initialization of fields of Guest
