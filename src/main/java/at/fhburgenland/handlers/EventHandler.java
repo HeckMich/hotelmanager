@@ -61,7 +61,7 @@ public class EventHandler {
         return true;
     }
 
-    public static Event updateEvent(int event_id, String name, String last_name, Date date) {
+    public static Event updateEvent(int event_id, String name, Date date) {
         EntityManager em = EMFSingleton.getEntityManager();
         EntityTransaction et = null;
         Event event = null;
