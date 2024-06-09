@@ -15,20 +15,20 @@ public class Main {
 
     public static void main(String[] args) {
         System.out.println("Test");
-        //RoomHandler.createRoom(43,9, BigDecimal.valueOf(999.10));
-        //RoomHandler.deleteRoom(43);
-        //ReservationHandler.createReservation(43,1, Date.valueOf("2024-01-01"),Date.valueOf("2024-01-02"));
-        //ReservationHandler.deleteReservation(11);
-        //readAllRooms();
-        //readAllEvents();
-        //readAllReservations();
-        //readAllGuest();
-        //readAllPlz();
-        //readAllInvoices();
-        //readAllBookedServices();
-        //readAllServiceTypes();
-        //readAllJobs();
-        //readAllEmployees();
+//        RoomHandler.createRoom(43,9, BigDecimal.valueOf(999.10));
+//        RoomHandler.deleteRoom(43);
+//        ReservationHandler.createReservation(43,1, Date.valueOf("2024-01-01"),Date.valueOf("2024-01-02"));
+//        ReservationHandler.deleteReservation(11);
+        readAllRooms();
+        readAllEvents();
+        readAllReservations();
+        readAllGuest();
+        readAllPlz();
+        readAllInvoices();
+        readAllBookedServices();
+        readAllServiceTypes();
+        readAllJobs();
+        readAllEmployees();
         readAllPlannedMaintenances();
         readAllMaintenanceTypes();
     }

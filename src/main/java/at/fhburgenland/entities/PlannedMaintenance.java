@@ -27,7 +27,7 @@ public class PlannedMaintenance {
     @Temporal(TemporalType.DATE)
     private Date end_date;
 
-    @Column(name = "room_nr", nullable = false)
+    @Column(name = "room_nr", nullable = false, updatable = false, insertable = false)
     private int room_nr;
 
     @Column(name = "employee_id", nullable = false, updatable = false, insertable = false)
@@ -40,6 +40,10 @@ public class PlannedMaintenance {
     @ManyToOne
     @JoinColumn(name = "m_type_id")
     private MaintenanceType maintenanceType;
+
+    @ManyToOne
+    @JoinColumn(name = "room_nr")
+    private Room room;
 
     public PlannedMaintenance() {
 

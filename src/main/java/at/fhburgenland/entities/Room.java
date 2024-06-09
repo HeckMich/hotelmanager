@@ -23,6 +23,9 @@ public class Room {
     @OneToMany(mappedBy = "room")
     private List<Reservation> reservations = new ArrayList<>();
 
+    @OneToMany(mappedBy = "room")
+    private List<PlannedMaintenance> plannedMaintenances = new ArrayList<>();
+
 
     public Room() {
         // TODO Initialization of fields of Room
