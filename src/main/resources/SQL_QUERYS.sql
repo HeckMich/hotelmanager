@@ -1,24 +1,50 @@
 --Query 1 (job_type is placeholder)
-select b.maintenance_type ,start_date, end_date, room_nr, c.first_name, c.last_name
-	from planned_maintenance a
-	join maintenance_type b on a.m_type_id = b.m_type_id
-	join employee c on a.employee_id = c.employee_id
-where '2024-04-07' between start_date and end_date;
+SELECT
+	B.MAINTENANCE_TYPE,
+	START_DATE,
+	END_DATE,
+	ROOM_NR,
+	C.FIRST_NAME,
+	C.LAST_NAME
+FROM
+	PLANNED_MAINTENANCE A
+	JOIN MAINTENANCE_TYPE B ON A.M_TYPE_ID = B.M_TYPE_ID
+	JOIN EMPLOYEE C ON A.EMPLOYEE_ID = C.EMPLOYEE_ID
+WHERE
+	'2024-04-07' BETWEEN START_DATE AND END_DATE;
 
 --Query 2
-select count(*) number_booked_rooms,
-(Select count(*) from room) - count(*)  number_empty_rooms,
-sum(cost) expected_earnings,
-(Select sum(cost) from room) - sum(cost) lost_earnings
-	from reservation a
-	join room b on a.room_nr = b.room_nr
-where '2024-07-09' between start_date and end_date
-
---Query 3
+SELECT
+	COUNT(*) NUMBER_BOOKED_ROOMS,
+	(
+		SELECT
+			COUNT(*)
+		FROM
+			ROOM
+	) - COUNT(*) NUMBER_EMPTY_ROOMS,
+	SUM(COST) EXPECTED_EARNINGS,
+	(
+		SELECT
+			SUM(COST)
+		FROM
+			ROOM
+	) - SUM(COST) LOST_EARNINGS
+FROM
+	RESERVATION A
+	JOIN ROOM B ON A.ROOM_NR = B.ROOM_NR
+WHERE
+	'2024-07-09' BETWEEN START_DATE AND END_DATE
+	--Query 3
 	--Part 1 - see available rooms for date
-select distinct(a.room_nr), a.max_occupants, a.cost
-	from room a
-	full outer join reservation b on a.room_nr = b.room_nr
-where '2024-07-02' not between b.start_date and b.end_date
-or reservation_id is null
-order by room_nr
+SELECT DISTINCT
+	(A.ROOM_NR),
+	A.MAX_OCCUPANTS,
+	A.COST
+FROM
+	ROOM A
+	FULL OUTER JOIN RESERVATION B ON A.ROOM_NR = B.ROOM_NR
+WHERE
+	'2024-07-02' NOT BETWEEN B.START_DATE AND B.END_DATE
+	OR RESERVATION_ID IS NULL
+ORDER BY
+	ROOM_NR

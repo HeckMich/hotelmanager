@@ -1,147 +1,156 @@
-DROP TABLE if exists invoice;
-drop table if exists booked_service;
-DROP TABLE if exists will_attend;
-DROP TABLE if exists reservation;
+DROP TABLE IF EXISTS INVOICE;
 
-drop table if exists can_do_service;
-drop table if exists can_do_maintenance;
-drop table if exists service_type;
-drop table if exists planned_maintenance;
-drop table if exists maintenance_type;
-drop table if exists employee;
-drop table if exists job;
+DROP TABLE IF EXISTS BOOKED_SERVICE;
 
-DROP TABLE if exists event;
-DROP TABLE if exists guest;
-DROP TABLE if exists plz;
-DROP TABLE if exists room;
+DROP TABLE IF EXISTS WILL_ATTEND;
 
-CREATE TABLE room (
-	room_nr int not null, --In format 101, 102, 201, ... (no leading 0s)
-	max_occupants int not null,
-	cost decimal(5,2) not null,
-	PRIMARY KEY(room_nr)
+DROP TABLE IF EXISTS RESERVATION;
+
+DROP TABLE IF EXISTS CAN_DO_SERVICE;
+
+DROP TABLE IF EXISTS CAN_DO_MAINTENANCE;
+
+DROP TABLE IF EXISTS SERVICE_TYPE;
+
+DROP TABLE IF EXISTS PLANNED_MAINTENANCE;
+
+DROP TABLE IF EXISTS MAINTENANCE_TYPE;
+
+DROP TABLE IF EXISTS EMPLOYEE;
+
+DROP TABLE IF EXISTS JOB;
+
+DROP TABLE IF EXISTS EVENT;
+
+DROP TABLE IF EXISTS GUEST;
+
+DROP TABLE IF EXISTS PLZ;
+
+DROP TABLE IF EXISTS ROOM;
+
+CREATE TABLE ROOM (
+	ROOM_NR INT NOT NULL, --In format 101, 102, 201, ... (no leading 0s)
+	MAX_OCCUPANTS INT NOT NULL,
+	COST DECIMAL(5, 2) NOT NULL,
+	PRIMARY KEY (ROOM_NR)
 );
 
-CREATE TABLE event (
-	event_id serial,
-	name varchar(100) not null,
-	date date not null,
-	PRIMARY KEY(event_id)
+CREATE TABLE EVENT (
+	EVENT_ID SERIAL,
+	NAME VARCHAR(100) NOT NULL,
+	DATE DATE NOT NULL,
+	PRIMARY KEY (EVENT_ID)
 );
 
-CREATE TABLE plz (
-	plz varchar(10) not null, -- Leading 0s (e.g. germany), up to 10 digits (e.g. USA)
-	city varchar(100) not null,
-	PRIMARY KEY(plz)
+CREATE TABLE PLZ (
+	PLZ VARCHAR(10) NOT NULL, -- Leading 0s (e.g. germany), up to 10 digits (e.g. USA)
+	CITY VARCHAR(100) NOT NULL,
+	PRIMARY KEY (PLZ)
 );
 
-CREATE TABLE guest (
-	plz varchar(10) not null,
-	guest_id serial,
-	last_name varchar(50) not null,
-	first_name varchar(50) not null,
-	house_number int not null,
-	street varchar(100) not null,
-	PRIMARY KEY(guest_id),
-	FOREIGN KEY(plz) REFERENCES plz(plz)
+CREATE TABLE GUEST (
+	PLZ VARCHAR(10) NOT NULL,
+	GUEST_ID SERIAL,
+	LAST_NAME VARCHAR(50) NOT NULL,
+	FIRST_NAME VARCHAR(50) NOT NULL,
+	HOUSE_NUMBER INT NOT NULL,
+	STREET VARCHAR(100) NOT NULL,
+	PRIMARY KEY (GUEST_ID),
+	FOREIGN KEY (PLZ) REFERENCES PLZ (PLZ)
 );
 
-CREATE TABLE reservation (
-	guest_id int not null,
-	reservation_id serial,
-	start_date date not null,
-	end_date date not null,
-	room_nr int not null,
-	PRIMARY KEY(reservation_id),
-	FOREIGN KEY(guest_id) REFERENCES guest(guest_id)
+CREATE TABLE RESERVATION (
+	GUEST_ID INT NOT NULL,
+	RESERVATION_ID SERIAL,
+	START_DATE DATE NOT NULL,
+	END_DATE DATE NOT NULL,
+	ROOM_NR INT NOT NULL,
+	PRIMARY KEY (RESERVATION_ID),
+	FOREIGN KEY (GUEST_ID) REFERENCES GUEST (GUEST_ID),
+	FOREIGN KEY (ROOM_NR) REFERENCES ROOM (ROOM_NR)
 );
 
-CREATE TABLE invoice (
-	guest_id int not null,
-	reservation_id int not null,
-	invoice_id serial,
-	sum decimal(10,2) not null,
-	PRIMARY KEY(reservation_id),
-	FOREIGN KEY(guest_id) REFERENCES guest(guest_id),
-	FOREIGN KEY(reservation_id) REFERENCES reservation(reservation_id)
+CREATE TABLE INVOICE (
+	GUEST_ID INT NOT NULL,
+	RESERVATION_ID INT NOT NULL,
+	INVOICE_ID SERIAL,
+	SUM DECIMAL(10, 2) NOT NULL,
+	PRIMARY KEY (RESERVATION_ID),
+	FOREIGN KEY (GUEST_ID) REFERENCES GUEST (GUEST_ID),
+	FOREIGN KEY (RESERVATION_ID) REFERENCES RESERVATION (RESERVATION_ID)
 );
 
-
-CREATE TABLE will_attend (
-	reservation_id int not null,
-	event_id int not null,
-	PRIMARY KEY(reservation_id, event_id),
-	FOREIGN KEY(reservation_id) REFERENCES reservation(reservation_id),
-	FOREIGN KEY(event_id) REFERENCES event(event_id)
+CREATE TABLE WILL_ATTEND (
+	RESERVATION_ID INT NOT NULL,
+	EVENT_ID INT NOT NULL,
+	PRIMARY KEY (RESERVATION_ID, EVENT_ID),
+	FOREIGN KEY (RESERVATION_ID) REFERENCES RESERVATION (RESERVATION_ID),
+	FOREIGN KEY (EVENT_ID) REFERENCES EVENT (EVENT_ID)
 );
 
-
-
-
-create table maintenance_type (
-	m_type_id Serial,
-	maintenance_type varchar(40) not null,
-	Primary key (m_type_id)
+CREATE TABLE MAINTENANCE_TYPE (
+	M_TYPE_ID SERIAL,
+	MAINTENANCE_TYPE VARCHAR(40) NOT NULL,
+	PRIMARY KEY (M_TYPE_ID)
 );
 
-create table job (
-	job_id Serial,
-	name varchar (20) not null,
-	PRIMARY KEY (job_id)
+CREATE TABLE JOB (
+	JOB_ID SERIAL,
+	NAME VARCHAR(20) NOT NULL,
+	PRIMARY KEY (JOB_ID)
 );
 
-CREATE TABLE can_do_maintenance(
-	job_id int not null,
-	m_type_id int not null,
-	PRIMARY KEY (job_id, m_type_id),
-	FOREIGN KEY (job_id) REFERENCES job (job_id),
-	FOREIGN KEY (m_type_id) REFERENCES maintenance_type (m_type_id)
+CREATE TABLE CAN_DO_MAINTENANCE (
+	JOB_ID INT NOT NULL,
+	M_TYPE_ID INT NOT NULL,
+	PRIMARY KEY (JOB_ID, M_TYPE_ID),
+	FOREIGN KEY (JOB_ID) REFERENCES JOB (JOB_ID),
+	FOREIGN KEY (M_TYPE_ID) REFERENCES MAINTENANCE_TYPE (M_TYPE_ID)
 );
 
-CREATE TABLE service_type(
-	service_id Serial,
-	name varchar(30) not null,
-	cost decimal(5,2) not null,
-	PRIMARY KEY (service_id)
+CREATE TABLE SERVICE_TYPE (
+	SERVICE_ID SERIAL,
+	NAME VARCHAR(30) NOT NULL,
+	COST DECIMAL(5, 2) NOT NULL,
+	PRIMARY KEY (SERVICE_ID)
 );
 
-CREATE TABLE employee(
-	job_id int not null,
-	employee_id Serial,
-	first_name varchar(20) not null,
-	last_name varchar(30) not null,
-	PRIMARY KEY(employee_id),
-	FOREIGN KEY(job_id) REFERENCES job(job_id)
+CREATE TABLE EMPLOYEE (
+	JOB_ID INT NOT NULL,
+	EMPLOYEE_ID SERIAL,
+	FIRST_NAME VARCHAR(20) NOT NULL,
+	LAST_NAME VARCHAR(30) NOT NULL,
+	PRIMARY KEY (EMPLOYEE_ID),
+	FOREIGN KEY (JOB_ID) REFERENCES JOB (JOB_ID)
 );
 
-CREATE TABLE booked_service(
-	reservation_id int not null,
-	service_id int not null,
-	employee_id int not null,
-	PRIMARY KEY(reservation_id, service_id),
-	FOREIGN KEY (reservation_id) REFERENCES reservation,
-	FOREIGN KEY (service_id) REFERENCES service_type,
-    FOREIGN KEY(employee_id) REFERENCES employee(employee_id)
+CREATE TABLE BOOKED_SERVICE (
+	RESERVATION_ID INT NOT NULL,
+	SERVICE_ID INT NOT NULL,
+	EMPLOYEE_ID INT NOT NULL,
+	PRIMARY KEY (RESERVATION_ID, SERVICE_ID), -- Currently each Reservation can book each service exactly once
+	FOREIGN KEY (RESERVATION_ID) REFERENCES RESERVATION,
+	FOREIGN KEY (SERVICE_ID) REFERENCES SERVICE_TYPE,
+	FOREIGN KEY (EMPLOYEE_ID) REFERENCES EMPLOYEE (EMPLOYEE_ID)
 );
 
-CREATE TABLE can_do_service(
-	service_id int not null,
-	job_id int not null,
-	PRIMARY KEY(service_id, job_id),
-	FOREIGN KEY(service_id) REFERENCES service_type(service_id),
-	FOREIGN KEY(job_id) REFERENCES job(job_id)
+CREATE TABLE CAN_DO_SERVICE (
+	SERVICE_ID INT NOT NULL,
+	JOB_ID INT NOT NULL,
+	PRIMARY KEY (SERVICE_ID, JOB_ID),
+	FOREIGN KEY (SERVICE_ID) REFERENCES SERVICE_TYPE (SERVICE_ID),
+	FOREIGN KEY (JOB_ID) REFERENCES JOB (JOB_ID)
 );
 
-CREATE TABLE planned_maintenance(
-	m_type_id int not null,
-	maint_id Serial,
-	start_date date not null,
-	end_date date not null,
-	room_nr int not null,
-	employee_id int not null,
-	PRIMARY KEY(maint_id),
-	FOREIGN KEY(m_type_id) REFERENCES maintenance_type(m_type_id),
-	FOREIGN KEY(room_nr) REFERENCES room(room_nr),
-	FOREIGN KEY(employee_id) REFERENCES employee(employee_id)
+CREATE TABLE PLANNED_MAINTENANCE (
+	M_TYPE_ID INT NOT NULL,
+	MAINT_ID SERIAL,
+	START_DATE DATE NOT NULL,
+	END_DATE DATE NOT NULL,
+	ROOM_NR INT NOT NULL,
+	EMPLOYEE_ID INT NOT NULL,
+	PRIMARY KEY (MAINT_ID),
+	FOREIGN KEY (M_TYPE_ID) REFERENCES MAINTENANCE_TYPE (M_TYPE_ID),
+	FOREIGN KEY (ROOM_NR) REFERENCES ROOM (ROOM_NR),
+	FOREIGN KEY (EMPLOYEE_ID) REFERENCES EMPLOYEE (EMPLOYEE_ID)
 );
