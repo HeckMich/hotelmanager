@@ -12,28 +12,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 public class GuestHandler {
-    public static Room createRoom(int room_nr, int max_occupants, BigDecimal cost) {
-        EntityManager em = EMFSingleton.getEntityManager();
-        EntityTransaction et = null;
-        Room room;
-        try {
-            et = em.getTransaction();
-            et.begin();
-            room = new Room(room_nr, max_occupants, cost);
-            em.persist(room);
-            et.commit();
-            System.out.println("Created Room: " + room);
-        } catch (Exception ex) {
-            if (et != null) {
-                et.rollback();
-            }
-            System.out.println("ERROR in RoomHandler createRoom: " + ex.getMessage());
-            return null;
-        } finally {
-            em.close();
-        }
-        return room;
-    }
+
     public static Guest createGuest(String plz, String last_name, String first_name, int house_number, String street) {
         EntityManager em = EMFSingleton.getEntityManager();
         EntityTransaction et = null;
