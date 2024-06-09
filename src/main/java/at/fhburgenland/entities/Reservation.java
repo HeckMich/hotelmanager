@@ -53,10 +53,6 @@ public class Reservation {
         return reservation_id;
     }
 
-    public void setReservation_id(int reservation_id) {
-        this.reservation_id = reservation_id;
-    }
-
     public int getGuest_id() {
         return this.guest.getGuest_id();
     }

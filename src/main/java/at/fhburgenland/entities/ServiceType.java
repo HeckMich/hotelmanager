@@ -2,6 +2,7 @@ package at.fhburgenland.entities;
 
 import jakarta.persistence.*;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -20,8 +21,8 @@ public class ServiceType {
     @Column(name = "name", length = 30, nullable = false)
     private String name;
 
-    @Column(name = "cost", nullable = false)
-    private double cost;
+    @Column(name = "cost", nullable = false, precision = 5, scale = 2)
+    private BigDecimal cost;
 
     @OneToMany(mappedBy = "serviceType")
     private List<BookedService> bookedServices  = new ArrayList<>();
@@ -33,7 +34,7 @@ public class ServiceType {
 
     }
 
-    public ServiceType(String name, double cost) {
+    public ServiceType(String name, BigDecimal cost) {
         this.name = name;
         this.cost = cost;
     }
@@ -58,11 +59,11 @@ public class ServiceType {
         this.name = name;
     }
 
-    public double getCost() {
+    public BigDecimal getCost() {
         return cost;
     }
 
-    public void setCost(double cost) {
+    public void setCost(BigDecimal cost) {
         this.cost = cost;
     }
 

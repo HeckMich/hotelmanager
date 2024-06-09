@@ -1,6 +1,7 @@
 package at.fhburgenland;
 
 import at.fhburgenland.entities.*;
+import at.fhburgenland.handlers.GuestHandler;
 import at.fhburgenland.handlers.ReservationHandler;
 import at.fhburgenland.handlers.RoomHandler;
 import jakarta.persistence.*;
@@ -16,13 +17,13 @@ public class Main {
     public static void main(String[] args) {
         System.out.println("Test");
 //        RoomHandler.createRoom(43,9, BigDecimal.valueOf(999.10));
-//        RoomHandler.deleteRoom(43);
+        RoomHandler.deleteRoom(43);
 //        ReservationHandler.createReservation(43,1, Date.valueOf("2024-01-01"),Date.valueOf("2024-01-02"));
-//        ReservationHandler.deleteReservation(11);
+        ReservationHandler.deleteReservation(11);
         readAllRooms();
         readAllEvents();
         readAllReservations();
-        readAllGuest();
+        GuestHandler.readAllGuest();
         readAllPlz();
         readAllInvoices();
         readAllBookedServices();
@@ -99,22 +100,7 @@ public class Main {
             em.close();
         }
     }
-    public static void readAllGuest(){
-        EntityManager em = EMF.createEntityManager();
-        String query = "SELECT x FROM guest x";
-        List<Guest> list = null;
-        try {
-            TypedQuery<Guest> tq = em.createQuery(query, Guest.class);
-            list = tq.getResultList();
-            list.forEach(x -> System.out.println(
-                    x.toString()
-            ));
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        } finally {
-            em.close();
-        }
-    }
+
     public static void readAllInvoices(){
         EntityManager em = EMF.createEntityManager();
         String query = "SELECT x FROM invoice x";
