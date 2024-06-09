@@ -1,9 +1,7 @@
 package at.fhburgenland;
 
 import at.fhburgenland.entities.*;
-import at.fhburgenland.handlers.GuestHandler;
-import at.fhburgenland.handlers.ReservationHandler;
-import at.fhburgenland.handlers.RoomHandler;
+import at.fhburgenland.handlers.*;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
@@ -15,23 +13,45 @@ public class Main {
     private static EntityManagerFactory EMF = Persistence.createEntityManagerFactory("hotelmanagement");
 
     public static void main(String[] args) {
-        System.out.println("Test");
-//        RoomHandler.createRoom(43,9, BigDecimal.valueOf(999.10));
-        RoomHandler.deleteRoom(43);
-//        ReservationHandler.createReservation(43,1, Date.valueOf("2024-01-01"),Date.valueOf("2024-01-02"));
-        ReservationHandler.deleteReservation(11);
-        readAllRooms();
-        readAllEvents();
-        readAllReservations();
+//        System.out.println("Test");
+////        RoomHandler.createRoom(43,9, BigDecimal.valueOf(999.10));
+//        RoomHandler.deleteRoom(43);
+////        ReservationHandler.createReservation(43,1, Date.valueOf("2024-01-01"),Date.valueOf("2024-01-02"));
+//        ReservationHandler.deleteReservation(11);
+//        readAllRooms();
+//        readAllEvents();
+//        readAllReservations();
+//        GuestHandler.readAllGuest();
+//        readAllPlz();
+//        readAllInvoices();
+//        readAllBookedServices();
+//        readAllServiceTypes();
+//        readAllJobs();
+//        readAllEmployees();
+//        readAllPlannedMaintenances();
+//        readAllMaintenanceTypes();
+
+        Guest x = GuestHandler.createGuest("6020","test","test",1,"test");
+        System.out.println(GuestHandler.readGuest(x.getGuest_id()));
+        GuestHandler.updateGuest(x.getGuest_id(),"6020","test2","test2",1,"test2");
+        System.out.println(GuestHandler.readGuest(x.getGuest_id()));
+        GuestHandler.deleteGuest(x.getGuest_id());
         GuestHandler.readAllGuest();
-        readAllPlz();
-        readAllInvoices();
-        readAllBookedServices();
-        readAllServiceTypes();
-        readAllJobs();
-        readAllEmployees();
-        readAllPlannedMaintenances();
-        readAllMaintenanceTypes();
+
+        ServiceType y = ServiceTypeHandler.createServiceType("Test", BigDecimal.valueOf(0.1));
+        System.out.println(ServiceTypeHandler.readServiceType(y.getService_id()));
+        ServiceTypeHandler.updateServiceType(y.getService_id(),"Test2", BigDecimal.valueOf(2.9));
+        System.out.println(ServiceTypeHandler.readServiceType(y.getService_id()));
+        ServiceTypeHandler.deleteServiceType(y.getService_id());
+        ServiceTypeHandler.readAllServiceTypes();
+
+        Event z = EventHandler.createEvent("Test", Date.valueOf("2024-01-01"));
+        System.out.println(EventHandler.readEvent(z.getEvent_id()));
+        EventHandler.updateEvent(z.getEvent_id(),"Test2", Date.valueOf("2024-01-01"));
+        System.out.println(EventHandler.readEvent(z.getEvent_id()));
+        EventHandler.deleteEvent(z.getEvent_id());
+        EventHandler.readAllEvents();
+        
     }
 
     public static void readAllRooms(){

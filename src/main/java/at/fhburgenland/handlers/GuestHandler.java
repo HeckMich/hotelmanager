@@ -12,7 +12,6 @@ import java.math.BigDecimal;
 import java.util.List;
 
 public class GuestHandler {
-
     public static Guest createGuest(String plz, String last_name, String first_name, int house_number, String street) {
         EntityManager em = EMFSingleton.getEntityManager();
         EntityTransaction et = null;
