@@ -3,8 +3,8 @@ package at.fhburgenland.entities;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity(name = "room")
 @Table( name = "room")
@@ -21,7 +21,7 @@ public class Room {
     private BigDecimal cost;
 
     @OneToMany(mappedBy = "room")
-    private Set<Reservation> reservations = new HashSet<>();
+    private List<Reservation> reservations = new ArrayList<>();
 
 
     public Room() {

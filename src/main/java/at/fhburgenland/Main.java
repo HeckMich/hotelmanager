@@ -1,8 +1,6 @@
 package at.fhburgenland;
 
-import at.fhburgenland.entities.Event;
-import at.fhburgenland.entities.Reservation;
-import at.fhburgenland.entities.Room;
+import at.fhburgenland.entities.*;
 import at.fhburgenland.handlers.ReservationHandler;
 import at.fhburgenland.handlers.RoomHandler;
 import jakarta.persistence.*;
@@ -17,13 +15,22 @@ public class Main {
 
     public static void main(String[] args) {
         System.out.println("Test");
-        //RoomHandler.createRoom(202,9, BigDecimal.valueOf(999.10));
-        //RoomHandler.deleteRoom(77);
-        //ReservationHandler.createReservation(101,1, Date.valueOf("2024-01-01"),Date.valueOf("2024-01-02"));
-        ReservationHandler.deleteReservation(11);
-        readAllRooms();
-        readAllEvents();
-        readAllReservations();
+        //RoomHandler.createRoom(43,9, BigDecimal.valueOf(999.10));
+        //RoomHandler.deleteRoom(43);
+        //ReservationHandler.createReservation(43,1, Date.valueOf("2024-01-01"),Date.valueOf("2024-01-02"));
+        //ReservationHandler.deleteReservation(11);
+        //readAllRooms();
+        //readAllEvents();
+        //readAllReservations();
+        //readAllGuest();
+        //readAllPlz();
+        //readAllInvoices();
+        //readAllBookedServices();
+        //readAllServiceTypes();
+        //readAllJobs();
+        //readAllEmployees();
+        readAllPlannedMaintenances();
+        readAllMaintenanceTypes();
     }
 
     public static void readAllRooms(){
@@ -33,10 +40,10 @@ public class Main {
         try {
             TypedQuery<Room> tq = em.createQuery(query, Room.class);
             list = tq.getResultList();
-            list.forEach(room -> System.out.println(
-                    "Nr: " + room.getRoom_nr() + "\n" +
-                            "Capacity: " + room.getMax_occupants() + "\n" +
-                            "Cost: " + room.getCost() + "\n"
+            list.forEach(x -> System.out.println(
+                    "Nr: " + x.getRoom_nr() + "\n" +
+                            "Capacity: " + x.getMax_occupants() + "\n" +
+                            "Cost: " + x.getCost() + "\n"
             ));
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -51,8 +58,8 @@ public class Main {
         try {
             TypedQuery<Event> tq = em.createQuery(query, Event.class);
             list = tq.getResultList();
-            list.forEach(event -> System.out.println(
-                    event.toString()
+            list.forEach(x -> System.out.println(
+                    x.toString()
             ));
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -67,13 +74,180 @@ public class Main {
         try {
             TypedQuery<Reservation> tq = em.createQuery(query, Reservation.class);
             list = tq.getResultList();
-            list.forEach(reservation -> System.out.println(
-                    reservation.toString()
+            list.forEach(x -> System.out.println(
+                    x.toString()
             ));
         } catch (Exception ex) {
             ex.printStackTrace();
         } finally {
             em.close();
         }
+    }
+    public static void readAllPlz(){
+        EntityManager em = EMF.createEntityManager();
+        String query = "SELECT x FROM plz x";
+        List<Plz> list = null;
+        try {
+            TypedQuery<Plz> tq = em.createQuery(query, Plz.class);
+            list = tq.getResultList();
+            list.forEach(x -> System.out.println(
+                    x.toString()
+            ));
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+            em.close();
+        }
+    }
+    public static void readAllGuest(){
+        EntityManager em = EMF.createEntityManager();
+        String query = "SELECT x FROM guest x";
+        List<Guest> list = null;
+        try {
+            TypedQuery<Guest> tq = em.createQuery(query, Guest.class);
+            list = tq.getResultList();
+            list.forEach(x -> System.out.println(
+                    x.toString()
+            ));
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+            em.close();
+        }
+    }
+    public static void readAllInvoices(){
+        EntityManager em = EMF.createEntityManager();
+        String query = "SELECT x FROM invoice x";
+        List<Invoice> list = null;
+        try {
+            TypedQuery<Invoice> tq = em.createQuery(query, Invoice.class);
+            list = tq.getResultList();
+            list.forEach(x -> System.out.println(
+                    x.toString()
+            ));
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+            em.close();
+        }
+    }
+    public static void readAllBookedServices(){
+        EntityManager em = EMF.createEntityManager();
+        String query = "SELECT x FROM booked_service x";
+        List<BookedService> list = null;
+        try {
+            TypedQuery<BookedService> tq = em.createQuery(query, BookedService.class);
+            list = tq.getResultList();
+            list.forEach(x -> System.out.println(
+                    x.toString()
+            ));
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+            em.close();
+        }
+    }
+    public static void readAllServiceTypes(){
+        EntityManager em = EMF.createEntityManager();
+        String query = "SELECT x FROM service_type x";
+        List<ServiceType> list = null;
+        try {
+            TypedQuery<ServiceType> tq = em.createQuery(query, ServiceType.class);
+            list = tq.getResultList();
+            list.forEach(x -> System.out.println(
+                    x.toString()
+            ));
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+            em.close();
+        }
+    }
+    public static void readAllJobs(){
+        EntityManager em = EMF.createEntityManager();
+        String query = "SELECT x FROM job x";
+        List<Job> list = null;
+        try {
+            TypedQuery<Job> tq = em.createQuery(query, Job.class);
+            list = tq.getResultList();
+            list.forEach(x -> System.out.println(
+                    x.toString()
+            ));
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+            em.close();
+        }
+    }
+    public static void readAllEmployees(){
+        EntityManager em = EMF.createEntityManager();
+        String query = "SELECT x FROM employee x";
+        List<Employee> list = null;
+        try {
+            TypedQuery<Employee> tq = em.createQuery(query, Employee.class);
+            list = tq.getResultList();
+            list.forEach(x -> System.out.println(
+                    x.toString()
+            ));
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+            em.close();
+        }
+    }
+    public static void readAllMaintenanceTypes(){
+        EntityManager em = EMF.createEntityManager();
+        String query = "SELECT x FROM maintenance_type x";
+        List<MaintenanceType> list = null;
+        try {
+            TypedQuery<MaintenanceType> tq = em.createQuery(query, MaintenanceType.class);
+            list = tq.getResultList();
+            list.forEach(x -> System.out.println(
+                    x.toString()
+            ));
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+            em.close();
+        }
+    }
+    public static void readAllPlannedMaintenances(){
+        EntityManager em = EMF.createEntityManager();
+        String query = "SELECT x FROM planned_maintenance x";
+        List<PlannedMaintenance> list = null;
+        try {
+            TypedQuery<PlannedMaintenance> tq = em.createQuery(query, PlannedMaintenance.class);
+            list = tq.getResultList();
+            list.forEach(x -> System.out.println(
+                    x.toString()
+            ));
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+            em.close();
+        }
+    }
+
+
+
+
+
+
+
+
+    public static List<Job> getAllJobs(){
+        EntityManager em = EMF.createEntityManager();
+        String query = "SELECT x FROM employee x";
+        List<Job> list = null;
+        try {
+            TypedQuery<Job> tq = em.createQuery(query, Job.class);
+            list = tq.getResultList();
+            return list;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+            em.close();
+        }
+        return null;
     }
 }

@@ -17,6 +17,7 @@
         <class>at.fhburgenland.MaintenanceType</class>
         <class>at.fhburgenland.Job</class>
         <class>at.fhburgenland.ServiceType</class>
+        <class>at.fhburgenland.BookedService</class>
         <class>at.fhburgenland.Employee</class>
         <class>at.fhburgenland.PlannedMaintenance</class>
         <properties>

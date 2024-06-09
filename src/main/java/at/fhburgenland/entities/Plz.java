@@ -1,9 +1,9 @@
 package at.fhburgenland.entities;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity(name = "plz")
 @Table(name = "plz")
@@ -16,9 +16,10 @@ public class Plz {
     @Column(name = "city", nullable = false, length = 100)
     private String city;
 
+    @OneToMany(mappedBy = "plz")
+    private List<Guest> guests = new ArrayList<>();
 
     public Plz() {
-
     }
 
     public Plz(String plz, String city) {

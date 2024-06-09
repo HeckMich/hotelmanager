@@ -2,6 +2,11 @@ package at.fhburgenland.entities;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 @Entity(name = "maintenance_type")
 @Table(name = "maintenance_type")
 public class MaintenanceType {
@@ -13,6 +18,13 @@ public class MaintenanceType {
 
     @Column(name = "maintenance_type", length = 40, nullable = false)
     private String maintenance_type;
+
+    @ManyToMany
+    @JoinTable(name = "can_do_maintenance", joinColumns = {@JoinColumn(name = "m_type_id")}, inverseJoinColumns = {@JoinColumn(name = "job_id")})
+    private Set<Job> jobs = new HashSet<>();
+
+    @OneToMany(mappedBy = "maintenanceType")
+    private List<PlannedMaintenance> plannedMaintenances = new ArrayList<>();
 
     public MaintenanceType() {
 

@@ -32,6 +32,23 @@ public class Reservation {
     @JoinColumn(name = "guest_id")
     private Guest guest;
 
+    @OneToMany(mappedBy = "reservation")
+    private List<Invoice> invoices = new ArrayList<>();
+
+    @OneToMany(mappedBy = "reservation")
+    private List<BookedService> bookedServices  = new ArrayList<>();
+
+    public Reservation() {
+    }
+    
+    public Reservation(Guest guest,Room room, Date start_date, Date end_date) {
+        this.guest = guest;
+        this.room = room;
+        this.start_date = start_date;
+        this.end_date = end_date;
+        this.event = new HashSet<>();
+    }
+
     public int getReservation_id() {
         return reservation_id;
     }
@@ -84,7 +101,7 @@ public class Reservation {
         }
     }
 
-    public Set<Event> getEvent() {
+    public Set<Event> getEvents() {
         return event;
     }
 
@@ -92,13 +109,13 @@ public class Reservation {
         this.event = event;
     }
 
-
-    public Reservation(Guest guest,Room room, Date start_date, Date end_date) {
-        this.guest = guest;
-        this.room = room;
-        this.start_date = start_date;
-        this.end_date = end_date;
-        this.event = new HashSet<>();
+    public void addEvent(Event event) {
+        this.event.add(event);
+        event.getReservations().add(this);
+    }
+    public void removeEvent(Event event) {
+        this.event.remove(event);
+        event.getReservations().remove(this);
     }
 
     @Override
@@ -110,8 +127,5 @@ public class Reservation {
                 ", end_date=" + end_date +
                 ", room_nr=" + this.room.getRoom_nr() +
                 '}';
-    }
-
-    public Reservation() {
     }
 }

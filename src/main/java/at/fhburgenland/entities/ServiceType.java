@@ -2,6 +2,11 @@ package at.fhburgenland.entities;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 @Entity(name = "service_type")
 @Table(name = "service_type")
 public class ServiceType {
@@ -18,22 +23,31 @@ public class ServiceType {
     @Column(name = "cost", nullable = false)
     private double cost;
 
+    @OneToMany(mappedBy = "serviceType")
+    private List<BookedService> bookedServices  = new ArrayList<>();
+
+    @ManyToMany(mappedBy = "serviceTypes")
+    private Set<Job> jobs = new HashSet<>();
+
     public ServiceType() {
 
     }
 
-    public ServiceType(int service_id, String name, double cost) {
-        this.service_id = service_id;
+    public ServiceType(String name, double cost) {
         this.name = name;
         this.cost = cost;
     }
 
-    public int getService_id() {
-        return service_id;
+    public List<BookedService> getBookedServices() {
+        return bookedServices;
     }
 
-    public void setService_id(int service_id) {
-        this.service_id = service_id;
+    public void setBookedServices(List<BookedService> bookedServices) {
+        this.bookedServices = bookedServices;
+    }
+
+    public int getService_id() {
+        return service_id;
     }
 
     public String getName() {
@@ -50,6 +64,23 @@ public class ServiceType {
 
     public void setCost(double cost) {
         this.cost = cost;
+    }
+
+    public Set<Job> getJobs() {
+        return jobs;
+    }
+
+    public void setJobs(Set<Job> jobs) {
+        this.jobs = jobs;
+    }
+
+    public void addJob(Job job) {
+        this.jobs.add(job);
+        job.getServiceTypes().add(this);
+    }
+    public void removeJob(Job job) {
+        this.jobs.remove(job);
+        job.getServiceTypes().remove(this);
     }
 
     @Override

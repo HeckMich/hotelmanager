@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import org.hibernate.annotations.TenantId;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity(name = "planned_maintenance")
 @Table(name = "planned_maintenance")
@@ -14,7 +16,7 @@ public class PlannedMaintenance {
     @Column(name = "maint_id", nullable = false)
     private int maint_id;
 
-    @Column(name = "m_type_id", nullable = false)
+    @Column(name = "m_type_id", nullable = false, insertable = false, updatable = false)
     private int m_type_id;
 
     @Column(name = "start_date", nullable = false)
@@ -28,9 +30,16 @@ public class PlannedMaintenance {
     @Column(name = "room_nr", nullable = false)
     private int room_nr;
 
-    @Column(name = "employee_id", nullable = false)
+    @Column(name = "employee_id", nullable = false, updatable = false, insertable = false)
     private int employee_id;
 
+    @ManyToOne
+    @JoinColumn(name = "employee_id")
+    private Employee employee;
+
+    @ManyToOne
+    @JoinColumn(name = "m_type_id")
+    private MaintenanceType maintenanceType;
 
     public PlannedMaintenance() {
 

@@ -24,11 +24,9 @@ public class Event {
     @JoinTable(name = "will_attend", joinColumns = {@JoinColumn(name = "event_id")}, inverseJoinColumns = {@JoinColumn(name = "reservation_id")})
     private Set<Reservation> reservation = new HashSet<>();
 
-    public Event(int event_id, String name, Date date, Set<Reservation> reservation) {
-        this.event_id = event_id;
+    public Event(String name, Date date) {
         this.name = name;
         this.date = date;
-        this.reservation = reservation;
     }
 
     public Event(){
@@ -39,18 +37,6 @@ public class Event {
         return event_id;
     }
 
-    @Override
-    public String toString() {
-        return "Event{" +
-                "event_id=" + this.event_id +
-                ", name='" + this.name + '\'' +
-                ", date=" + this.date +
-                '}';
-    }
-
-    public void setEvent_id(int event_id) {
-        this.event_id = event_id;
-    }
 
     public String getName() {
         return name;
@@ -68,11 +54,29 @@ public class Event {
         this.date = date;
     }
 
-    public Set<Reservation> getReservation() {
+    public Set<Reservation> getReservations() {
         return reservation;
     }
 
     public void setReservation(Set<Reservation> reservation) {
         this.reservation = reservation;
+    }
+
+    public void addReservation(Reservation reservation) {
+        this.reservation.add(reservation);
+        reservation.getEvents().add(this);
+    }
+    public void removeReservation(Reservation reservation) {
+        this.reservation.remove(reservation);
+        reservation.getEvents().remove(this);
+    }
+
+    @Override
+    public String toString() {
+        return "Event{" +
+                "event_id=" + this.event_id +
+                ", name='" + this.name + '\'' +
+                ", date=" + this.date +
+                '}';
     }
 }

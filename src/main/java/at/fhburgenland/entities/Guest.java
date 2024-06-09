@@ -1,8 +1,11 @@
 package at.fhburgenland.entities;
 
+import at.fhburgenland.EMFSingleton;
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity(name = "guest")
@@ -13,9 +16,6 @@ public class Guest {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "guest_id", nullable = false)
     private int guest_id;
-
-    @Column(name = "plz", length = 10, nullable = false)
-    private String plz;
 
     @Column(name = "last_name", length = 50, nullable = false)
     private String last_name;
@@ -29,15 +29,30 @@ public class Guest {
     @Column(name = "street", length = 100, nullable = false)
     private String street;
 
+    @Column(name = "plz", nullable = false, insertable = false, updatable = false)
+    private String plz_;
+
     @OneToMany(mappedBy = "guest")
     private Set<Reservation> reservations = new HashSet<>();
 
+    @ManyToOne
+    @JoinColumn(name = "plz")
+    private Plz plz;
+
+    @OneToMany(mappedBy = "guest")
+    private List<Invoice> invoices = new ArrayList<>();
+
     public Guest() {
-        // TODO Initialization of fields of Guest
     }
 
-    public Guest(int guest_id, String plz, String last_name, String first_name, int house_number, String street) {
-        this.guest_id = guest_id;
+    public Guest(String plz, String last_name, String first_name, int house_number, String street) {
+        this.plz_ = plz;
+        this.last_name = last_name;
+        this.first_name = first_name;
+        this.house_number = house_number;
+        this.street = street;
+    }
+    public Guest(Plz plz, String last_name, String first_name, int house_number, String street) {
         this.plz = plz;
         this.last_name = last_name;
         this.first_name = first_name;
@@ -49,16 +64,18 @@ public class Guest {
         return guest_id;
     }
 
-    public void setGuest_id(int guest_id) {
-        this.guest_id = guest_id;
-    }
-
     public String getPlz() {
-        return plz;
+        return this.plz.getPlz();
     }
 
     public void setPlz(String plz) {
-        this.plz = plz;
+        EntityManager EM = EMFSingleton.getEntityManager();
+        Plz plz_obj = EM.find(Plz.class, plz);
+        if (plz != null) {
+            this.plz = plz_obj;
+        } else {
+            throw new IllegalArgumentException("No plz found with: " + plz);
+        }
     }
 
     public String getLast_name() {
