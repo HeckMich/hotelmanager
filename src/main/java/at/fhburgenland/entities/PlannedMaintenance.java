@@ -63,9 +63,7 @@ public class PlannedMaintenance {
         return maint_id;
     }
 
-    public void setMaint_id(int maint_id) {
-        this.maint_id = maint_id;
-    }
+
 
     public int getM_type_id() {
         return m_type_id;

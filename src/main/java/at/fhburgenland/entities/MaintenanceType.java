@@ -39,9 +39,7 @@ public class MaintenanceType {
         return m_type_id;
     }
 
-    public void setM_type_id(int m_type_id) {
-        this.m_type_id = m_type_id;
-    }
+
 
     public String getMaintenance_type() {
         return maintenance_type;
