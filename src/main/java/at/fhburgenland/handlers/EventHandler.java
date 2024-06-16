@@ -45,7 +45,8 @@ public class EventHandler {
             et = em.getTransaction();
             et.begin();
             event = em.find(Event.class, event_id);
-            if (event == null) throw new IllegalArgumentException("The event with id : " + event_id + " was not found in DB. Deletion canceled." );
+            if (event == null)
+                throw new IllegalArgumentException("The event with id : " + event_id + " was not found in DB. Deletion canceled.");
             em.remove(event);
             et.commit();
             System.out.println("Deleted " + event);
@@ -69,7 +70,8 @@ public class EventHandler {
             et = em.getTransaction();
             et.begin();
             event = em.find(Event.class, event_id);
-            if (event == null) throw new IllegalArgumentException("The event with id : " + event_id + " was not found in DB. Update canceled." );
+            if (event == null)
+                throw new IllegalArgumentException("The event with id : " + event_id + " was not found in DB. Update canceled.");
             event.setName(name);
             event.setDate(date);
 
@@ -110,22 +112,19 @@ public class EventHandler {
         }
     }
 
-        public static void readAllEvents(){
-            EntityManager em = EMFSingleton.getEntityManager();
-            String query = "SELECT x FROM event x";
-            List<Event> list = null;
-            try {
-                TypedQuery<Event> tq = em.createQuery(query, Event.class);
-                list = tq.getResultList();
-                list.forEach(x -> System.out.println(
-                        x.toString()
-                ));
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            } finally {
-                em.close();
-            }
-
+    public static List<Event> readAllEvents() {
+        EntityManager em = EMFSingleton.getEntityManager();
+        String query = "SELECT x FROM event x";
+        List<Event> list = null;
+        try {
+            TypedQuery<Event> tq = em.createQuery(query, Event.class);
+            list = tq.getResultList();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+            em.close();
+        }
+        return list;
     }
 
 }

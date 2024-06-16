@@ -50,10 +50,6 @@ public class Room {
         return room_nr;
     }
 
-    public void setRoom_nr(int room_nr) {
-        this.room_nr = room_nr;
-    }
-
     public int getMax_occupants() {
         return max_occupants;
     }

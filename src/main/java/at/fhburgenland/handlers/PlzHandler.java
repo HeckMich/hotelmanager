@@ -1,57 +1,58 @@
 package at.fhburgenland.handlers;
 
 import at.fhburgenland.EMFSingleton;
-import at.fhburgenland.entities.Reservation;
-import at.fhburgenland.entities.Room;
+import at.fhburgenland.entities.Event;
+import at.fhburgenland.entities.Plz;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.TypedQuery;
 
-import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
-public class RoomHandler {
-    public RoomHandler() {
-    }
-    public static Room createRoom(int room_nr, int max_occupants, BigDecimal cost) {
+public class PlzHandler {
+    public static Plz createPlz(String plz_string, String city) {
         EntityManager em = EMFSingleton.getEntityManager();
         EntityTransaction et = null;
-        Room room;
+        Plz plz;
         try {
             et = em.getTransaction();
             et.begin();
-            room = new Room(room_nr, max_occupants, cost);
-            em.persist(room);
+
+            plz = new Plz(plz_string, city);
+            em.persist(plz);
             et.commit();
-            System.out.println("Created Room: " + room);
+            System.out.println("Created Plz: " + plz);
         } catch (Exception ex) {
             if (et != null) {
                 et.rollback();
             }
-            System.out.println("ERROR in RoomHandler createRoom: " + ex.getMessage());
+            System.err.println("ERROR in PlzHandler createPlz: " + ex.getMessage());
             return null;
         } finally {
             em.close();
         }
-        return room;
+        return plz;
     }
-    public static boolean deleteRoom(int room_nr) {
+
+    public static boolean deletePlz(int plz_string) {
         EntityManager em = EMFSingleton.getEntityManager();
         EntityTransaction et = null;
-        Room room = null;
+        Plz plz = null;
         try {
             et = em.getTransaction();
             et.begin();
-            room = em.find(Room.class, room_nr);
-            em.remove(room);
+            plz = em.find(Plz.class, plz_string);
+            if (plz == null)
+                throw new IllegalArgumentException("The Plz with id : " + plz_string + " was not found in DB. Deletion canceled.");
+            em.remove(plz);
             et.commit();
-            System.out.println("deleted " + room);
+            System.out.println("Deleted " + plz);
         } catch (Exception ex) {
             if (et != null) {
                 et.rollback();
             }
-            System.out.println("ERROR in RoomHandler deleteRoom: " + ex.getMessage());
+            System.err.println("ERROR in PlzHandler DeletePlz: " + ex.getMessage());
             return false;
         } finally {
             em.close();
@@ -59,61 +60,60 @@ public class RoomHandler {
         return true;
     }
 
-    public static Room updateRoom(int room_nr, int max_occupants, BigDecimal cost) {
+    public static Plz updatePlz(String plz_string, String city) {
         EntityManager em = EMFSingleton.getEntityManager();
         EntityTransaction et = null;
-        Room room = null;
+        Plz plz = null;
         try {
             et = em.getTransaction();
             et.begin();
-            room = em.find(Room.class, room_nr);
-            if (room == null)
-                throw new IllegalArgumentException("The Room with id : " + room_nr + " was not found in DB. Update canceled.");
-            room.setMax_occupants(max_occupants);
-            room.setCost(cost);
-            em.persist(room);
+            plz = em.find(Plz.class, plz_string);
+            if (plz == null)
+                throw new IllegalArgumentException("The Plz with id : " + plz_string + " was not found in DB. Update canceled.");
+            plz.setCity(city);
+            em.persist(plz);
             et.commit();
-            System.out.println("Updated " + room);
+            System.out.println("Updated " + plz);
         } catch (Exception ex) {
             if (et != null) {
                 et.rollback();
             }
-            System.out.println("ERROR in RoomHandler UpdateRoom: " + ex.getMessage());
+            System.out.println("ERROR in PlzHandler UpdatePlz: " + ex.getMessage());
             return null;
         } finally {
             em.close();
         }
-        return room;
+        return plz;
     }
 
-    public static Room readRoom(int room_nr) {
+    public static Plz readPlz(int plz_string) {
         EntityManager em = EMFSingleton.getEntityManager();
         EntityTransaction et = null;
-        Room room = null;
+        Plz plz = null;
         try {
             et = em.getTransaction();
             et.begin();
-            room = em.find(Room.class, room_nr);
-            if (room == null)
-                throw new IllegalArgumentException("The Room with id : " + room_nr + " was not found in DB.");
-            return room;
+            plz = em.find(Plz.class, plz_string);
+            if (plz == null)
+                throw new IllegalArgumentException("The Plz with id : " + plz_string + " was not found in DB.");
+            return plz;
         } catch (Exception ex) {
             if (et != null) {
                 et.rollback();
             }
-            System.out.println("ERROR in RoomHandler ReadRoom: " + ex.getMessage());
+            System.out.println("ERROR in PlzHandler EventPlz: " + ex.getMessage());
             return null;
         } finally {
             em.close();
         }
     }
 
-    public static List<Room> readAllRoom() {
+    public static List<Plz> readAllPlzs() {
         EntityManager em = EMFSingleton.getEntityManager();
-        String query = "SELECT x FROM room x";
-        List<Room> list = null;
+        String query = "SELECT x FROM plz x";
+        List<Plz> list = null;
         try {
-            TypedQuery<Room> tq = em.createQuery(query, Room.class);
+            TypedQuery<Plz> tq = em.createQuery(query, Plz.class);
             list = tq.getResultList();
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -122,4 +122,5 @@ public class RoomHandler {
         }
         return list;
     }
+
 }

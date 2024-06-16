@@ -1,5 +1,6 @@
 package at.fhburgenland.entities;
 
+import at.fhburgenland.EMFSingleton;
 import jakarta.persistence.*;
 
 @Entity(name = "booked_service")
@@ -36,16 +37,28 @@ public class BookedService {
         return reservation;
     }
 
-    public void setReservation(Reservation reservation) {
-        this.reservation = reservation;
+    public void setReservation(int reservation_id) {
+        EntityManager EM = EMFSingleton.getEntityManager();
+        Reservation reservation1 = EM.find(Reservation.class, reservation_id);
+        if (reservation1 != null) {
+            this.reservation = reservation1;
+        } else {
+            throw new IllegalArgumentException("No reservation found with id: " + reservation_id);
+        }
     }
 
     public ServiceType getServiceType() {
         return serviceType;
     }
 
-    public void setServiceType(ServiceType serviceType) {
-        this.serviceType = serviceType;
+    public void setServiceType(int service_id) {
+        EntityManager EM = EMFSingleton.getEntityManager();
+        ServiceType serviceType1 = EM.find(ServiceType.class, service_id);
+        if (serviceType1 != null) {
+            this.serviceType = serviceType1;
+        } else {
+            throw new IllegalArgumentException("No serviceType found with id: " + service_id);
+        }
     }
 
     public Employee getEmployee() {
@@ -54,6 +67,16 @@ public class BookedService {
 
     public void setEmployee(Employee employee) {
         this.employee = employee;
+    }
+
+    public void setEmployee(int employee_id) {
+        EntityManager EM = EMFSingleton.getEntityManager();
+        Employee employee1 = EM.find(Employee.class, employee_id);
+        if (employee1 != null) {
+            this.employee = employee1;
+        } else {
+            throw new IllegalArgumentException("No employee found with id: " + employee_id);
+        }
     }
 
     @Override

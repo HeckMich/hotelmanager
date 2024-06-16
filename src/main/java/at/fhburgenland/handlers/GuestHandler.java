@@ -109,20 +109,18 @@ public class GuestHandler {
         }
     }
 
-    public static void readAllGuest(){
+    public static List<Guest> readAllGuest(){
         EntityManager em = EMFSingleton.getEntityManager();
         String query = "SELECT x FROM guest x";
         List<Guest> list = null;
         try {
             TypedQuery<Guest> tq = em.createQuery(query, Guest.class);
             list = tq.getResultList();
-            list.forEach(x -> System.out.println(
-                    x.toString()
-            ));
         } catch (Exception ex) {
             ex.printStackTrace();
         } finally {
             em.close();
         }
+        return list;
     }
 }

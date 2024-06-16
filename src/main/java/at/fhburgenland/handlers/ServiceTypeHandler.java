@@ -105,20 +105,18 @@ public class ServiceTypeHandler {
         }
     }
 
-    public static void readAllServiceTypes(){
+    public static List<ServiceType> readAllServiceTypes(){
         EntityManager em = EMFSingleton.getEntityManager();
         String query = "SELECT x FROM service_type x";
         List<ServiceType> list = null;
         try {
             TypedQuery<ServiceType> tq = em.createQuery(query, ServiceType.class);
             list = tq.getResultList();
-            list.forEach(x -> System.out.println(
-                    x.toString()
-            ));
         } catch (Exception ex) {
             ex.printStackTrace();
         } finally {
             em.close();
         }
+        return list;
     }
 }
