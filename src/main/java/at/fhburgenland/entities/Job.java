@@ -42,9 +42,6 @@ public class Job {
         return job_id;
     }
 
-    public void setJob_id(int job_id) {
-        this.job_id = job_id;
-    }
 
     public Set<ServiceType> getServiceTypes() {
         return serviceTypes;

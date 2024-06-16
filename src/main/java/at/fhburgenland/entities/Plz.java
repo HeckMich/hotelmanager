@@ -31,9 +31,7 @@ public class Plz {
         return plz;
     }
 
-    public void setPlz(String plz) {
-        this.plz = plz;
-    }
+
 
     public String getCity() {
         return city;
