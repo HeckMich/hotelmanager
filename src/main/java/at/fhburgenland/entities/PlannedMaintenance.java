@@ -107,6 +107,18 @@ public class PlannedMaintenance extends HotelEntity  {
         this.employee_id = employee_id;
     }
 
+    public void setEmployee(Employee employee) {
+        this.employee = employee;
+    }
+
+    public void setMaintenanceType(MaintenanceType maintenanceType) {
+        this.maintenanceType = maintenanceType;
+    }
+
+    public void setRoom(Room room) {
+        this.room = room;
+    }
+
     @Override
     public String toString() {
         return "PlannedMaintenance{" +
@@ -125,14 +137,13 @@ public class PlannedMaintenance extends HotelEntity  {
         // m-Type
         ColorHelper.printBlue("Select a Maintenance type to use.");
         MaintenanceType mt = HotelEntityHandler.selectEntityFromList(MaintenanceType.class);
-        entity.setM_type_id(mt.getM_type_id());
-
+        entity.setMaintenanceType(mt);
         // Room NR
         Room room = HotelEntityHandler.selectEntityFromList(Room.class);
-        entity.setRoom_nr(room.getRoom_nr());
+        entity.setRoom(room);
         // Employee
         Employee employee = HotelEntityHandler.selectEntityFromList(Employee.class);
-        entity.setEmployee_id(employee.getEmployee_id());
+        entity.setEmployee(employee);
         // Start date
         String i1 = "Please enter the Start Date in the format dd.MM.yyy like 18.03.2024";
         String e1 = "Invalid input!";
