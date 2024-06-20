@@ -1,5 +1,6 @@
 package at.fhburgenland.entities;
 
+import at.fhburgenland.handlers.HotelEntityHandler;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -107,7 +108,21 @@ public class Employee extends HotelEntity  {
 
     @Override
     public HotelEntity createFromUserInput() {
-        // TODO implement createFromUserInput in at.fhburgenland.entities.Employee
-        return null;
+        Employee entity = new Employee();
+
+        //JobID
+        Job job = HotelEntityHandler.selectEntityFromList(Job.class);
+        entity.setJob(job);
+        //EMployeeID = automatisch
+        // FirstName
+        String i1 = "Please enter the First Name of the new Employee";
+        String e1 = "Invalid Input";
+        entity.setFirst_name(parseStringFixedLengthFromUser(i1, e1, 1, 20));
+        //LastName
+        String i2 = "Please enter the LAst Name of the new Employee";
+        entity.setLast_name(parseStringFixedLengthFromUser(i2, e1, 1, 30));
+
+
+        return entity;
     }
 }

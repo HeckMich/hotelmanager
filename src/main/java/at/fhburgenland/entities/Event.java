@@ -82,7 +82,18 @@ public class Event extends HotelEntity  {
 
     @Override
     public HotelEntity createFromUserInput() {
-        // TODO implement createFromUserInput in at.fhburgenland.entities.Event
-        return null;
+        Event entity = new Event();
+
+        //Name
+        String i1 = "Please enter the name of the new Event:";
+        String e1 = "Invalid input!";
+        entity.setName(parseStringFixedLengthFromUser(i1,e1, 1, 100));
+        // Date
+        String i2 = "Please enter the Date in the format dd.MM.yyy like 18.03.2024";
+        entity.setDate(parseDateFromUser(i2,e1));
+
+
+
+        return entity;
     }
 }

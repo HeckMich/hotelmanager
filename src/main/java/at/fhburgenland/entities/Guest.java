@@ -1,6 +1,7 @@
 package at.fhburgenland.entities;
 
 import at.fhburgenland.EMFSingleton;
+import at.fhburgenland.handlers.HotelEntityHandler;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -110,6 +111,10 @@ public class Guest extends HotelEntity  {
         this.street = street;
     }
 
+    public void setPlz(Plz plz) {
+        this.plz = plz;
+    }
+
     @Override
     public String toString() {
         return "Guest{" +
@@ -125,7 +130,27 @@ public class Guest extends HotelEntity  {
 
     @Override
     public HotelEntity createFromUserInput() {
-        // TODO implement createFromUserInput in at.fhburgenland.entities.Guest
-        return null;
+        Guest entity = new Guest();
+
+        //PLZ
+        Plz plz = HotelEntityHandler.selectEntityFromList(Plz.class);
+        entity.setPlz(plz);
+        //GuestID=automatisch
+        //First Name
+        String i1 = "Please enter the First Name of the Guest";
+        String e1 = "Invalid input";
+        entity.setFirst_name(parseStringFixedLengthFromUser(i1, e1, 1, 50));
+        //Last Name
+        String i2 = "Please enter the Last Name of the Guest";
+        entity.setLast_name(parseStringFixedLengthFromUser(i2, e1, 1, 50));
+
+        //Street
+        String i3 = "Please enter the Name of the Streeet the Guest is living on";
+        entity.setStreet(parseStringFixedLengthFromUser(i3, e1, 1, 100));
+
+        //HOuseNumber
+        String i4 = "Please enter the House Number of the Guest";
+        entity.setHouse_number(parseIntFromUser(i4, e1));
+        return entity;
     }
 }

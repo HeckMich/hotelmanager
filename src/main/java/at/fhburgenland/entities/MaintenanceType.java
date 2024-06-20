@@ -59,7 +59,14 @@ public class MaintenanceType extends HotelEntity  {
 
     @Override
     public HotelEntity createFromUserInput() {
-        // TODO implement createFromUserInput in at.fhburgenland.entities.MaintenanceType
-        return null;
+        MaintenanceType entity = new MaintenanceType();
+
+        //m_type_id = automatisch
+        //Bezeichnung
+        String i1 = "Please enter the Name/Description of the Maintenance";
+        String e1 = "Invalid input!";
+        entity.setMaintenance_type(parseStringFixedLengthFromUser(i1, e1, 1, 40));
+
+        return entity;
     }
 }

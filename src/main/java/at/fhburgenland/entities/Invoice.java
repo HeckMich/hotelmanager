@@ -1,5 +1,8 @@
 package at.fhburgenland.entities;
 
+import at.fhburgenland.EMFSingleton;
+import at.fhburgenland.handlers.HotelEntityHandler;
+import at.fhburgenland.helpers.ColorHelper;
 import jakarta.persistence.*;
 
 @Entity(name = "invoice")
@@ -74,6 +77,12 @@ public class Invoice extends HotelEntity  {
         this.sum = sum;
     }
 
+    private void setGuest(Guest guest) {
+    }
+
+    private void setReservation(Reservation reservation) {
+    }
+
     @Override
     public String toString() {
         return "Invoice{" +
@@ -86,7 +95,41 @@ public class Invoice extends HotelEntity  {
 
     @Override
     public HotelEntity createFromUserInput() {
-        // TODO implement createFromUserInput in at.fhburgenland.entities.Invoice
-        return null;
+        Invoice entity = new Invoice();
+
+        //GuestId
+        Guest guest = HotelEntityHandler.selectEntityFromList(Guest.class);
+        entity.setGuest(guest);
+        //InvoiceID = automatisch
+
+        //ReservationID
+        Reservation reservation = HotelEntityHandler.selectEntityFromList(Reservation.class);
+        entity.setReservation(reservation);
+        //Sum [maybe late über datenbankabfrage]
+        String i1 = "Please enter the the Sum the Guest has to pay";
+        String e1 = "Invalid input!";
+        entity.setSum(parseIntFromUser(i1,e1));
+
+        //ColorHelper.printGreen("The sum is calculated automatically!");
+        //double sumCosts = calculateSumCosts(entity);
+        //entity.setSum(sumCosts);
+
+        return entity;
     }
+
+    /*private double calculateSumCosts(Invoice entity) {
+        EntityManager em = EMFSingleton.getEntityManager();
+        try {
+            String query = "SUM(D.COST) + SUM(E.COST) * (a.end_date::date - a.start_date::date)";
+            TypedQuery<PlannedMaintenance> tq = em.createQuery(query, PlannedMaintenance.class);
+            tq.setParameter("startDate", startDate);
+            tq.setParameter("endDate", endDate);
+            return tq.getResultList();
+        } finally {
+            em.close();
+        }
+
+    }*/
+
+
 }

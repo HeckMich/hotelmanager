@@ -115,6 +115,14 @@ public class Reservation extends HotelEntity  {
         event.getReservations().remove(this);
     }
 
+    public void setRoom(Room room) {
+        this.room = room;
+    }
+
+    public void setGuest(Guest guest) {
+        this.guest = guest;
+    }
+
     @Override
     public String toString() {
         return "Reservation{" +
@@ -132,10 +140,10 @@ public class Reservation extends HotelEntity  {
 
         //Room NR
         Room room = HotelEntityHandler.selectEntityFromList(Room.class);
-        entity.setRoom(room.getRoom_nr());
+        entity.setRoom(room);
         // Guest
         Guest guest = HotelEntityHandler.selectEntityFromList(Guest.class);
-        entity.setGuest(guest.getGuest_id());
+        entity.setGuest(guest);
         // Start date
         String i1 = "Please enter the Start Date in the format dd.MM.yyy like 18.03.2024";
         String e1 = "Invalid input!";

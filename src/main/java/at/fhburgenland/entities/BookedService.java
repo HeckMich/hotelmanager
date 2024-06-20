@@ -1,7 +1,10 @@
 package at.fhburgenland.entities;
 
 import at.fhburgenland.EMFSingleton;
+import at.fhburgenland.handlers.HotelEntityHandler;
 import jakarta.persistence.*;
+
+import java.security.Provider;
 
 @Entity(name = "booked_service")
 @Table(name = "booked_service")
@@ -79,6 +82,14 @@ public class BookedService extends HotelEntity {
         }
     }
 
+    public void setReservation(Reservation reservation) {
+        this.reservation = reservation;
+    }
+
+    public void setServiceType(ServiceType serviceType) {
+        this.serviceType = serviceType;
+    }
+
     @Override
     public String toString() {
         return "BookedService{" +
@@ -91,7 +102,22 @@ public class BookedService extends HotelEntity {
 
     @Override
     public HotelEntity createFromUserInput() {
+        BookedService entity = new BookedService();
 
-        return null;
+        //Employe ID
+        System.out.println("Here is a List of Employees: ");
+        Employee employee = HotelEntityHandler.selectEntityFromList(Employee.class);
+        entity.setEmployee(employee);
+        //Reservation ID
+        System.out.println("Choose a Reservation ID from List");
+        Reservation reservation = HotelEntityHandler.selectEntityFromList(Reservation.class);
+        entity.setReservation(reservation);
+        //Service ID
+        System.out.println("Choose ServiceId from List");
+        ServiceType serviceType = HotelEntityHandler.selectEntityFromList(ServiceType.class);
+        entity.setServiceType(serviceType);
+
+
+        return entity;
     }
 }
