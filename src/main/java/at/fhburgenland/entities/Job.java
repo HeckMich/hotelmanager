@@ -33,8 +33,7 @@ public class Job extends HotelEntity  {
 
     }
 
-    public Job(int job_id, String name) {
-        this.job_id = job_id;
+    public Job(String name) {
         this.name = name;
     }
 

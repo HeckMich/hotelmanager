@@ -1,5 +1,7 @@
 package at.fhburgenland.entities;
 
+import at.fhburgenland.handlers.HotelEntityHandler;
+import at.fhburgenland.helpers.ColorHelper;
 import jakarta.persistence.*;
 import org.hibernate.annotations.TenantId;
 
@@ -117,9 +119,28 @@ public class PlannedMaintenance extends HotelEntity  {
                 '}';
     }
 
-    @Override
     public HotelEntity createFromUserInput() {
-        // TODO implement createFromUserInput in at.fhburgenland.entities.PlannedMaintenance
-        return null;
+        PlannedMaintenance entity = new PlannedMaintenance();
+
+        // m-Type
+        ColorHelper.printBlue("Select a Maintenance type to use.");
+        MaintenanceType mt = HotelEntityHandler.selectEntityFromList(MaintenanceType.class);
+        entity.setM_type_id(mt.getM_type_id());
+
+        // Room NR
+        Room room = HotelEntityHandler.selectEntityFromList(Room.class);
+        entity.setRoom_nr(room.getRoom_nr());
+        // Employee
+        Employee employee = HotelEntityHandler.selectEntityFromList(Employee.class);
+        entity.setEmployee_id(employee.getEmployee_id());
+        // Start date
+        String i1 = "Please enter the Start Date in the format dd.MM.yyy like 18.03.2024";
+        String e1 = "Invalid input!";
+        entity.setStart_date(parseDateFromUser(i1,e1));
+        // End date
+        String i2 = "Please enter the End Date in the format dd.MM.yyy like 18.03.2024";
+        entity.setEnd_date(parseDateFromUser(i2,e1));
+
+        return entity;
     }
 }

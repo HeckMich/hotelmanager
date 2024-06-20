@@ -68,6 +68,17 @@ public abstract class HotelEntity {
             if (line != null && !line.isEmpty()) {
                 return line;
             }
+            ColorHelper.printRed(errorMessage);
+        }
+    }
+    public static String parseStringFixedLengthFromUser(String instructions, String errorMessage, int minLength, int maxLength) {
+        while (true) {
+            ColorHelper.printBlue(instructions);
+            String line = scanner.nextLine();
+            if (line != null && !line.isEmpty() && line.length() >= minLength && line.length() <= maxLength) {
+                return line;
+            }
+            ColorHelper.printRed(errorMessage);
         }
     }
 }

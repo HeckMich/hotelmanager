@@ -1,5 +1,6 @@
 package at.fhburgenland.entities;
 
+import at.fhburgenland.helpers.ColorHelper;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -30,6 +31,9 @@ public class Plz extends HotelEntity  {
     public String getPlz() {
         return plz;
     }
+    public void setPlz(String newplz) {
+        this.plz = newplz;
+    }
 
     public String getCity() {
         return city;
@@ -50,7 +54,17 @@ public class Plz extends HotelEntity  {
 
     @Override
     public HotelEntity createFromUserInput() {
-        // TODO implement createFromUserInput in at.fhburgenland.entities.Plz
-        return null;
+        Plz entity = new Plz();
+
+        //Plz
+        String i1 = "Please enter the new PLZ. Enter a number between 1 and 10 digits long:";
+        String e1 = "Invalid input!";
+        entity.setPlz(parseStringFixedLengthFromUser(i1,e1,1,10));
+        // City
+        String i2 = "Please enter the name of the city. Use between 1 and 100 characters";
+        entity.setCity(parseStringFixedLengthFromUser(i1,e1,1,100));
+
+        return entity;
     }
+
 }

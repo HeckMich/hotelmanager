@@ -76,7 +76,7 @@ public class CrudMenu {
                 }
                 case "1" -> HotelEntityHandler.create(entity.createFromUserInput());
                 case "2" -> readEntityByIdPromt(entity);
-                case "3" -> HotelEntityHandler.update(entity.createFromUserInput());
+                case "3" -> HotelEntityHandler.update(entity.createFromUserInput()); //Update methode instead ??
                 case "4" -> HotelEntityHandler.delete(HotelEntityHandler.selectEntityFromList(entity.getClass()));
                 default -> ColorHelper.printRed("Invalid input. Try again.");
             }

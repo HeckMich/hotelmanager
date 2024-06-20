@@ -3,6 +3,7 @@ package at.fhburgenland.handlers;
 import at.fhburgenland.EMFSingleton;
 import at.fhburgenland.entities.*;
 import at.fhburgenland.helpers.ColorHelper;
+import jakarta.persistence.Entity;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.TypedQuery;
@@ -20,7 +21,7 @@ public class HotelEntityHandler {
             et.begin();
             em.persist(entity);
             et.commit();
-            System.out.println("Created " + entity.getClass().getName() + ": " + entity);
+            ColorHelper.printGreen("Created " + entity.getClass().getName() + ": " + entity);
         } catch (Exception ex) {
             if (et != null) {
                 et.rollback();
@@ -45,7 +46,7 @@ public class HotelEntityHandler {
             }
             em.remove(entity);
             et.commit();
-            System.out.println("Deleted " + entity);
+            ColorHelper.printGreen("Deleted " + entity);
         } catch (Exception ex) {
             if (et != null) {
                 et.rollback();
@@ -66,12 +67,12 @@ public class HotelEntityHandler {
             et.begin();
             entity = em.merge(entity); //Merge entity to implement changes (can create new entity if PK is not found!)
             et.commit();
-            System.out.println("Updated " + entity);
+            ColorHelper.printGreen("Updated " + entity);
         } catch (Exception ex) {
             if (et != null) {
                 et.rollback();
             }
-            System.out.println("ERROR in HotelEntityHandler update: " + ex.getMessage());
+            System.err.println("ERROR in HotelEntityHandler update: " + ex.getMessage());
             return null;
         } finally {
             em.close();
@@ -93,7 +94,7 @@ public class HotelEntityHandler {
             if (et != null) {
                 et.rollback();
             }
-            System.out.println("ERROR in HotelEntityHandler read: " + ex.getMessage());
+            System.err.println("ERROR in HotelEntityHandler read: " + ex.getMessage());
             return null;
         } finally {
             em.close();
@@ -102,7 +103,7 @@ public class HotelEntityHandler {
 
     public static <T extends HotelEntity> List<T> readAll(Class<T> entityClass){
         EntityManager em = EMFSingleton.getEntityManager();
-        String query = "SELECT x FROM " + entityClass.getSimpleName().toLowerCase() + " x";
+        String query = "SELECT x FROM " + entityClass.getAnnotation(Entity.class).name() + " x";
         List<T> list = null;
         try {
             var x = Plz.class;
@@ -143,9 +144,9 @@ public class HotelEntityHandler {
                 selectedEntity = list.get(index);
                 break;
             } catch (NumberFormatException e) {
-                System.out.println("Invalid input. Please enter a valid number.");
+                System.err.println("Invalid input. Please enter a valid number.");
             } catch (IndexOutOfBoundsException e) {
-                System.out.println("Invalid index. Please enter an index between 0 and " + (list.size() - 1));
+                System.err.println("Invalid index. Please enter an index between 0 and " + (list.size() - 1));
             }
         }
 
