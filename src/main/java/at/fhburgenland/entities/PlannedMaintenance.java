@@ -9,7 +9,7 @@ import java.util.Set;
 
 @Entity(name = "planned_maintenance")
 @Table(name = "planned_maintenance")
-public class PlannedMaintenance {
+public class PlannedMaintenance extends HotelEntity  {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -115,5 +115,11 @@ public class PlannedMaintenance {
                 ", room_nr=" + room_nr +
                 ", employee_id=" + employee_id +
                 '}';
+    }
+
+    @Override
+    public HotelEntity createFromUserInput() {
+        // TODO implement createFromUserInput in at.fhburgenland.entities.PlannedMaintenance
+        return null;
     }
 }

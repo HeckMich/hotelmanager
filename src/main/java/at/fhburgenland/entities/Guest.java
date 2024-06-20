@@ -10,7 +10,7 @@ import java.util.Set;
 
 @Entity(name = "guest")
 @Table(name = "guest")
-public class Guest {
+public class Guest extends HotelEntity  {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -123,4 +123,9 @@ public class Guest {
     }
 
 
+    @Override
+    public HotelEntity createFromUserInput() {
+        // TODO implement createFromUserInput in at.fhburgenland.entities.Guest
+        return null;
+    }
 }

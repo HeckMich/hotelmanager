@@ -7,7 +7,7 @@ import java.util.List;
 
 @Entity(name = "employee")
 @Table(name = "employee")
-public class Employee {
+public class Employee extends HotelEntity  {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -103,5 +103,11 @@ public class Employee {
                 ", first_name='" + first_name + '\'' +
                 ", last_name='" + last_name + '\'' +
                 '}';
+    }
+
+    @Override
+    public HotelEntity createFromUserInput() {
+        // TODO implement createFromUserInput in at.fhburgenland.entities.Employee
+        return null;
     }
 }

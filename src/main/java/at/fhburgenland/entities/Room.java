@@ -1,14 +1,16 @@
 package at.fhburgenland.entities;
 
+import at.fhburgenland.helpers.ColorHelper;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 @Entity(name = "room")
 @Table( name = "room")
-public class Room {
+public class Room extends HotelEntity  {
 
     @Id
     @Column(name = "room_nr", nullable = false)
@@ -50,6 +52,10 @@ public class Room {
         return room_nr;
     }
 
+    public void setRoom_nr(int room_nr) {
+        this.room_nr = room_nr;
+    }
+
     public int getMax_occupants() {
         return max_occupants;
     }
@@ -64,5 +70,34 @@ public class Room {
 
     public void setCost(BigDecimal cost) {
         this.cost = cost;
+    }
+
+    @Override
+    public HotelEntity createFromUserInput() {
+        Room entity = new Room();
+        //Room NR
+        String i1 = "Please enter the Room-Number of the new room. Only enter a number. Do not enter a Room-Number which already exists!";
+        String e1 = "Invalid input!";
+        entity.setRoom_nr(parseIntFromUser(i1,e1));
+        // Cost
+        String i2 = "Please enter the cost of the new room. Only enter a number using '.' for up to two decimal points!";
+        entity.setCost(parseBigDecimalFromUser(i2,e1));
+        // Max Occupants
+        String i3 = "Please enter the maximum number of occupants for the new room. Only enter a number.";
+        entity.setMax_occupants(parseIntFromUser(i3,e1));
+
+        return entity;
+    }
+
+    public HotelEntity updateFromUserInput() {
+        String e1 = "Invalid input!";
+        // Cost
+        String i2 = "Please enter the cost of the new room. Only enter a number. Only enter a number using '.' for up to two decimal points!";
+        this.setCost(parseBigDecimalFromUser(i2,e1));
+        // Max Occupants
+        String i3 = "Please enter the maximum number of occupants for the new room. Only enter a number.";
+        this.setMax_occupants(parseIntFromUser(i3,e1));
+
+        return this;
     }
 }

@@ -1,13 +1,14 @@
 package at.fhburgenland.entities;
 
 import at.fhburgenland.EMFSingleton;
+import at.fhburgenland.handlers.HotelEntityHandler;
 import jakarta.persistence.*;
 
 import java.util.*;
 
 @Entity(name = "reservation")
 @Table(name = "reservation")
-public class Reservation {
+public class Reservation extends HotelEntity  {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "reservation_id")
@@ -123,5 +124,26 @@ public class Reservation {
                 ", end_date=" + end_date +
                 ", room_nr=" + this.room.getRoom_nr() +
                 '}';
+    }
+
+    @Override
+    public HotelEntity createFromUserInput() {
+        Reservation entity = new Reservation();
+
+        //Room NR
+        Room room = HotelEntityHandler.selectEntityFromList(Room.class);
+        entity.setRoom(room.getRoom_nr());
+        // Guest
+        Guest guest = HotelEntityHandler.selectEntityFromList(Guest.class);
+        entity.setGuest(guest.getGuest_id());
+        // Start date
+        String i1 = "Please enter the Start Date in the format dd.MM.yyy like 18.03.2024";
+        String e1 = "Invalid input!";
+        entity.setStart_date(parseDateFromUser(i1,e1));
+        // End date
+        String i2 = "Please enter the End Date in the format dd.MM.yyy like 18.03.2024";
+        entity.setEnd_date(parseDateFromUser(i2,e1));
+
+        return entity;
     }
 }

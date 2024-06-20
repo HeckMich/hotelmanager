@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 
 @Entity(name = "invoice")
 @Table(name = "invoice")
-public class Invoice {
+public class Invoice extends HotelEntity  {
 
     //TODO: Should reservation_id be PK???
 
@@ -82,5 +82,11 @@ public class Invoice {
                 ", reservation_id=" + reservation_id +
                 ", sum=" + sum +
                 '}';
+    }
+
+    @Override
+    public HotelEntity createFromUserInput() {
+        // TODO implement createFromUserInput in at.fhburgenland.entities.Invoice
+        return null;
     }
 }

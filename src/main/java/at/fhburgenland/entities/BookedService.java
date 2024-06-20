@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 
 @Entity(name = "booked_service")
 @Table(name = "booked_service")
-public class BookedService {
+public class BookedService extends HotelEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -87,5 +87,11 @@ public class BookedService {
                 ", serviceType=" + serviceType +
                 ", employee=" + employee +
                 '}';
+    }
+
+    @Override
+    public HotelEntity createFromUserInput() {
+
+        return null;
     }
 }

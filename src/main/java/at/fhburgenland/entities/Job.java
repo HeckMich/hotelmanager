@@ -9,7 +9,7 @@ import java.util.Set;
 
 @Entity(name = "job")
 @Table(name = "job")
-public class Job {
+public class Job extends HotelEntity  {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -82,5 +82,11 @@ public class Job {
                 "job_id=" + job_id +
                 ", name='" + name + '\'' +
                 '}';
+    }
+
+    @Override
+    public HotelEntity createFromUserInput() {
+        // TODO implement createFromUserInput in at.fhburgenland.entities.Job
+        return null;
     }
 }

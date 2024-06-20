@@ -8,7 +8,7 @@ import java.util.Set;
 
 @Entity(name = "event")
 @Table(name = "event")
-public class Event {
+public class Event extends HotelEntity  {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "event_id")
@@ -78,5 +78,11 @@ public class Event {
                 ", name='" + this.name + '\'' +
                 ", date=" + this.date +
                 '}';
+    }
+
+    @Override
+    public HotelEntity createFromUserInput() {
+        // TODO implement createFromUserInput in at.fhburgenland.entities.Event
+        return null;
     }
 }

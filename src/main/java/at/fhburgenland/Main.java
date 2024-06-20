@@ -1,15 +1,28 @@
 package at.fhburgenland;
 
 
+import at.fhburgenland.entities.Guest;
+import at.fhburgenland.entities.HotelEntity;
+import at.fhburgenland.entities.Room;
+import at.fhburgenland.handlers.HotelEntityHandler;
 import at.fhburgenland.helpers.ColorHelper;
 import at.fhburgenland.ui.CrudMenu;
 
+import java.math.BigDecimal;
 import java.util.Scanner;
 
 public class Main {
     private static Scanner scanner = new Scanner(System.in);
     public static void main(String[] args) {
         showMainMenu();
+//          HotelEntityHandler.printAllAsIndexedList(Room.class);
+//          Room r = new Room(992,7, BigDecimal.valueOf(2));
+//          HotelEntityHandler.create(r);
+//          Room rr = new Room(992,3, BigDecimal.valueOf(7));
+//          HotelEntityHandler.update(rr);
+//          HotelEntityHandler.delete(rr);
+//          HotelEntityHandler.printAllAsIndexedList(Room.class);
+//            HotelEntity x = HotelEntityHandler.selectEntityFromList(Guest.class);
     }
 
     private static void showMainMenu() {

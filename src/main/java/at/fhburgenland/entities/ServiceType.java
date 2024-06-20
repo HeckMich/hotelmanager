@@ -10,7 +10,7 @@ import java.util.Set;
 
 @Entity(name = "service_type")
 @Table(name = "service_type")
-public class ServiceType {
+public class ServiceType extends HotelEntity  {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -91,5 +91,19 @@ public class ServiceType {
                 ", name='" + name + '\'' +
                 ", cost=" + cost +
                 '}';
+    }
+
+    @Override
+    public HotelEntity createFromUserInput() {
+        ServiceType entity = new ServiceType();
+        //Name
+        String i1 = "Please enter the name of the new Service Type:";
+        String e1 = "Invalid input!";
+        entity.setName(parseStringFromUser(i1,e1));
+        // Cost
+        String i2 = "Please enter the cost of the new Service Type. Only enter a number using '.' for up to two decimal points!";
+        entity.setCost(parseBigDecimalFromUser(i2,e1));
+
+        return entity;
     }
 }

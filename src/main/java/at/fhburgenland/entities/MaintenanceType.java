@@ -9,7 +9,7 @@ import java.util.Set;
 
 @Entity(name = "maintenance_type")
 @Table(name = "maintenance_type")
-public class MaintenanceType {
+public class MaintenanceType extends HotelEntity  {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -55,5 +55,11 @@ public class MaintenanceType {
                 "m_type_id=" + m_type_id +
                 ", maintenance_type='" + maintenance_type + '\'' +
                 '}';
+    }
+
+    @Override
+    public HotelEntity createFromUserInput() {
+        // TODO implement createFromUserInput in at.fhburgenland.entities.MaintenanceType
+        return null;
     }
 }

@@ -7,7 +7,7 @@ import java.util.List;
 
 @Entity(name = "plz")
 @Table(name = "plz")
-public class Plz {
+public class Plz extends HotelEntity  {
 
     @Id
     @Column(name = "plz", nullable = false, length = 10)
@@ -48,4 +48,9 @@ public class Plz {
     }
 
 
+    @Override
+    public HotelEntity createFromUserInput() {
+        // TODO implement createFromUserInput in at.fhburgenland.entities.Plz
+        return null;
+    }
 }
