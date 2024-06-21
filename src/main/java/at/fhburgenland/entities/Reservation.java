@@ -1,6 +1,6 @@
 package at.fhburgenland.entities;
 
-import at.fhburgenland.EMFSingleton;
+import at.fhburgenland.helpers.EMFSingleton;
 import at.fhburgenland.handlers.HotelEntityHandler;
 import jakarta.persistence.*;
 
@@ -29,6 +29,9 @@ public class Reservation extends HotelEntity  {
     @JoinColumn(name = "room_nr")
     private Room room;
 
+    @Column(name = "room_nr", nullable = false, insertable = false, updatable = false)
+    private int room_nr;
+
     @ManyToOne
     @JoinColumn(name = "guest_id")
     private Guest guest;
@@ -48,6 +51,14 @@ public class Reservation extends HotelEntity  {
         this.start_date = start_date;
         this.end_date = end_date;
         this.event = new HashSet<>();
+    }
+
+    public Reservation(Guest guest,Room room, Date start_date, Date end_datem, HashSet<Event> events) {
+        this.guest = guest;
+        this.room = room;
+        this.start_date = start_date;
+        this.end_date = end_date;
+        this.event = events;
     }
 
     public int getReservation_id() {
@@ -139,10 +150,10 @@ public class Reservation extends HotelEntity  {
         Reservation entity = new Reservation();
 
         //Room NR
-        Room room = HotelEntityHandler.selectEntityFromList(Room.class);
+        Room room = HotelEntityHandler.selectEntityFromFullList(Room.class);
         entity.setRoom(room);
         // Guest
-        Guest guest = HotelEntityHandler.selectEntityFromList(Guest.class);
+        Guest guest = HotelEntityHandler.selectEntityFromFullList(Guest.class);
         entity.setGuest(guest);
         // Start date
         String i1 = "Please enter the Start Date in the format dd.MM.yyy like 18.03.2024";

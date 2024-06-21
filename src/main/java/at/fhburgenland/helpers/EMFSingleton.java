@@ -1,4 +1,4 @@
-package at.fhburgenland;
+package at.fhburgenland.helpers;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;

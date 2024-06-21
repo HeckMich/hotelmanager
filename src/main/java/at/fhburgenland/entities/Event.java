@@ -1,9 +1,11 @@
 package at.fhburgenland.entities;
 
+import at.fhburgenland.helpers.EMFSingleton;
 import jakarta.persistence.*;
 
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity(name = "event")
@@ -31,6 +33,18 @@ public class Event extends HotelEntity  {
 
     public Event(){
 
+    }
+
+    public static List<Event> getEventsForReservation(Date startDate, Date endDate) {
+        EntityManager em = EMFSingleton.getEntityManager();
+        String jpql = "SELECT a FROM event a " +
+                "WHERE a.date BETWEEN :startDate AND :endDate";
+
+        TypedQuery<Event> query = em.createQuery(jpql, Event.class);
+        query.setParameter("startDate", startDate);
+        query.setParameter("endDate", endDate);
+
+        return query.getResultList();
     }
 
     public int getEvent_id() {

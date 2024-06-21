@@ -1,6 +1,6 @@
 package at.fhburgenland.handlers;
 
-import at.fhburgenland.EMFSingleton;
+import at.fhburgenland.helpers.EMFSingleton;
 import at.fhburgenland.entities.*;
 import at.fhburgenland.helpers.ColorHelper;
 import jakarta.persistence.Entity;
@@ -119,26 +119,32 @@ public class HotelEntityHandler {
 
     public static void printAllAsIndexedList(Class<? extends HotelEntity> entityClass) {
         List<? extends HotelEntity> list = readAll(entityClass);
+        printAsIndexedList(list);
+    }
+    public static void printAsIndexedList(List<? extends HotelEntity> list) {
         for (int i = 0; i < list.size(); i++) {
             ColorHelper.printYellow(i + " - " + list.get(i).toString());
         }
     }
 
-    public static <T extends HotelEntity> T selectEntityFromList(Class<T> entityClass) {
+    public static <T extends HotelEntity> T selectEntityFromFullList(Class<T> entityClass) {
         List<T> list = readAll(entityClass);
+        return selectEntityFromList(list);
+    }
 
-        if (list.isEmpty()) {
-            ColorHelper.printRed("No entities found.");
+    public static <T extends HotelEntity> T selectEntityFromList(List<T> list) {
+        if (list == null || list.isEmpty()) {
+            ColorHelper.printRed("No entities in list.");
             return null;
         }
 
         Scanner scanner = new Scanner(System.in);
-        int index = -1;
+        int index;
         T selectedEntity = null;
 
         while (true) {
-            ColorHelper.printBlue("Enter the index of the " + entityClass.getSimpleName() + " to select:");
-            printAllAsIndexedList(entityClass);
+            ColorHelper.printBlue("Enter the index of the " + list.get(0).getClass().getSimpleName() + " to select:");
+            printAsIndexedList(list);
             try {
                 index = Integer.parseInt(scanner.nextLine());
                 selectedEntity = list.get(index);

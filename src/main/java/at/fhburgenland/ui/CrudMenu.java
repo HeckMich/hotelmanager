@@ -3,7 +3,6 @@ package at.fhburgenland.ui;
 import at.fhburgenland.entities.*;
 import at.fhburgenland.handlers.*;
 import at.fhburgenland.helpers.ColorHelper;
-import jakarta.persistence.criteria.CriteriaBuilder;
 
 import java.util.Scanner;
 
@@ -77,7 +76,7 @@ public class CrudMenu {
                 case "1" -> HotelEntityHandler.create(entity.createFromUserInput());
                 case "2" -> readEntityByIdPromt(entity);
                 case "3" -> HotelEntityHandler.update(entity.createFromUserInput()); //Update methode instead ??
-                case "4" -> HotelEntityHandler.delete(HotelEntityHandler.selectEntityFromList(entity.getClass()));
+                case "4" -> HotelEntityHandler.delete(HotelEntityHandler.selectEntityFromFullList(entity.getClass()));
                 default -> ColorHelper.printRed("Invalid input. Try again.");
             }
         }

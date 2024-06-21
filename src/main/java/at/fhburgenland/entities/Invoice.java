@@ -1,8 +1,5 @@
 package at.fhburgenland.entities;
-
-import at.fhburgenland.EMFSingleton;
 import at.fhburgenland.handlers.HotelEntityHandler;
-import at.fhburgenland.helpers.ColorHelper;
 import jakarta.persistence.*;
 
 @Entity(name = "invoice")
@@ -98,12 +95,12 @@ public class Invoice extends HotelEntity  {
         Invoice entity = new Invoice();
 
         //GuestId
-        Guest guest = HotelEntityHandler.selectEntityFromList(Guest.class);
+        Guest guest = HotelEntityHandler.selectEntityFromFullList(Guest.class);
         entity.setGuest(guest);
         //InvoiceID = automatisch
 
         //ReservationID
-        Reservation reservation = HotelEntityHandler.selectEntityFromList(Reservation.class);
+        Reservation reservation = HotelEntityHandler.selectEntityFromFullList(Reservation.class);
         entity.setReservation(reservation);
         //Sum [maybe late über datenbankabfrage]
         String i1 = "Please enter the the Sum the Guest has to pay";

@@ -90,13 +90,12 @@ public class Room extends HotelEntity  {
     }
 
     public HotelEntity updateFromUserInput() {
-        String e1 = "Invalid input!";
-        // Cost
-        String i2 = "Please enter the cost of the new room. Only enter a number. Only enter a number using '.' for up to two decimal points!";
-        this.setCost(parseBigDecimalFromUser(i2,e1));
-        // Max Occupants
-        String i3 = "Please enter the maximum number of occupants for the new room. Only enter a number.";
-        this.setMax_occupants(parseIntFromUser(i3,e1));
+
+        //TODO:
+        // Print List all Room
+        // Select Room from index
+        // -> Query user which attribute they want to change
+        // -> Change accordingly
 
         return this;
     }

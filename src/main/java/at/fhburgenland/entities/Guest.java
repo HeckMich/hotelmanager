@@ -1,6 +1,7 @@
 package at.fhburgenland.entities;
 
-import at.fhburgenland.EMFSingleton;
+import at.fhburgenland.helpers.ColorHelper;
+import at.fhburgenland.helpers.EMFSingleton;
 import at.fhburgenland.handlers.HotelEntityHandler;
 import jakarta.persistence.*;
 
@@ -133,9 +134,27 @@ public class Guest extends HotelEntity  {
         Guest entity = new Guest();
 
         //PLZ
-        Plz plz = HotelEntityHandler.selectEntityFromList(Plz.class);
+        HotelEntityHandler.printAllAsIndexedList(Plz.class);
+        Plz plz = new Plz();
+        boolean choosing = true;
+        while (choosing) {
+            ColorHelper.printBlue("Choose existing Plz?");
+            ColorHelper.printYellow("Y - yes (choose from list)");
+            ColorHelper.printYellow("N - no (enter new Plz)");
+            String line = scanner.next();
+            switch (line) {
+                case "Y", "y" -> {
+                    plz =  HotelEntityHandler.selectEntityFromFullList(Plz.class);
+                    choosing = false;
+                }
+                case "N", "n" -> {
+                    plz = (Plz)HotelEntityHandler.create(plz.createFromUserInput());
+                    choosing = false;
+                }
+                default -> ColorHelper.printRed("Invalid input!");
+            }
+        }
         entity.setPlz(plz);
-        //GuestID=automatisch
         //First Name
         String i1 = "Please enter the First Name of the Guest";
         String e1 = "Invalid input";
@@ -148,7 +167,7 @@ public class Guest extends HotelEntity  {
         String i3 = "Please enter the Name of the Streeet the Guest is living on";
         entity.setStreet(parseStringFixedLengthFromUser(i3, e1, 1, 100));
 
-        //HOuseNumber
+        //HouseNumber
         String i4 = "Please enter the House Number of the Guest";
         entity.setHouse_number(parseIntFromUser(i4, e1));
         return entity;

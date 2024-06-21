@@ -3,11 +3,8 @@ package at.fhburgenland.entities;
 import at.fhburgenland.handlers.HotelEntityHandler;
 import at.fhburgenland.helpers.ColorHelper;
 import jakarta.persistence.*;
-import org.hibernate.annotations.TenantId;
 
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
 
 @Entity(name = "planned_maintenance")
 @Table(name = "planned_maintenance")
@@ -136,13 +133,13 @@ public class PlannedMaintenance extends HotelEntity  {
 
         // m-Type
         ColorHelper.printBlue("Select a Maintenance type to use.");
-        MaintenanceType mt = HotelEntityHandler.selectEntityFromList(MaintenanceType.class);
+        MaintenanceType mt = HotelEntityHandler.selectEntityFromFullList(MaintenanceType.class);
         entity.setMaintenanceType(mt);
         // Room NR
-        Room room = HotelEntityHandler.selectEntityFromList(Room.class);
+        Room room = HotelEntityHandler.selectEntityFromFullList(Room.class);
         entity.setRoom(room);
         // Employee
-        Employee employee = HotelEntityHandler.selectEntityFromList(Employee.class);
+        Employee employee = HotelEntityHandler.selectEntityFromFullList(Employee.class);
         entity.setEmployee(employee);
         // Start date
         String i1 = "Please enter the Start Date in the format dd.MM.yyy like 18.03.2024";

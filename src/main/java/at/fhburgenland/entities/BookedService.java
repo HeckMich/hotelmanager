@@ -1,10 +1,13 @@
 package at.fhburgenland.entities;
 
-import at.fhburgenland.EMFSingleton;
+import at.fhburgenland.helpers.ColorHelper;
+import at.fhburgenland.helpers.EMFSingleton;
 import at.fhburgenland.handlers.HotelEntityHandler;
+import at.fhburgenland.ui.QueryMenu;
 import jakarta.persistence.*;
 
 import java.security.Provider;
+import java.util.List;
 
 @Entity(name = "booked_service")
 @Table(name = "booked_service")
@@ -106,18 +109,38 @@ public class BookedService extends HotelEntity {
 
         //Employe ID
         System.out.println("Here is a List of Employees: ");
-        Employee employee = HotelEntityHandler.selectEntityFromList(Employee.class);
+        Employee employee = HotelEntityHandler.selectEntityFromFullList(Employee.class);
         entity.setEmployee(employee);
         //Reservation ID
         System.out.println("Choose a Reservation ID from List");
-        Reservation reservation = HotelEntityHandler.selectEntityFromList(Reservation.class);
+        Reservation reservation = HotelEntityHandler.selectEntityFromFullList(Reservation.class);
         entity.setReservation(reservation);
         //Service ID
         System.out.println("Choose ServiceId from List");
-        ServiceType serviceType = HotelEntityHandler.selectEntityFromList(ServiceType.class);
+        ServiceType serviceType = HotelEntityHandler.selectEntityFromFullList(ServiceType.class);
         entity.setServiceType(serviceType);
 
+        return entity;
+    }
 
+
+    public static BookedService createFromUserInputForReservationProcess(Reservation reservation) {
+        BookedService entity = new BookedService();
+        //Reservation
+        entity.setReservation(reservation);
+        //Service
+        System.out.println("Please choose which service to add to the reservation:");
+        ServiceType serviceType = HotelEntityHandler.selectEntityFromFullList(ServiceType.class);
+        entity.setServiceType(serviceType);
+        //Employe
+        System.out.println("Please choose which employee should perform the service: ");
+        List<Employee> employeeOptions = QueryMenu.getEmployeesForServiceType(serviceType);
+        if (employeeOptions == null || employeeOptions.isEmpty()) {
+            ColorHelper.printRed("No employees available!");
+            return null;
+        }
+        Employee employee = HotelEntityHandler.selectEntityFromList(employeeOptions);
+        entity.setEmployee(employee);
         return entity;
     }
 }

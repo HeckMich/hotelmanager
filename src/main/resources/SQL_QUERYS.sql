@@ -34,6 +34,8 @@ FROM
 	JOIN ROOM B ON A.ROOM_NR = B.ROOM_NR
 WHERE
 	'2024-07-09' BETWEEN START_DATE AND END_DATE
+
+
 	--Query 3
 	--Part 1 - see available rooms for date
 SELECT DISTINCT

@@ -111,7 +111,7 @@ public class Employee extends HotelEntity  {
         Employee entity = new Employee();
 
         //JobID
-        Job job = HotelEntityHandler.selectEntityFromList(Job.class);
+        Job job = HotelEntityHandler.selectEntityFromFullList(Job.class);
         entity.setJob(job);
         //EMployeeID = automatisch
         // FirstName

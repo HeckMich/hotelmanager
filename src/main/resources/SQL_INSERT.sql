@@ -236,7 +236,7 @@ INSERT INTO
 		SELECT
 			A.GUEST_ID,
 			A.RESERVATION_ID,
-			SUM(D.COST) + SUM(E.COST) --* (a.end_date::date - a.start_date::date)
+			SUM(D.COST) + SUM(E.COST) * (a.end_date::date - a.start_date::date)
 		FROM
 			RESERVATION A
 			JOIN BOOKED_SERVICE C ON A.RESERVATION_ID = C.RESERVATION_ID

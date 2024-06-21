@@ -51,6 +51,7 @@ public abstract class HotelEntity {
             if (line != null && !line.isEmpty()) {
                 try {
                     SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy", Locale.GERMAN);
+                    formatter.setLenient(false); //Will only accept correct dates
                     Date date = formatter.parse(line);
                     return date;
                 } catch (ParseException x) {
