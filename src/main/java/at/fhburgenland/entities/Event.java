@@ -22,7 +22,7 @@ public class Event extends HotelEntity  {
     @Temporal(TemporalType.DATE)
     private Date date;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.REMOVE)
     @JoinTable(name = "will_attend", joinColumns = {@JoinColumn(name = "event_id")}, inverseJoinColumns = {@JoinColumn(name = "reservation_id")})
     private Set<Reservation> reservation = new HashSet<>();
 
@@ -86,15 +86,6 @@ public class Event extends HotelEntity  {
     }
 
     @Override
-    public String toString() {
-        return "Event{" +
-                "event_id=" + this.event_id +
-                ", name='" + this.name + '\'' +
-                ", date=" + this.date +
-                '}';
-    }
-
-    @Override
     public HotelEntity createFromUserInput() {
         Event entity = new Event();
 
@@ -109,5 +100,14 @@ public class Event extends HotelEntity  {
 
 
         return entity;
+    }
+
+    @Override
+    public String toString() {
+        return "[" +
+                "event_id : " + event_id +
+                ", name : '" + name + '\'' +
+                ", date : " + date +
+                "]";
     }
 }

@@ -6,6 +6,7 @@ package at.fhburgenland.helpers;
  */
 public class ColorHelper {
     private static final String ANSI_RED = "\u001B[31m";
+    private static final String ANSI_ORANGE = "\u001B[38;5;208m";
     private static final String ANSI_YELLOW = "\u001B[33m";
     private static final String ANSI_GREEN = "\u001B[32m";
     private static final String ANSI_BLUE = "\u001b[34m";
@@ -16,6 +17,12 @@ public class ColorHelper {
      */
     public static void printRed(String line) {
         System.out.println(ANSI_RED + line + ANSI_RESET);
+    }
+    /**Prints line to console in ORANGE
+     * @param line Line to print in color
+     */
+    public static void printOrange(String line) {
+        System.out.println(ANSI_ORANGE + line + ANSI_RESET);
     }
     /**Prints line to console in GREEN
      * @param line Line to print in color

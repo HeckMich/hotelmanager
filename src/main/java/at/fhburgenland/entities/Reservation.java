@@ -22,7 +22,7 @@ public class Reservation extends HotelEntity  {
     @Temporal(TemporalType.DATE)
     private Date end_date;
 
-    @ManyToMany(mappedBy = "reservation")
+    @ManyToMany(mappedBy = "reservation", cascade = CascadeType.REMOVE)
     private Set<Event> event = new HashSet<>();
 
     @ManyToOne
@@ -36,10 +36,10 @@ public class Reservation extends HotelEntity  {
     @JoinColumn(name = "guest_id")
     private Guest guest;
 
-    @OneToMany(mappedBy = "reservation")
+    @OneToMany(mappedBy = "reservation", cascade = CascadeType.REMOVE)
     private List<Invoice> invoices = new ArrayList<>();
 
-    @OneToMany(mappedBy = "reservation")
+    @OneToMany(mappedBy = "reservation", cascade = CascadeType.REMOVE)
     private List<BookedService> bookedServices  = new ArrayList<>();
 
     public Reservation() {
@@ -53,7 +53,7 @@ public class Reservation extends HotelEntity  {
         this.event = new HashSet<>();
     }
 
-    public Reservation(Guest guest,Room room, Date start_date, Date end_datem, HashSet<Event> events) {
+    public Reservation(Guest guest,Room room, Date start_date, Date end_date, HashSet<Event> events) {
         this.guest = guest;
         this.room = room;
         this.start_date = start_date;
@@ -135,17 +135,6 @@ public class Reservation extends HotelEntity  {
     }
 
     @Override
-    public String toString() {
-        return "Reservation{" +
-                "reservation_id=" + reservation_id +
-                ", guest_id=" + this.guest.getGuest_id() +
-                ", start_date=" + start_date +
-                ", end_date=" + end_date +
-                ", room_nr=" + this.room.getRoom_nr() +
-                '}';
-    }
-
-    @Override
     public HotelEntity createFromUserInput() {
         Reservation entity = new Reservation();
 
@@ -164,5 +153,17 @@ public class Reservation extends HotelEntity  {
         entity.setEnd_date(parseDateFromUser(i2,e1));
 
         return entity;
+    }
+
+
+    @Override
+    public String toString() {
+        return "[" +
+                "reservation_id : " + reservation_id +
+                ", start_date : " + start_date +
+                ", end_date : " + end_date +
+                ", room_nr : " + room_nr +
+                ", guest : " + guest +
+                "]";
     }
 }

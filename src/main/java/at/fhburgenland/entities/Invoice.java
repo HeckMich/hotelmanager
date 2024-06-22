@@ -81,16 +81,6 @@ public class Invoice extends HotelEntity  {
     }
 
     @Override
-    public String toString() {
-        return "Invoice{" +
-                "invoice_id=" + invoice_id +
-                ", guest_id=" + guest_id +
-                ", reservation_id=" + reservation_id +
-                ", sum=" + sum +
-                '}';
-    }
-
-    @Override
     public HotelEntity createFromUserInput() {
         Invoice entity = new Invoice();
 
@@ -129,4 +119,13 @@ public class Invoice extends HotelEntity  {
     }*/
 
 
+    @Override
+    public String toString() {
+        return "[" +
+                "invoice_id : " + invoice_id +
+                ", guest_id : " + guest_id +
+                ", reservation_id : " + reservation_id +
+                ", sum : " + sum +
+                "]";
+    }
 }

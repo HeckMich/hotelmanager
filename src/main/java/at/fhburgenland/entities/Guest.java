@@ -34,14 +34,14 @@ public class Guest extends HotelEntity  {
     @Column(name = "plz", nullable = false, insertable = false, updatable = false)
     private String plz_;
 
-    @OneToMany(mappedBy = "guest")
+    @OneToMany(mappedBy = "guest", cascade = CascadeType.REMOVE)
     private Set<Reservation> reservations = new HashSet<>();
 
     @ManyToOne
     @JoinColumn(name = "plz")
     private Plz plz;
 
-    @OneToMany(mappedBy = "guest")
+    @OneToMany(mappedBy = "guest", cascade = CascadeType.REMOVE)
     private List<Invoice> invoices = new ArrayList<>();
 
     public Guest() {
@@ -116,18 +116,6 @@ public class Guest extends HotelEntity  {
         this.plz = plz;
     }
 
-    @Override
-    public String toString() {
-        return "Guest{" +
-                "guest_id=" + guest_id +
-                ", plz='" + plz + '\'' +
-                ", last_name='" + last_name + '\'' +
-                ", first_name='" + first_name + '\'' +
-                ", house_number=" + house_number +
-                ", street='" + street + '\'' +
-                '}';
-    }
-
 
     @Override
     public HotelEntity createFromUserInput() {
@@ -171,5 +159,18 @@ public class Guest extends HotelEntity  {
         String i4 = "Please enter the House Number of the Guest";
         entity.setHouse_number(parseIntFromUser(i4, e1));
         return entity;
+    }
+
+
+    @Override
+    public String toString() {
+        return "[" +
+                "guest_id : " + guest_id +
+                ", last_name : '" + last_name + '\'' +
+                ", first_name : '" + first_name + '\'' +
+                ", house_number : " + house_number +
+                ", street : '" + street + '\'' +
+                ", plz : '" + plz_ + '\'' +
+                "]";
     }
 }

@@ -94,16 +94,6 @@ public class BookedService extends HotelEntity {
     }
 
     @Override
-    public String toString() {
-        return "BookedService{" +
-                "bookedserviceid=" + bookedserviceid +
-                ", reservation=" + reservation +
-                ", serviceType=" + serviceType +
-                ", employee=" + employee +
-                '}';
-    }
-
-    @Override
     public HotelEntity createFromUserInput() {
         BookedService entity = new BookedService();
 
@@ -133,7 +123,7 @@ public class BookedService extends HotelEntity {
         ServiceType serviceType = HotelEntityHandler.selectEntityFromFullList(ServiceType.class);
         entity.setServiceType(serviceType);
         //Employe
-        System.out.println("Please choose which employee should perform the service: ");
+        System.out.println("Please choose which qualified employee should perform the service: ");
         List<Employee> employeeOptions = QueryMenu.getEmployeesForServiceType(serviceType);
         if (employeeOptions == null || employeeOptions.isEmpty()) {
             ColorHelper.printRed("No employees available!");
@@ -142,5 +132,15 @@ public class BookedService extends HotelEntity {
         Employee employee = HotelEntityHandler.selectEntityFromList(employeeOptions);
         entity.setEmployee(employee);
         return entity;
+    }
+
+    @Override
+    public String toString() {
+        return "[" +
+                "bookedserviceid : " + bookedserviceid +
+                ", reservation : " + reservation +
+                ", serviceType : " + serviceType +
+                ", employee : " + employee +
+                "]";
     }
 }

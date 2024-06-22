@@ -23,20 +23,85 @@ public class CrudMenu {
             ColorHelper.printYellow("10 - BookedService");
             ColorHelper.printYellow("11 - Employee");
             ColorHelper.printYellow("12 - PlannedMaintenance");
-            ColorHelper.printYellow("X  - Cancel");
+            ColorHelper.printOrange("X - Return");
 
             String line = scanner.nextLine();
 
             try {
+                if (line.toLowerCase().matches("x")) {
+                    return;
+                }
                 int type = Integer.parseInt(line);
                 if (type > 0 && type <= 12) {
                     showCrudOptions(emptyEntityFromType(type));
-                    break;
                 } else {
                     throw new NumberFormatException();
                 }
             } catch (Exception x) {
                 ColorHelper.printRed(("Please enter a number in the provided range!"));
+            }
+        }
+    }
+
+    private static void showCrudOptions(HotelEntity entity) {
+        while(true) {
+            ColorHelper.printBlue("Choose the CRUD option to perform on " + entity.getClass().getSimpleName() + ":");
+            ColorHelper.printYellow("1 - CREATE");
+            ColorHelper.printYellow("2 - READ");
+            ColorHelper.printYellow("3 - UPDATE");
+            ColorHelper.printYellow("4 - DELETE");
+            ColorHelper.printOrange("X - Return");
+            String line = scanner.nextLine();
+            switch (line) {
+                case "X", "x" -> {
+                    return;
+                }
+                case "1" -> HotelEntityHandler.create(entity.createFromUserInput());
+                case "2" -> readEntityByIdPromt(entity);
+                case "3" -> {
+                    if(entity.getClass() == Room.class) {
+                        HotelEntityHandler.update(((Room) entity).updateFromUserInput());
+                    } else {
+                        HotelEntityHandler.update(entity.createFromUserInput());
+                    }
+                }
+                case "4" -> {
+                    ColorHelper.printBlue("Choose the " + entity.getClass().getSimpleName() + " to delete. Be careful, deleting one entity can have a cascading effect on others! Like deleting a room will also delete all associated reservations.");
+                    HotelEntityHandler.delete(HotelEntityHandler.selectEntityFromFullList(entity.getClass()));
+                }
+                default -> ColorHelper.printRed("Invalid input. Try again.");
+            }
+        }
+    }
+
+    private static void readEntityByIdPromt(HotelEntity entity) {
+        while(true) {
+            ColorHelper.printBlue("Please enter the ID of the " + entity.getClass().getSimpleName() + " to read.");
+            ColorHelper.printBlue("Or press L to print list of all " + entity.getClass().getSimpleName() + "s" );
+            String line = scanner.nextLine();
+            switch (line) {
+                case "X", "x" -> {
+                    return;
+                }
+                case "L", "l" -> {
+                    HotelEntityHandler.printAsNeutralList(HotelEntityHandler.readAll(entity.getClass()));
+                    return;
+                }
+                default -> {
+                    try {
+                        int i = Integer.parseInt(line);
+                        HotelEntity result = HotelEntityHandler.read(entity.getClass(), i);
+                        if (result != null) {
+                            ColorHelper.printGreen("The following " + entity.getClass().getSimpleName() + " was read from DB:");
+                            ColorHelper.printGreen(result.toString());
+                        } else {
+                            ColorHelper.printRed("No result found!");
+                        }
+                        return;
+                    } catch (NumberFormatException x) {
+                        ColorHelper.printRed("Invalid input!");
+                    }
+                }
             }
         }
     }
@@ -58,116 +123,4 @@ public class CrudMenu {
             default: throw new IllegalArgumentException("Not a valid type");
         }
     }
-
-
-    private static void showCrudOptions(HotelEntity entity) {
-        while(true) {
-            ColorHelper.printBlue("Choose the CRUD option to perform:");
-            ColorHelper.printYellow("1 - CREATE");
-            ColorHelper.printYellow("2 - READ");
-            ColorHelper.printYellow("3 - UPDATE");
-            ColorHelper.printYellow("4 - DELETE");
-            ColorHelper.printYellow("X - Cancel");
-            String line = scanner.nextLine();
-            switch (line) {
-                case "X", "x" -> {
-                    return;
-                }
-                case "1" -> HotelEntityHandler.create(entity.createFromUserInput());
-                case "2" -> readEntityByIdPromt(entity);
-                case "3" -> HotelEntityHandler.update(entity.createFromUserInput()); //Update methode instead ??
-                case "4" -> HotelEntityHandler.delete(HotelEntityHandler.selectEntityFromFullList(entity.getClass()));
-                default -> ColorHelper.printRed("Invalid input. Try again.");
-            }
-        }
-    }
-
-    private static void readEntityByIdPromt(HotelEntity entity) {
-        while(true) {
-            ColorHelper.printBlue("Please enter the ID of the " + entity.getClass().getSimpleName() + "to read.");
-            ColorHelper.printBlue("Or press L to print list of all " + entity.getClass().getSimpleName() );
-            String line = scanner.nextLine();
-            switch (line) {
-                case "X", "x" -> {
-                    return;
-                }
-                case "L", "l" -> {
-                    HotelEntityHandler.printAllAsIndexedList(entity.getClass());
-                    return;
-                }
-                default -> {
-                    try {
-                        int i = Integer.parseInt(line);
-                        HotelEntity result = HotelEntityHandler.read(entity.getClass(), i);
-                        ColorHelper.printGreen("The following " + entity.getClass().getSimpleName() + " was read from DB:");
-                        ColorHelper.printGreen(result.toString());
-                        return;
-                    } catch (NumberFormatException x) {
-                        ColorHelper.printRed("Invalid input!");
-                    }
-                }
-            }
-        }
-    }
-
-
-//    private static void callRead(int type) {
-//        int id = queryUserForID();
-//        switch (type) {
-//            case 1 -> ColorHelper.printGreen(RoomHandler.readRoom(id).toString());
-//            case 2 -> ColorHelper.printGreen(ReservationHandler.readReservation(id).toString());
-//            case 3 -> ColorHelper.printGreen(InvoiceHandler.readInvoice(id).toString());
-//            case 4 -> ColorHelper.printGreen(EventHandler.readEvent(id).toString());
-//            case 5 -> ColorHelper.printGreen(PlzHandler.readPlz(id).toString());
-//            case 6 -> ColorHelper.printGreen(GuestHandler.readGuest(id).toString());
-//            case 7 -> ColorHelper.printGreen(MaintenanceTypeHandler.readMaintenanceType(id).toString());
-//            case 8 -> ColorHelper.printGreen(JobHandler.readJob(id).toString());
-//            case 9 -> ColorHelper.printGreen(ServiceTypeHandler.readServiceType(id).toString());
-////            case 10 -> ColorHelper.printGreen(BookedServiceHandler.readBookedService(id).toString());
-//            case 11 -> ColorHelper.printGreen(EmployeeHandler.readEmployee(id).toString());
-//            case 12 -> ColorHelper.printGreen(PlannedMaintenanceHandler.readPlannedMaintenance(id).toString());
-//        }
-//    }
-//
-//    private static void callDelete(int type) {
-//        int id = queryUserForID();
-//        switch (type) {
-//            case 1 ->  ColorHelper.printGreen("Deleted item with id " + id + " successfully: " + RoomHandler.deleteRoom(id));
-//            case 2 ->  ColorHelper.printGreen("Deleted item with id " + id + " successfully: " + ReservationHandler.deleteReservation(id));
-//            case 3 ->  ColorHelper.printGreen("Deleted item with id " + id + " successfully: " + InvoiceHandler.deleteInvoice(id));
-//            case 4 ->  ColorHelper.printGreen("Deleted item with id " + id + " successfully: " + EventHandler.deleteEvent(id));
-//            case 5 ->  ColorHelper.printGreen("Deleted item with id " + id + " successfully: " + PlzHandler.deletePlz(id));
-//            case 6 ->  ColorHelper.printGreen("Deleted item with id " + id + " successfully: " + GuestHandler.deleteGuest(id));
-//            case 7 ->  ColorHelper.printGreen("Deleted item with id " + id + " successfully: " + MaintenanceTypeHandler.deleteMaintenanceType(id));
-//            case 8 ->  ColorHelper.printGreen("Deleted item with id " + id + " successfully: " + JobHandler.deleteJob(id));
-//            case 9 ->  ColorHelper.printGreen("Deleted item with id " + id + " successfully: " + ServiceTypeHandler.deleteServiceType(id));
-////            case 10 -> ColorHelper.printGreen("Deleted item with id " + id + " successfully: " + BookedServiceHandler.(id));
-//            case 11 -> ColorHelper.printGreen("Deleted item with id " + id + " successfully: " + EmployeeHandler.deleteEmployee(id));
-//            case 12 -> ColorHelper.printGreen("Deleted item with id " + id + " successfully: " + PlannedMaintenanceHandler.deletePlannedMaintenance(id));
-//        }
-//    }
-//    private static int queryUserForID() {
-//        while(true) {
-//            ColorHelper.printBlue("Please enter the ID of the entity you want to select:");
-//            String line = scanner.nextLine();
-//            try {
-//                return Integer.parseInt(line);
-//            } catch (NumberFormatException x) {
-//                ColorHelper.printRed(("Please enter a number matching the desired ID."));
-//            }
-//        }
-//    }
-
-//    private static void printListOf() {
-//        while(true) {
-//            ColorHelper.printBlue("Please enter the ID of the entity you want to select:");
-//            String line = scanner.nextLine();
-//            try {
-//                return Integer.parseInt(line);
-//            } catch (NumberFormatException x) {
-//                ColorHelper.printRed(("Please enter a number matching the desired ID."));
-//            }
-//        }
-//    }
-
 }

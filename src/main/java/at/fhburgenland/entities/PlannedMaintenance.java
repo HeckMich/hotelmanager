@@ -116,18 +116,6 @@ public class PlannedMaintenance extends HotelEntity  {
         this.room = room;
     }
 
-    @Override
-    public String toString() {
-        return "PlannedMaintenance{" +
-                "maint_id=" + maint_id +
-                ", m_type_id=" + m_type_id +
-                ", start_date=" + start_date +
-                ", end_date=" + end_date +
-                ", room_nr=" + room_nr +
-                ", employee_id=" + employee_id +
-                '}';
-    }
-
     public HotelEntity createFromUserInput() {
         PlannedMaintenance entity = new PlannedMaintenance();
 
@@ -150,5 +138,17 @@ public class PlannedMaintenance extends HotelEntity  {
         entity.setEnd_date(parseDateFromUser(i2,e1));
 
         return entity;
+    }
+
+    @Override
+    public String toString() {
+        return "[" +
+                "maint_id : " + maint_id +
+                ", m_type_id : " + m_type_id +
+                ", start_date : " + start_date +
+                ", end_date : " + end_date +
+                ", room_nr : " + room_nr +
+                ", employee_id : " + employee_id +
+                "]";
     }
 }

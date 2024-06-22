@@ -17,7 +17,7 @@ public class Plz extends HotelEntity  {
     @Column(name = "city", nullable = false, length = 100)
     private String city;
 
-    @OneToMany(mappedBy = "plz")
+    @OneToMany(mappedBy = "plz", cascade = CascadeType.REMOVE)
     private List<Guest> guests = new ArrayList<>();
 
     public Plz() {
@@ -43,14 +43,6 @@ public class Plz extends HotelEntity  {
         this.city = city;
     }
 
-    @Override
-    public String toString() {
-        return "Plz{" +
-                "plz='" + plz + '\'' +
-                ", city='" + city + '\'' +
-                '}';
-    }
-
 
     @Override
     public HotelEntity createFromUserInput() {
@@ -66,4 +58,11 @@ public class Plz extends HotelEntity  {
         return entity;
     }
 
+    @Override
+    public String toString() {
+        return "[" +
+                "plz : '" + plz + '\'' +
+                ", city : '" + city + '\'' +
+                "]";
+    }
 }

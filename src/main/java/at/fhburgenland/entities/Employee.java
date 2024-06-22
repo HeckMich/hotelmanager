@@ -24,14 +24,14 @@ public class Employee extends HotelEntity  {
     @Column(name = "last_name", length = 30, nullable = false)
     private String last_name;
 
-    @OneToMany(mappedBy = "employee")
+    @OneToMany(mappedBy = "employee", cascade = CascadeType.REMOVE)
     private List<BookedService> bookedServices  = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "job_id")
     private Job job;
 
-    @OneToMany(mappedBy = "employee")
+    @OneToMany(mappedBy = "employee", cascade = CascadeType.REMOVE)
     private List<PlannedMaintenance> plannedMaintenances = new ArrayList<>();
 
     public Employee() {
@@ -97,16 +97,6 @@ public class Employee extends HotelEntity  {
     }
 
     @Override
-    public String toString() {
-        return "Employee{" +
-                "employee_id=" + employee_id +
-                ", job_id=" + job_id +
-                ", first_name='" + first_name + '\'' +
-                ", last_name='" + last_name + '\'' +
-                '}';
-    }
-
-    @Override
     public HotelEntity createFromUserInput() {
         Employee entity = new Employee();
 
@@ -124,5 +114,14 @@ public class Employee extends HotelEntity  {
 
 
         return entity;
+    }
+
+    @Override
+    public String toString() {
+        return "[" +
+                "employee_id : " + employee_id +
+                ", first_name : '" + first_name + '\'' +
+                ", last_name : '" + last_name + '\'' +
+                "]";
     }
 }

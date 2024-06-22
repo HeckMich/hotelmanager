@@ -12,6 +12,7 @@ import java.util.Scanner;
 
 public abstract class HotelEntity {
     protected static Scanner scanner = new Scanner(System.in);
+    protected static String e1 = "Invalid input!";
     public abstract HotelEntity createFromUserInput();
 
     public static int parseIntFromUser(String instructions, String errorMessage) {

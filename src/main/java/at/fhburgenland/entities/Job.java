@@ -76,16 +76,16 @@ public class Job extends HotelEntity  {
     }
 
     @Override
-    public String toString() {
-        return "Job{" +
-                "job_id=" + job_id +
-                ", name='" + name + '\'' +
-                '}';
-    }
-
-    @Override
     public HotelEntity createFromUserInput() {
         // TODO implement createFromUserInput in at.fhburgenland.entities.Job
         return null;
+    }
+
+    @Override
+    public String toString() {
+        return "[" +
+                "job_id : " + job_id +
+                ", name : '" + name + '\'' +
+                "]";
     }
 }

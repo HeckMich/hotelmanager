@@ -127,6 +127,12 @@ public class HotelEntityHandler {
         }
     }
 
+    public static void printAsNeutralList(List<? extends HotelEntity> list) {
+        for (int i = 0; i < list.size(); i++) {
+            System.out.println((list.get(i).toString()));
+        }
+    }
+
     public static <T extends HotelEntity> T selectEntityFromFullList(Class<T> entityClass) {
         List<T> list = readAll(entityClass);
         return selectEntityFromList(list);

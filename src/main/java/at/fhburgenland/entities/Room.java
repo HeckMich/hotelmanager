@@ -1,5 +1,6 @@
 package at.fhburgenland.entities;
 
+import at.fhburgenland.handlers.HotelEntityHandler;
 import at.fhburgenland.helpers.ColorHelper;
 import jakarta.persistence.*;
 
@@ -22,10 +23,10 @@ public class Room extends HotelEntity  {
     @Column(name = "cost", nullable = false, precision = 5, scale = 2)
     private BigDecimal cost;
 
-    @OneToMany(mappedBy = "room")
+    @OneToMany(mappedBy = "room", cascade = CascadeType.REMOVE)
     private List<Reservation> reservations = new ArrayList<>();
 
-    @OneToMany(mappedBy = "room")
+    @OneToMany(mappedBy = "room", cascade = CascadeType.REMOVE)
     private List<PlannedMaintenance> plannedMaintenances = new ArrayList<>();
 
 
@@ -37,15 +38,6 @@ public class Room extends HotelEntity  {
         this.room_nr = room_nr;
         this.max_occupants = max_occupants;
         this.cost = cost;
-    }
-
-    @Override
-    public String toString() {
-        return "Room{" +
-                "room_nr=" + room_nr +
-                ", max_occupants=" + max_occupants +
-                ", cost=" + cost +
-                '}';
     }
 
     public int getRoom_nr() {
@@ -76,27 +68,56 @@ public class Room extends HotelEntity  {
     public HotelEntity createFromUserInput() {
         Room entity = new Room();
         //Room NR
-        String i1 = "Please enter the Room-Number of the new room. Only enter a number. Do not enter a Room-Number which already exists!";
-        String e1 = "Invalid input!";
-        entity.setRoom_nr(parseIntFromUser(i1,e1));
+        changeRoomNr(entity);
         // Cost
-        String i2 = "Please enter the cost of the new room. Only enter a number using '.' for up to two decimal points!";
-        entity.setCost(parseBigDecimalFromUser(i2,e1));
+        changeCost(entity);
         // Max Occupants
-        String i3 = "Please enter the maximum number of occupants for the new room. Only enter a number.";
-        entity.setMax_occupants(parseIntFromUser(i3,e1));
-
+        changeMaxOccupants(entity);
         return entity;
     }
 
     public HotelEntity updateFromUserInput() {
-
-        //TODO:
-        // Print List all Room
         // Select Room from index
+        ColorHelper.printBlue("Please select the room to update:");
+        Room entity = HotelEntityHandler.selectEntityFromFullList(this.getClass());
         // -> Query user which attribute they want to change
-        // -> Change accordingly
+        while (true) {
+            ColorHelper.printBlue("What do you want to change?");
+            ColorHelper.printYellow("1 - Cost");
+            ColorHelper.printYellow("2 - Max Occupants");
+            ColorHelper.printYellow("X - Finish");
+            String line = scanner.nextLine();
+            switch (line) {
+                case "x","X" -> {
+                    return entity;
+                }
+                case "1" ->  changeCost(entity);
+                case "2" ->  changeMaxOccupants(entity);
+                default ->  ColorHelper.printRed(e1);
+            }
 
-        return this;
+        }
+    }
+
+    private void changeCost(Room entity) {
+        String i2 = "Please enter the new cost for the room. Only enter a number using '.' for up to two decimal points!";
+        entity.setCost(parseBigDecimalFromUser(i2,e1));
+    }
+    private void changeRoomNr(Room entity) {
+        String i1 = "Please enter the Room-Number of the new room. Only enter a number. Do not enter a Room-Number which already exists!";
+        entity.setRoom_nr(parseIntFromUser(i1,e1));
+    }
+    private void changeMaxOccupants(Room entity) {
+        String i3 = "Please enter the maximum number of occupants for the room. Only enter a number.";
+        entity.setMax_occupants(parseIntFromUser(i3,e1));
+    }
+
+    @Override
+    public String toString() {
+        return "[" +
+                "room_nr : " + room_nr +
+                ", max_occupants : " + max_occupants +
+                ", cost : " + cost +
+                "]";
     }
 }

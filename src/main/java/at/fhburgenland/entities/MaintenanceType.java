@@ -23,7 +23,7 @@ public class MaintenanceType extends HotelEntity  {
     @JoinTable(name = "can_do_maintenance", joinColumns = {@JoinColumn(name = "m_type_id")}, inverseJoinColumns = {@JoinColumn(name = "job_id")})
     private Set<Job> jobs = new HashSet<>();
 
-    @OneToMany(mappedBy = "maintenanceType")
+    @OneToMany(mappedBy = "maintenanceType", cascade = CascadeType.REMOVE)
     private List<PlannedMaintenance> plannedMaintenances = new ArrayList<>();
 
     public MaintenanceType() {
@@ -50,14 +50,6 @@ public class MaintenanceType extends HotelEntity  {
     }
 
     @Override
-    public String toString() {
-        return "MaintenanceType{" +
-                "m_type_id=" + m_type_id +
-                ", maintenance_type='" + maintenance_type + '\'' +
-                '}';
-    }
-
-    @Override
     public HotelEntity createFromUserInput() {
         MaintenanceType entity = new MaintenanceType();
 
@@ -68,5 +60,13 @@ public class MaintenanceType extends HotelEntity  {
         entity.setMaintenance_type(parseStringFixedLengthFromUser(i1, e1, 1, 40));
 
         return entity;
+    }
+
+    @Override
+    public String toString() {
+        return "[" +
+                "m_type_id : " + m_type_id +
+                ", maintenance_type : '" + maintenance_type + '\'' +
+                "]";
     }
 }

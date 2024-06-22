@@ -24,10 +24,10 @@ public class ServiceType extends HotelEntity  {
     @Column(name = "cost", nullable = false, precision = 5, scale = 2)
     private BigDecimal cost;
 
-    @OneToMany(mappedBy = "serviceType")
+    @OneToMany(mappedBy = "serviceType", cascade = CascadeType.REMOVE)
     private List<BookedService> bookedServices  = new ArrayList<>();
 
-    @ManyToMany(mappedBy = "serviceTypes")
+    @ManyToMany(mappedBy = "serviceTypes", cascade = CascadeType.REMOVE)
     private Set<Job> jobs = new HashSet<>();
 
     public ServiceType() {
@@ -85,15 +85,6 @@ public class ServiceType extends HotelEntity  {
     }
 
     @Override
-    public String toString() {
-        return "ServiceType{" +
-                "service_id=" + service_id +
-                ", name='" + name + '\'' +
-                ", cost=" + cost +
-                '}';
-    }
-
-    @Override
     public HotelEntity createFromUserInput() {
         ServiceType entity = new ServiceType();
         //Name
@@ -105,5 +96,14 @@ public class ServiceType extends HotelEntity  {
         entity.setCost(parseBigDecimalFromUser(i2,e1));
 
         return entity;
+    }
+
+    @Override
+    public String toString() {
+        return "[" +
+                "service_id : " + service_id +
+                ", name : '" + name + '\'' +
+                ", cost : " + cost +
+                "]";
     }
 }

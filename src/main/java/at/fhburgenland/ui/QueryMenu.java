@@ -35,7 +35,7 @@ public class QueryMenu {
 
     public static void reservationProcess() {
         ColorHelper.printGreen("Starting Reservation Process!");
-        //Check if room is free for date-range
+        //Check if a room is free for date-range
         //  N -> end
         //  Y -> return lis of rooms
         List<Date> dateList = fetchDatesFromUserInput();
@@ -74,6 +74,8 @@ public class QueryMenu {
     private static boolean createReservationUserInput(Reservation reservation) {
         while (true) {
             ColorHelper.printGreen("The following Reservation was prepared based on your input: " + reservation.toString());
+            ColorHelper.printGreen("The following Events were booked for the reservation: ");
+            HotelEntityHandler.printAsNeutralList(reservation.getEvents().stream().toList());
             ColorHelper.printBlue("Do you want to confirm this reservation and save it to the Hotel Management System? (Services will be booked after confirmation)");
             ColorHelper.printYellow("Y - Yes (Save reservation to database)");
             ColorHelper.printYellow("N - No (Cancel and return to menu)");
@@ -163,9 +165,9 @@ public class QueryMenu {
     }
 
     private static List<Date> fetchDatesFromUserInput() {
-        String instructions = "Please enter the desired Start Date of the reservation in the format dd.MM.yyy like 18.03.2024";
+        String instructions = "Please enter the desired Start Date of the reservation in the format dd.MM.yyyy like 18.03.2024";
         String errorMessage = "Invalid Input!";
-        String instructions2 = "Please enter the desired End Date of the reservation in the format dd.MM.yyy like 18.03.2024";
+        String instructions2 = "Please enter the desired End Date of the reservation in the format dd.MM.yyyy like 18.03.2024";
         Date startDate;
         Date endDate;
         while (true) {
@@ -184,9 +186,13 @@ public class QueryMenu {
     private static List<Room> fetchAvailableRoomsFromUserInput(Date startDate, Date endDate) {
         EntityManager em = EMFSingleton.getEntityManager();
         try {
-            String query = "SELECT DISTINCT r FROM room r LEFT JOIN r.reservations res " +
-                    "WHERE res.start_date > :endDate OR res.end_date < :startDate OR res IS NULL " +
-                    "ORDER BY r.room_nr";
+            String query = "SELECT a FROM room a " +
+                    "WHERE NOT EXISTS (" +
+                    "SELECT 1 FROM reservation b " +
+                    "WHERE b.room = a AND " +
+                    "b.start_date <= :endDate AND " +
+                    "b.end_date >= :startDate" +
+                    ") ORDER BY a.room_nr";
             TypedQuery<Room> tq = em.createQuery(query, Room.class);
             tq.setParameter("startDate", startDate);
             tq.setParameter("endDate", endDate);
