@@ -14,6 +14,7 @@ public abstract class HotelEntity {
     protected static Scanner scanner = new Scanner(System.in);
     protected static String e1 = "Invalid input!";
     public abstract HotelEntity createFromUserInput();
+    public abstract HotelEntity updateFromUserInput();
 
     public static int parseIntFromUser(String instructions, String errorMessage) {
         while (true) {
