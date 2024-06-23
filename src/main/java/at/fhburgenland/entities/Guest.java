@@ -120,17 +120,14 @@ public class Guest extends HotelEntity  {
     @Override
     public HotelEntity createFromUserInput() {
         Guest entity = new Guest();
-
         //PLZ
         changePlz(entity);
         //First Name
         changeFirstName(entity);
         //Last Name
         changeLastName(entity);
-
         //Street
         changeStreet(entity);
-
         //HouseNumber
         changeHouseNumber(entity);
         return entity;

@@ -126,7 +126,6 @@ public class ServiceType extends HotelEntity  {
                 case "2" ->  changeCostFromUser(entity);
                 default ->  ColorHelper.printRed(e1);
             }
-
         }
     }
 

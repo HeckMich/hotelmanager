@@ -21,7 +21,7 @@ public class HotelEntityHandler {
             et.begin();
             em.persist(entity);
             et.commit();
-            ColorHelper.printGreen("Created " + entity.getClass().getName() + ": " + entity);
+            ColorHelper.printGreen("Created " + entity.getClass().getSimpleName() + ": " + entity);
         } catch (Exception ex) {
             if (et != null) {
                 et.rollback();
@@ -106,7 +106,6 @@ public class HotelEntityHandler {
         String query = "SELECT x FROM " + entityClass.getAnnotation(Entity.class).name() + " x";
         List<T> list = null;
         try {
-            var x = Plz.class;
             TypedQuery<T> tq = em.createQuery(query, entityClass);
             list = tq.getResultList();
         } catch (Exception ex) {

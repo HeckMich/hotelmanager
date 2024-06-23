@@ -138,10 +138,11 @@ public class Reservation extends HotelEntity  {
     @Override
     public HotelEntity createFromUserInput() {
         Reservation entity = new Reservation();
-
         //Room NR
+        ColorHelper.printBlue("Please select the room for reservation:");
         changeRoomFromUser(entity);
         // Guest
+        ColorHelper.printBlue("Please select the Guest for reservation:");
         changeGuestFromUser(entity);
         // Date
         changeDatesFromUser(entity);

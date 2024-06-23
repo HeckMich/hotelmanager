@@ -100,7 +100,7 @@ public class Room extends HotelEntity  {
     }
 
     private void changeCost(Room entity) {
-        String i2 = "Please enter the new cost for the room. Only enter a number using '.' for up to two decimal points!";
+        String i2 = "Please enter the new cost for the room. Only enter a number using '.' for up to two decimal points! To a Maximum of 99999.99";
         entity.setCost(parseBigDecimalFromUser(i2,e1));
     }
     private void changeRoomNr(Room entity) {

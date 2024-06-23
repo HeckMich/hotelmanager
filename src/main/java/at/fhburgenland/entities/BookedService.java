@@ -96,23 +96,32 @@ public class BookedService extends HotelEntity {
     @Override
     public HotelEntity createFromUserInput() {
         BookedService entity = new BookedService();
-
-
-        //Service ID
-        changeServiceType(entity);
-        //Employe ID
-        changeEmployee(entity);
         //Reservation ID
         changeReservationID(entity);
-
-
+        changeServiceTypeAndEmployee(entity);
         return entity;
     }
 
-    private static void changeServiceType(BookedService entity) {
+    private static void changeServiceTypeAndEmployee(BookedService entity) {
+        while (true) {
+            //Service ID
+            ServiceType stype = changeServiceType(entity);
+            //Employe ID
+            Employee e = getEmployeeRestricted(entity,stype);
+            if (e == null) {
+                ColorHelper.printRed("Please choose a different service.");
+            } else {
+                entity.setEmployee(e);
+                break;
+            }
+        }
+    }
+
+    private static ServiceType changeServiceType(BookedService entity) {
         System.out.println("Choose ServiceId from List");
         ServiceType serviceType = HotelEntityHandler.selectEntityFromFullList(ServiceType.class);
         entity.setServiceType(serviceType);
+        return serviceType;
     }
 
     private static void changeReservationID(BookedService entity) {
@@ -125,6 +134,17 @@ public class BookedService extends HotelEntity {
         System.out.println("Here is a List of Employees: ");
         Employee employee = HotelEntityHandler.selectEntityFromFullList(Employee.class);
         entity.setEmployee(employee);
+    }
+
+    private static Employee getEmployeeRestricted(BookedService entity, ServiceType serviceType) {
+        System.out.println("Please choose which qualified employee should perform the service: ");
+        List<Employee> employeeOptions = QueryMenu.getEmployeesForServiceType(serviceType);
+        if (employeeOptions == null || employeeOptions.isEmpty()) {
+            ColorHelper.printRed("No employees available!");
+            return null;
+        }
+        Employee employee = HotelEntityHandler.selectEntityFromList(employeeOptions);
+        return employee;
     }
 
 
@@ -156,21 +176,18 @@ public class BookedService extends HotelEntity {
         // -> Query user which attribute they want to change
         while (true) {
             ColorHelper.printBlue("What do you want to change?");
-            ColorHelper.printYellow("1 - Employee");
+            ColorHelper.printYellow("1 - Service Type and Employee");
             ColorHelper.printYellow("2 - ReservationID");
-            ColorHelper.printYellow("3 - ServiceType");
             ColorHelper.printYellow("X - Finish");
             String line = scanner.nextLine();
             switch (line) {
                 case "x","X" -> {
                     return entity;
                 }
-                case "1" ->  changeEmployee(entity);
+                case "1" ->  changeServiceTypeAndEmployee(entity);
                 case "2" ->  changeReservationID(entity);
-                case "3" ->  changeServiceType(entity);
                 default ->  ColorHelper.printRed(e1);
             }
-
         }
     }
 
@@ -178,9 +195,9 @@ public class BookedService extends HotelEntity {
     public String toString() {
         return "[" +
                 "bookedserviceid : " + bookedserviceid +
-                ", reservationID : " + reservation.getReservation_id() +
-                ", serviceTypeID : " + serviceType.getService_id() +
-                ", employeeID : " + employee.getEmployee_id() +
+                ", reservation : " + reservation +
+                ", serviceType : " + serviceType +
+                ", employee : " + employee +
                 "]";
     }
 }

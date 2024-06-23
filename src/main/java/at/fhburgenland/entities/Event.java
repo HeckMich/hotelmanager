@@ -90,17 +90,15 @@ public class Event extends HotelEntity  {
     @Override
     public HotelEntity createFromUserInput() {
         Event entity = new Event();
-
         //Name
         changeEventName(entity);
         // Date
-        changeStartDate(entity);
-
+        changeDate(entity);
 
         return entity;
     }
 
-    private static void changeStartDate(Event entity) {
+    private static void changeDate(Event entity) {
         String i2 = "Please enter the Date in the format dd.MM.yyy like 18.03.2024";
         entity.setDate(parseDateFromUser(i2,e1));
     }
@@ -127,10 +125,9 @@ public class Event extends HotelEntity  {
                     return entity;
                 }
                 case "1" ->  changeEventName(entity);
-                case "2" ->  changeStartDate(entity);
+                case "2" ->  changeDate(entity);
                 default ->  ColorHelper.printRed(e1);
             }
-
         }
     }
 
