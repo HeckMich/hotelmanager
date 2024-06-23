@@ -1,6 +1,7 @@
 package at.fhburgenland.entities;
 
 import at.fhburgenland.handlers.HotelEntityHandler;
+import at.fhburgenland.helpers.ColorHelper;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -101,19 +102,56 @@ public class Employee extends HotelEntity  {
         Employee entity = new Employee();
 
         //JobID
-        Job job = HotelEntityHandler.selectEntityFromFullList(Job.class);
-        entity.setJob(job);
+        changeJob(entity);
         //EMployeeID = automatisch
         // FirstName
-        String i1 = "Please enter the First Name of the new Employee";
-        String e1 = "Invalid Input";
-        entity.setFirst_name(parseStringFixedLengthFromUser(i1, e1, 1, 20));
+        changeFirstName(entity);
         //LastName
-        String i2 = "Please enter the LAst Name of the new Employee";
-        entity.setLast_name(parseStringFixedLengthFromUser(i2, e1, 1, 30));
+        changeLastName(entity);
 
 
         return entity;
+    }
+
+    private static void changeLastName(Employee entity) {
+        String i2 = "Please enter the Last Name of the new Employee";
+        entity.setLast_name(parseStringFixedLengthFromUser(i2, e1, 1, 30));
+    }
+
+    private static void changeFirstName(Employee entity) {
+        String i1 = "Please enter the First Name of the new Employee";
+        entity.setFirst_name(parseStringFixedLengthFromUser(i1, e1, 1, 20));
+    }
+
+    private static void changeJob(Employee entity) {
+        Job job = HotelEntityHandler.selectEntityFromFullList(Job.class);
+        entity.setJob(job);
+    }
+
+    @Override
+    public HotelEntity updateFromUserInput() {
+        // Select Room from index
+        ColorHelper.printBlue("Please select the employee to update:");
+        Employee entity = HotelEntityHandler.selectEntityFromFullList(this.getClass());
+        // -> Query user which attribute they want to change
+        while (true) {
+            ColorHelper.printBlue("What do you want to change?");
+            ColorHelper.printYellow("1 - Job");
+            ColorHelper.printYellow("2 - First Name");
+            ColorHelper.printYellow("3 - Last Name");
+            ColorHelper.printYellow("X - Finish");
+            String line = scanner.nextLine();
+            switch (line) {
+                case "x","X" -> {
+                    return entity;
+                }
+                case "1" ->  changeJob(entity);
+                case "2" ->  changeFirstName(entity);
+                case "3" ->  changeLastName(entity);
+                default ->  ColorHelper.printRed(e1);
+            }
+
+        }
     }
 
     @Override

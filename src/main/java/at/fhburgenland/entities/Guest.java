@@ -122,6 +122,41 @@ public class Guest extends HotelEntity  {
         Guest entity = new Guest();
 
         //PLZ
+        changePlz(entity);
+        //First Name
+        changeFirstName(entity);
+        //Last Name
+        changeLastName(entity);
+
+        //Street
+        changeStreet(entity);
+
+        //HouseNumber
+        changeHouseNumber(entity);
+        return entity;
+    }
+
+    private static void changeHouseNumber(Guest entity) {
+        String i4 = "Please enter the House Number of the Guest";
+        entity.setHouse_number(parseIntFromUser(i4, e1));
+    }
+
+    private static void changeStreet(Guest entity) {
+        String i3 = "Please enter the Name of the Streeet the Guest is living on";
+        entity.setStreet(parseStringFixedLengthFromUser(i3, e1, 1, 100));
+    }
+
+    private static void changeLastName(Guest entity) {
+        String i2 = "Please enter the Last Name of the Guest";
+        entity.setLast_name(parseStringFixedLengthFromUser(i2, e1, 1, 50));
+    }
+
+    private static void changeFirstName(Guest entity) {
+        String i1 = "Please enter the First Name of the Guest";
+        entity.setFirst_name(parseStringFixedLengthFromUser(i1, e1, 1, 50));
+    }
+
+    private static void changePlz(Guest entity) {
         HotelEntityHandler.printAllAsIndexedList(Plz.class);
         Plz plz = new Plz();
         boolean choosing = true;
@@ -143,22 +178,35 @@ public class Guest extends HotelEntity  {
             }
         }
         entity.setPlz(plz);
-        //First Name
-        String i1 = "Please enter the First Name of the Guest";
-        String e1 = "Invalid input";
-        entity.setFirst_name(parseStringFixedLengthFromUser(i1, e1, 1, 50));
-        //Last Name
-        String i2 = "Please enter the Last Name of the Guest";
-        entity.setLast_name(parseStringFixedLengthFromUser(i2, e1, 1, 50));
+    }
 
-        //Street
-        String i3 = "Please enter the Name of the Streeet the Guest is living on";
-        entity.setStreet(parseStringFixedLengthFromUser(i3, e1, 1, 100));
+    public HotelEntity updateFromUserInput() {
+        // Select Room from index
+        ColorHelper.printBlue("Please select the guest to update:");
+        Guest entity = HotelEntityHandler.selectEntityFromFullList(this.getClass());
+        // -> Query user which attribute they want to change
+        while (true) {
+            ColorHelper.printBlue("What do you want to change?");
+            ColorHelper.printYellow("1 - PLZ");
+            ColorHelper.printYellow("2 - First Name");
+            ColorHelper.printYellow("3 - Last Name");
+            ColorHelper.printYellow("4 - Street");
+            ColorHelper.printYellow("5 - House Number");
+            ColorHelper.printYellow("X - Finish");
+            String line = scanner.nextLine();
+            switch (line) {
+                case "x","X" -> {
+                    return entity;
+                }
+                case "1" ->  changePlz(entity);
+                case "2" ->  changeFirstName(entity);
+                case "3" ->  changeLastName(entity);
+                case "4" ->  changeStreet(entity);
+                case "5" ->  changeHouseNumber(entity);
+                default ->  ColorHelper.printRed(e1);
+            }
 
-        //HouseNumber
-        String i4 = "Please enter the House Number of the Guest";
-        entity.setHouse_number(parseIntFromUser(i4, e1));
-        return entity;
+        }
     }
 
 

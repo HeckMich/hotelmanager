@@ -1,5 +1,7 @@
 package at.fhburgenland.entities;
 
+import at.fhburgenland.handlers.HotelEntityHandler;
+import at.fhburgenland.helpers.ColorHelper;
 import at.fhburgenland.helpers.EMFSingleton;
 import jakarta.persistence.*;
 
@@ -90,16 +92,46 @@ public class Event extends HotelEntity  {
         Event entity = new Event();
 
         //Name
-        String i1 = "Please enter the name of the new Event:";
-        String e1 = "Invalid input!";
-        entity.setName(parseStringFixedLengthFromUser(i1,e1, 1, 100));
+        changeEventName(entity);
         // Date
-        String i2 = "Please enter the Date in the format dd.MM.yyy like 18.03.2024";
-        entity.setDate(parseDateFromUser(i2,e1));
-
+        changeStartDate(entity);
 
 
         return entity;
+    }
+
+    private static void changeStartDate(Event entity) {
+        String i2 = "Please enter the Date in the format dd.MM.yyy like 18.03.2024";
+        entity.setDate(parseDateFromUser(i2,e1));
+    }
+
+    private static void changeEventName(Event entity) {
+        String i1 = "Please enter the name of the new Event:";
+        entity.setName(parseStringFixedLengthFromUser(i1,e1, 1, 100));
+    }
+
+    @Override
+    public HotelEntity updateFromUserInput() {
+        // Select Room from index
+        ColorHelper.printBlue("Please select the event to update:");
+        Event entity = HotelEntityHandler.selectEntityFromFullList(this.getClass());
+        // -> Query user which attribute they want to change
+        while (true) {
+            ColorHelper.printBlue("What do you want to change?");
+            ColorHelper.printYellow("1 - Event Name");
+            ColorHelper.printYellow("2 - Date");
+            ColorHelper.printYellow("X - Finish");
+            String line = scanner.nextLine();
+            switch (line) {
+                case "x","X" -> {
+                    return entity;
+                }
+                case "1" ->  changeEventName(entity);
+                case "2" ->  changeStartDate(entity);
+                default ->  ColorHelper.printRed(e1);
+            }
+
+        }
     }
 
     @Override

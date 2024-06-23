@@ -98,19 +98,31 @@ public class BookedService extends HotelEntity {
         BookedService entity = new BookedService();
 
         //Employe ID
-        System.out.println("Here is a List of Employees: ");
-        Employee employee = HotelEntityHandler.selectEntityFromFullList(Employee.class);
-        entity.setEmployee(employee);
+        changeEmployee(entity);
         //Reservation ID
-        System.out.println("Choose a Reservation ID from List");
-        Reservation reservation = HotelEntityHandler.selectEntityFromFullList(Reservation.class);
-        entity.setReservation(reservation);
+        changeReservationID(entity);
         //Service ID
+        changeServiceType(entity);
+
+        return entity;
+    }
+
+    private static void changeServiceType(BookedService entity) {
         System.out.println("Choose ServiceId from List");
         ServiceType serviceType = HotelEntityHandler.selectEntityFromFullList(ServiceType.class);
         entity.setServiceType(serviceType);
+    }
 
-        return entity;
+    private static void changeReservationID(BookedService entity) {
+        System.out.println("Choose a Reservation ID from List");
+        Reservation reservation = HotelEntityHandler.selectEntityFromFullList(Reservation.class);
+        entity.setReservation(reservation);
+    }
+
+    private static void changeEmployee(BookedService entity) {
+        System.out.println("Here is a List of Employees: ");
+        Employee employee = HotelEntityHandler.selectEntityFromFullList(Employee.class);
+        entity.setEmployee(employee);
     }
 
 
@@ -132,6 +144,32 @@ public class BookedService extends HotelEntity {
         Employee employee = HotelEntityHandler.selectEntityFromList(employeeOptions);
         entity.setEmployee(employee);
         return entity;
+    }
+
+    @Override
+    public HotelEntity updateFromUserInput() {
+        // Select Room from index
+        ColorHelper.printBlue("Please select the booked service to update:");
+        BookedService entity = HotelEntityHandler.selectEntityFromFullList(this.getClass());
+        // -> Query user which attribute they want to change
+        while (true) {
+            ColorHelper.printBlue("What do you want to change?");
+            ColorHelper.printYellow("1 - Employee");
+            ColorHelper.printYellow("2 - ReservationID");
+            ColorHelper.printYellow("3 - ServiceType");
+            ColorHelper.printYellow("X - Finish");
+            String line = scanner.nextLine();
+            switch (line) {
+                case "x","X" -> {
+                    return entity;
+                }
+                case "1" ->  changeEmployee(entity);
+                case "2" ->  changeReservationID(entity);
+                case "3" ->  changeServiceType(entity);
+                default ->  ColorHelper.printRed(e1);
+            }
+
+        }
     }
 
     @Override
