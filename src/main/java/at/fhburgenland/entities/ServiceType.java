@@ -1,5 +1,7 @@
 package at.fhburgenland.entities;
 
+import at.fhburgenland.handlers.HotelEntityHandler;
+import at.fhburgenland.helpers.ColorHelper;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
@@ -88,14 +90,44 @@ public class ServiceType extends HotelEntity  {
     public HotelEntity createFromUserInput() {
         ServiceType entity = new ServiceType();
         //Name
-        String i1 = "Please enter the name of the new Service Type:";
-        String e1 = "Invalid input!";
-        entity.setName(parseStringFromUser(i1,e1));
+        changeNameFromUser(entity);
         // Cost
-        String i2 = "Please enter the cost of the new Service Type. Only enter a number using '.' for up to two decimal points!";
-        entity.setCost(parseBigDecimalFromUser(i2,e1));
+        changeCostFromUser(entity);
 
         return entity;
+    }
+
+    private static void changeCostFromUser(ServiceType entity) {
+        String i2 = "Please enter the cost of the new Service Type. Only enter a number using '.' for up to two decimal points!";
+        entity.setCost(parseBigDecimalFromUser(i2,e1));
+    }
+
+    private void changeNameFromUser(ServiceType entity) {
+        String i1 = "Please enter the name of the new Service Type:";
+        entity.setName(parseStringFromUser(i1,e1));
+    }
+
+    public HotelEntity updateFromUserInput() {
+        // Select from index
+        ColorHelper.printBlue("Please select the " + this.getClass().getSimpleName() +" to update:");
+        ServiceType entity = HotelEntityHandler.selectEntityFromFullList(this.getClass());
+        // -> Query user which attribute they want to change
+        while (true) {
+            ColorHelper.printBlue("What do you want to change?");
+            ColorHelper.printYellow("1 - Name");
+            ColorHelper.printYellow("2 - Cost");
+            ColorHelper.printYellow("X - Finish");
+            String line = scanner.nextLine();
+            switch (line) {
+                case "x","X" -> {
+                    return entity;
+                }
+                case "1" ->  changeNameFromUser(entity);
+                case "2" ->  changeCostFromUser(entity);
+                default ->  ColorHelper.printRed(e1);
+            }
+
+        }
     }
 
     @Override

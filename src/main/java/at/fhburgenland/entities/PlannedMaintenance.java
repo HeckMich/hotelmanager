@@ -120,24 +120,67 @@ public class PlannedMaintenance extends HotelEntity  {
         PlannedMaintenance entity = new PlannedMaintenance();
 
         // m-Type
-        ColorHelper.printBlue("Select a Maintenance type to use.");
-        MaintenanceType mt = HotelEntityHandler.selectEntityFromFullList(MaintenanceType.class);
-        entity.setMaintenanceType(mt);
+        changeMType(entity);
         // Room NR
-        Room room = HotelEntityHandler.selectEntityFromFullList(Room.class);
-        entity.setRoom(room);
+        changeRoomNr(entity);
         // Employee
-        Employee employee = HotelEntityHandler.selectEntityFromFullList(Employee.class);
-        entity.setEmployee(employee);
+        changeEmployee(entity);
+        // Dates
+        changeDates(entity);
+
+        return entity;
+    }
+
+    private static void changeDates(PlannedMaintenance entity) {
         // Start date
         String i1 = "Please enter the Start Date in the format dd.MM.yyy like 18.03.2024";
-        String e1 = "Invalid input!";
         entity.setStart_date(parseDateFromUser(i1,e1));
         // End date
         String i2 = "Please enter the End Date in the format dd.MM.yyy like 18.03.2024";
         entity.setEnd_date(parseDateFromUser(i2,e1));
+    }
 
-        return entity;
+    private static void changeEmployee(PlannedMaintenance entity) {
+        Employee employee = HotelEntityHandler.selectEntityFromFullList(Employee.class);
+        entity.setEmployee(employee);
+    }
+
+    private static void changeRoomNr(PlannedMaintenance entity) {
+        Room room = HotelEntityHandler.selectEntityFromFullList(Room.class);
+        entity.setRoom(room);
+    }
+
+    private static void changeMType(PlannedMaintenance entity) {
+        ColorHelper.printBlue("Select a Maintenance type to use.");
+        MaintenanceType mt = HotelEntityHandler.selectEntityFromFullList(MaintenanceType.class);
+        entity.setMaintenanceType(mt);
+    }
+
+    public HotelEntity updateFromUserInput() {
+        // Select from index
+        ColorHelper.printBlue("Please select the " + this.getClass().getSimpleName() +" to update:");
+        PlannedMaintenance entity = HotelEntityHandler.selectEntityFromFullList(this.getClass());
+        // -> Query user which attribute they want to change
+        while (true) {
+            ColorHelper.printBlue("What do you want to change?");
+            ColorHelper.printYellow("1 - Maintenance Type");
+            ColorHelper.printYellow("2 - Room");
+            ColorHelper.printYellow("3 - Employee");
+            ColorHelper.printYellow("4 - Dates");
+            ColorHelper.printYellow("X - Finish");
+            String line = scanner.nextLine();
+            switch (line) {
+                case "x","X" -> {
+                    return entity;
+                }
+                case "1" ->  changeMType(entity);
+                case "2" ->  changeRoomNr(entity);
+                case "3" ->  changeEmployee(entity);
+                case "4" ->  changeDates(entity);
+                default ->  ColorHelper.printRed(e1);
+            }
+
+        }
     }
 
     @Override

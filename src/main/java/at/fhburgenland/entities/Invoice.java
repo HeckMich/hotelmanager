@@ -1,5 +1,6 @@
 package at.fhburgenland.entities;
 import at.fhburgenland.handlers.HotelEntityHandler;
+import at.fhburgenland.helpers.ColorHelper;
 import jakarta.persistence.*;
 
 @Entity(name = "invoice")
@@ -85,23 +86,60 @@ public class Invoice extends HotelEntity  {
         Invoice entity = new Invoice();
 
         //GuestId
-        Guest guest = HotelEntityHandler.selectEntityFromFullList(Guest.class);
-        entity.setGuest(guest);
+        changeGuest(entity);
         //InvoiceID = automatisch
 
         //ReservationID
-        Reservation reservation = HotelEntityHandler.selectEntityFromFullList(Reservation.class);
-        entity.setReservation(reservation);
+        changeReservation(entity);
         //Sum [maybe late über datenbankabfrage]
-        String i1 = "Please enter the the Sum the Guest has to pay";
-        String e1 = "Invalid input!";
-        entity.setSum(parseIntFromUser(i1,e1));
+        changeSum(entity);
 
         //ColorHelper.printGreen("The sum is calculated automatically!");
         //double sumCosts = calculateSumCosts(entity);
         //entity.setSum(sumCosts);
 
         return entity;
+    }
+
+    private static void changeSum(Invoice entity) {
+        String i1 = "Please enter the the Sum the Guest has to pay";
+        String e1 = "Invalid input!";
+        entity.setSum(parseIntFromUser(i1,e1));
+    }
+
+    private static void changeReservation(Invoice entity) {
+        Reservation reservation = HotelEntityHandler.selectEntityFromFullList(Reservation.class);
+        entity.setReservation(reservation);
+    }
+
+    private static void changeGuest(Invoice entity) {
+        Guest guest = HotelEntityHandler.selectEntityFromFullList(Guest.class);
+        entity.setGuest(guest);
+    }
+
+    public HotelEntity updateFromUserInput() {
+        // Select from index
+        ColorHelper.printBlue("Please select the " + this.getClass().getSimpleName() +" to update:");
+        Invoice entity = HotelEntityHandler.selectEntityFromFullList(this.getClass());
+        // -> Query user which attribute they want to change
+        while (true) {
+            ColorHelper.printBlue("What do you want to change?");
+            ColorHelper.printYellow("1 - Guest");
+            ColorHelper.printYellow("2 - Reservation");
+            ColorHelper.printYellow("3 - Sum");
+            ColorHelper.printYellow("X - Finish");
+            String line = scanner.nextLine();
+            switch (line) {
+                case "x","X" -> {
+                    return entity;
+                }
+                case "1" ->  changeGuest(entity);
+                case "2" ->  changeReservation(entity);
+                case "3" ->  changeSum(entity);
+                default ->  ColorHelper.printRed(e1);
+            }
+
+        }
     }
 
     /*private double calculateSumCosts(Invoice entity) {

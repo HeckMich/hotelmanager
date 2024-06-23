@@ -1,5 +1,7 @@
 package at.fhburgenland.entities;
 
+import at.fhburgenland.handlers.HotelEntityHandler;
+import at.fhburgenland.helpers.ColorHelper;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -77,8 +79,37 @@ public class Job extends HotelEntity  {
 
     @Override
     public HotelEntity createFromUserInput() {
-        // TODO implement createFromUserInput in at.fhburgenland.entities.Job
-        return null;
+        Job entity = new Job();
+        // Name
+        changeName(entity);
+
+        return entity;
+    }
+
+    private void changeName(Job entity) {
+        String i1 = "Please enter the name of the new Service Type:";
+        entity.setName(parseStringFromUser(i1,e1));
+    }
+
+    public HotelEntity updateFromUserInput() {
+        // Select from index
+        ColorHelper.printBlue("Please select the " + this.getClass().getSimpleName() +" to update:");
+        Job entity = HotelEntityHandler.selectEntityFromFullList(this.getClass());
+        // -> Query user which attribute they want to change
+        while (true) {
+            ColorHelper.printBlue("What do you want to change?");
+            ColorHelper.printYellow("1 - Name");
+            ColorHelper.printYellow("X - Finish");
+            String line = scanner.nextLine();
+            switch (line) {
+                case "x","X" -> {
+                    return entity;
+                }
+                case "1" ->  changeName(entity);
+                default ->  ColorHelper.printRed(e1);
+            }
+
+        }
     }
 
     @Override

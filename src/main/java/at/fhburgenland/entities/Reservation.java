@@ -1,5 +1,6 @@
 package at.fhburgenland.entities;
 
+import at.fhburgenland.helpers.ColorHelper;
 import at.fhburgenland.helpers.EMFSingleton;
 import at.fhburgenland.handlers.HotelEntityHandler;
 import jakarta.persistence.*;
@@ -139,20 +140,61 @@ public class Reservation extends HotelEntity  {
         Reservation entity = new Reservation();
 
         //Room NR
+        changeRoomFromUser(entity);
+        // Guest
+        changeGuestFromUser(entity);
+        // Date
+        changeDatesFromUser(entity);
+
+
+
+        return entity;
+    }
+
+
+    public HotelEntity updateFromUserInput() {
+        // Select from index
+        ColorHelper.printBlue("Please select the " + this.getClass().getSimpleName() +" to update:");
+        Reservation entity = HotelEntityHandler.selectEntityFromFullList(this.getClass());
+        // -> Query user which attribute they want to change
+        while (true) {
+            ColorHelper.printBlue("What do you want to change?");
+            ColorHelper.printYellow("1 - Room");
+            ColorHelper.printYellow("2 - Guest");
+            ColorHelper.printYellow("3 - Dates");
+            ColorHelper.printYellow("X - Finish");
+            String line = scanner.nextLine();
+            switch (line) {
+                case "x","X" -> {
+                    return entity;
+                }
+                case "1" ->  changeRoomFromUser(entity);
+                case "2" ->  changeGuestFromUser(entity);
+                case "3" ->  changeDatesFromUser(entity);
+                default ->  ColorHelper.printRed(e1);
+            }
+
+        }
+    }
+
+    private static void changeRoomFromUser(Reservation entity) {
         Room room = HotelEntityHandler.selectEntityFromFullList(Room.class);
         entity.setRoom(room);
-        // Guest
-        Guest guest = HotelEntityHandler.selectEntityFromFullList(Guest.class);
-        entity.setGuest(guest);
+    }
+
+
+    private static void changeDatesFromUser(Reservation entity) {
         // Start date
         String i1 = "Please enter the Start Date in the format dd.MM.yyy like 18.03.2024";
-        String e1 = "Invalid input!";
         entity.setStart_date(parseDateFromUser(i1,e1));
         // End date
         String i2 = "Please enter the End Date in the format dd.MM.yyy like 18.03.2024";
         entity.setEnd_date(parseDateFromUser(i2,e1));
+    }
 
-        return entity;
+    private static void changeGuestFromUser(Reservation entity) {
+        Guest guest = HotelEntityHandler.selectEntityFromFullList(Guest.class);
+        entity.setGuest(guest);
     }
 
 

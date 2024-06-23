@@ -1,5 +1,7 @@
 package at.fhburgenland.entities;
 
+import at.fhburgenland.handlers.HotelEntityHandler;
+import at.fhburgenland.helpers.ColorHelper;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -55,11 +57,35 @@ public class MaintenanceType extends HotelEntity  {
 
         //m_type_id = automatisch
         //Bezeichnung
-        String i1 = "Please enter the Name/Description of the Maintenance";
-        String e1 = "Invalid input!";
-        entity.setMaintenance_type(parseStringFixedLengthFromUser(i1, e1, 1, 40));
+        changeType(entity);
 
         return entity;
+    }
+
+    private static void changeType(MaintenanceType entity) {
+        String i1 = "Please enter the Name/Description of the Maintenance";
+        entity.setMaintenance_type(parseStringFixedLengthFromUser(i1, e1, 1, 40));
+    }
+
+    public HotelEntity updateFromUserInput() {
+        // Select from index
+        ColorHelper.printBlue("Please select the " + this.getClass().getSimpleName() +" to update:");
+        MaintenanceType entity = HotelEntityHandler.selectEntityFromFullList(this.getClass());
+        // -> Query user which attribute they want to change
+        while (true) {
+            ColorHelper.printBlue("What do you want to change?");
+            ColorHelper.printYellow("1 - Maintenance Type Name");
+            ColorHelper.printYellow("X - Finish");
+            String line = scanner.nextLine();
+            switch (line) {
+                case "x","X" -> {
+                    return entity;
+                }
+                case "1" ->  changeType(entity);
+                default ->  ColorHelper.printRed(e1);
+            }
+
+        }
     }
 
     @Override

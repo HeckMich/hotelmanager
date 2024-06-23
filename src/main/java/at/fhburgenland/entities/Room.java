@@ -77,8 +77,8 @@ public class Room extends HotelEntity  {
     }
 
     public HotelEntity updateFromUserInput() {
-        // Select Room from index
-        ColorHelper.printBlue("Please select the room to update:");
+        // Select from index
+        ColorHelper.printBlue("Please select the " + this.getClass().getSimpleName() +" to update:");
         Room entity = HotelEntityHandler.selectEntityFromFullList(this.getClass());
         // -> Query user which attribute they want to change
         while (true) {
