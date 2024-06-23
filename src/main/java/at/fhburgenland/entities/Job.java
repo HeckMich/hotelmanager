@@ -87,7 +87,7 @@ public class Job extends HotelEntity  {
     }
 
     private void changeName(Job entity) {
-        String i1 = "Please enter the name of the new Service Type:";
+        String i1 = "Please enter the name of the Job:";
         entity.setName(parseStringFromUser(i1,e1));
     }
 

@@ -106,7 +106,7 @@ public class Event extends HotelEntity  {
     }
 
     private static void changeEventName(Event entity) {
-        String i1 = "Please enter the name of the new Event:";
+        String i1 = "Please enter the name of the Event:";
         entity.setName(parseStringFixedLengthFromUser(i1,e1, 1, 100));
     }
 

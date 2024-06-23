@@ -164,7 +164,7 @@ public class Guest extends HotelEntity  {
             ColorHelper.printBlue("Choose existing Plz?");
             ColorHelper.printYellow("Y - yes (choose from list)");
             ColorHelper.printYellow("N - no (enter new Plz)");
-            String line = scanner.next();
+            String line = scanner.nextLine();
             switch (line) {
                 case "Y", "y" -> {
                     plz =  HotelEntityHandler.selectEntityFromFullList(Plz.class);
@@ -172,7 +172,11 @@ public class Guest extends HotelEntity  {
                 }
                 case "N", "n" -> {
                     plz = (Plz)HotelEntityHandler.create(plz.createFromUserInput());
-                    choosing = false;
+                    if(plz != null) {
+                        choosing = false;
+                    } else {
+                        plz = new Plz();
+                    }
                 }
                 default -> ColorHelper.printRed("Invalid input!");
             }

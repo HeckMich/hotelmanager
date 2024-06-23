@@ -97,12 +97,14 @@ public class BookedService extends HotelEntity {
     public HotelEntity createFromUserInput() {
         BookedService entity = new BookedService();
 
+
+        //Service ID
+        changeServiceType(entity);
         //Employe ID
         changeEmployee(entity);
         //Reservation ID
         changeReservationID(entity);
-        //Service ID
-        changeServiceType(entity);
+
 
         return entity;
     }
@@ -176,9 +178,9 @@ public class BookedService extends HotelEntity {
     public String toString() {
         return "[" +
                 "bookedserviceid : " + bookedserviceid +
-                ", reservation : " + reservation +
-                ", serviceType : " + serviceType +
-                ", employee : " + employee +
+                ", reservationID : " + reservation.getReservation_id() +
+                ", serviceTypeID : " + serviceType.getService_id() +
+                ", employeeID : " + employee.getEmployee_id() +
                 "]";
     }
 }

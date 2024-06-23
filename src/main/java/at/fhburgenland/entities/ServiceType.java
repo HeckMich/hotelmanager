@@ -98,12 +98,12 @@ public class ServiceType extends HotelEntity  {
     }
 
     private static void changeCostFromUser(ServiceType entity) {
-        String i2 = "Please enter the cost of the new Service Type. Only enter a number using '.' for up to two decimal points!";
+        String i2 = "Please enter the cost of the Service Type. Only enter a number using '.' for up to two decimal points!";
         entity.setCost(parseBigDecimalFromUser(i2,e1));
     }
 
     private void changeNameFromUser(ServiceType entity) {
-        String i1 = "Please enter the name of the new Service Type:";
+        String i1 = "Please enter the name of the Service Type:";
         entity.setName(parseStringFromUser(i1,e1));
     }
 

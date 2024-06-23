@@ -114,12 +114,12 @@ public class Employee extends HotelEntity  {
     }
 
     private static void changeLastName(Employee entity) {
-        String i2 = "Please enter the Last Name of the new Employee";
+        String i2 = "Please enter the Last Name of the Employee";
         entity.setLast_name(parseStringFixedLengthFromUser(i2, e1, 1, 30));
     }
 
     private static void changeFirstName(Employee entity) {
-        String i1 = "Please enter the First Name of the new Employee";
+        String i1 = "Please enter the First Name of the Employee";
         entity.setFirst_name(parseStringFixedLengthFromUser(i1, e1, 1, 20));
     }
 
