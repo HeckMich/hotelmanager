@@ -22,6 +22,11 @@ public class BookedService extends HotelEntity {
     @JoinColumn(name = "reservation_id", nullable = false)
     private Reservation reservation;
 
+    @Column(name = "reservation_id", insertable = false, updatable = false)
+    private int reservation_id;
+    @Column(name = "service_id", insertable = false, updatable = false)
+    private int service_id;
+
     @ManyToOne
     @JoinColumn(name = "service_id", nullable = false)
     private ServiceType serviceType;

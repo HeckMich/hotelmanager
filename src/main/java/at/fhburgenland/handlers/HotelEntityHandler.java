@@ -26,7 +26,7 @@ public class HotelEntityHandler {
             if (et != null) {
                 et.rollback();
             }
-            System.err.println("ERROR in HotelEntityHandler create: " + ex.getMessage());
+            ColorHelper.printRed("ERROR in HotelEntityHandler create. Did you enter a duplicate key? ");
             return null;
         } finally {
             em.close();
@@ -51,7 +51,7 @@ public class HotelEntityHandler {
             if (et != null) {
                 et.rollback();
             }
-            System.err.println("ERROR in HotelEntityHandler delete: " + ex.getMessage());
+            ColorHelper.printRed("ERROR in HotelEntityHandler delete: " + ex.getMessage());
             return false;
         } finally {
             em.close();
@@ -72,7 +72,7 @@ public class HotelEntityHandler {
             if (et != null) {
                 et.rollback();
             }
-            System.err.println("ERROR in HotelEntityHandler update: " + ex.getMessage());
+            ColorHelper.printRed("ERROR in HotelEntityHandler update: " + ex.getMessage());
             return null;
         } finally {
             em.close();

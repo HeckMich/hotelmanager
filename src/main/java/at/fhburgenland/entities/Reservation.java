@@ -37,6 +37,9 @@ public class Reservation extends HotelEntity  {
     @JoinColumn(name = "guest_id")
     private Guest guest;
 
+    @Column(name = "guest_id", nullable = false, insertable = false, updatable = false)
+    private int guest_id;
+
     @OneToMany(mappedBy = "reservation", cascade = CascadeType.REMOVE)
     private List<Invoice> invoices = new ArrayList<>();
 
@@ -68,6 +71,10 @@ public class Reservation extends HotelEntity  {
 
     public int getGuest_id() {
         return this.guest.getGuest_id();
+    }
+
+    public Guest getGuest() {
+        return guest;
     }
 
     public void setGuest(int guest_id) {

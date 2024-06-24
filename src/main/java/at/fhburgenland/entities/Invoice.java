@@ -37,6 +37,10 @@ public class Invoice extends HotelEntity  {
     @JoinColumn(name = "reservation_id", nullable = false)
     private Reservation reservation;
 
+    public Reservation getReservation() {
+        return reservation;
+    }
+
     public Invoice() {
 
     }
@@ -96,38 +100,53 @@ public class Invoice extends HotelEntity  {
         //InvoiceID = automatic
 
         //ReservationID
-        ColorHelper.printBlue("Please choose a reservation to create the invoice for.");
-        changeReservation(entity);
+        ColorHelper.printBlue("Please choose a reservation to create the invoice for. Only reservations which do not yet have an Invoice associated are available.");
+        if(!changeReservation(entity)) {
+            return null;
+        }
 
         //GuestId = automatic
         ColorHelper.printGreen("The correct Guest for the reservation was selected automatically!");
+        entity.setGuest(entity.reservation.getGuest());
         entity.setGuest_id(entity.reservation.getGuest_id());
 
-        //Sum [maybe late über DB-query]
-        changeSum(entity);
-
-//        ColorHelper.printGreen("The sum is calculated automatically!");
-//        double sumCosts = calculateSumCosts(entity);
-//        entity.setSum(BigDecimal.valueOf(sumCosts));
+        //Sum = automatic
+        BigDecimal sumCosts = calculateSumCosts(entity);
+        entity.setSum(sumCosts);
+        ColorHelper.printGreen("The invoice sum was automatically calculated to be: " + sumCosts);
 
         return entity;
     }
 
-    private static void changeSum(Invoice entity) {
-        String i1 = "Please enter the the Sum the Guest has to pay";
-        String e1 = "Invalid input!";
-        entity.setSum(parseBigDecimalFromUser(i1,e1));
-    }
-
-    private static void changeReservation(Invoice entity) {
-        Reservation reservation = HotelEntityHandler.selectEntityFromFullList(Reservation.class);
+    private static boolean changeReservation(Invoice entity) {
+        List<Reservation> reservationsWithoutInvoice = getReservationsWithoutInvoice();
+        if (reservationsWithoutInvoice == null || reservationsWithoutInvoice.isEmpty()) {
+            ColorHelper.printRed("No reservations available for selection! Canceling process.");
+            return false;
+        }
+        Reservation reservation = HotelEntityHandler.selectEntityFromList(reservationsWithoutInvoice);
         entity.setReservation(reservation);
+        entity.setReservation_id(reservation.getReservation_id());
+        return true;
     }
 
-    private static void changeGuest(Invoice entity) {
-        Guest guest = HotelEntityHandler.selectEntityFromFullList(Guest.class);
-        entity.setGuest(guest);
+    private static List<Reservation> getReservationsWithoutInvoice() {
+        EntityManager em = EMFSingleton.getEntityManager();
+        try {
+            String query = "SELECT a FROM reservation a " +
+                    "WHERE NOT EXISTS (" +
+                    "SELECT b FROM invoice b " +
+                    "WHERE b.reservation = a)";
+            TypedQuery<Reservation> tq = em.createQuery(query, Reservation.class);
+            return tq.getResultList();
+        } catch (Exception ex) {
+            System.err.println("ERROR in getReservationsWithoutInvoice: " + ex.getMessage());
+            throw ex;
+        } finally {
+            em.close();
+        }
     }
+
 
     public HotelEntity updateFromUserInput() {
         // Select from index
@@ -135,55 +154,52 @@ public class Invoice extends HotelEntity  {
         Invoice entity = HotelEntityHandler.selectEntityFromFullList(this.getClass());
         // -> Query user which attribute they want to change
         while (true) {
-            ColorHelper.printBlue("What do you want to change?");
-            ColorHelper.printYellow("1 - Guest");
-            ColorHelper.printYellow("2 - Reservation");
-            ColorHelper.printYellow("3 - Sum");
+            ColorHelper.printBlue("What do you want to change? (Guest and Sum are determined automatically)");
+            ColorHelper.printYellow("1 - Reservation");
             ColorHelper.printYellow("X - Finish");
             String line = scanner.nextLine();
             switch (line) {
                 case "x","X" -> {
                     return entity;
                 }
-                case "1" ->  changeGuest(entity);
-                case "2" ->  changeReservation(entity);
-                case "3" ->  changeSum(entity);
+                case "1" ->  entity = (Invoice)entity.createFromUserInput();
                 default ->  ColorHelper.printRed(e1);
             }
-
         }
     }
 
-    private double calculateSumCosts(Invoice entity) {
+    private BigDecimal calculateSumCosts(Invoice entity) {
         EntityManager em = EMFSingleton.getEntityManager();
         try {
-            Date startDate = HotelEntityHandler.read(Reservation.class,entity.getReservation_id()).getStart_date();
-            Date endDate = HotelEntityHandler.read(Reservation.class,entity.getReservation_id()).getEnd_date();
+            Date startDate = entity.getReservation().getStart_date();
+            Date endDate = entity.getReservation().getEnd_date();
 
             long diffInMillies = Math.abs(endDate.getTime() - startDate.getTime());
-            long diffInDays = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
+            int diffInDays = (int)TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
+            int resID = entity.getReservation().getReservation_id();
 
             String sql = "\t\tSELECT\n" +
-                    "\tCOALESCE(SUM(D.cost), 0) + COALESCE(SUM(E.cost), 0) * "+ diffInDays +" expenses\n" +
-                    "FROM\n" +
-                    "\tRESERVATION A\n" +
-                    "\tfull outer JOIN booked_service C ON A.reservation_id = C.reservation_id\n" +
-                    "\tfull JOIN SERVICE_TYPE D ON D.service_id = C.service_id\n" +
-                    "\tJOIN ROOM E ON A.room_nr = E.room_nr\n" +
-                    "WHERE\n" +
-                    "\tA.reservation_id = 9\n" +
-                    "GROUP BY\n" +
-                    "\tA.guest_id,\n" +
-                    "\tA.reservation_id";
+                         "\tCOALESCE(SUM(D.cost), 0) + COALESCE(SUM(E.cost), 0) * "+ diffInDays +" expenses\n" +
+                         "FROM\n" +
+                         "\treservation A\n" +
+                         "\tFULL OUTER JOIN booked_service C ON A.reservation_id = C.reservation_id\n" +
+                         "\tFULL JOIN service_type D ON D.service_id = C.service_id\n" +
+                         "\tJOIN room E ON A.room_nr = E.room_nr\n" +
+                         "WHERE\n" +
+                         "\tA.reservation_id = :resID\n" +
+                         "GROUP BY\n" +
+                         "\tA.guest_id,\n" +
+                         "\tA.reservation_id";
             Query query = em.createQuery(sql);
+            query.setParameter("resID", resID);
 
-            List<Object[]> results = query.getResultList();
+            List<Object> results = query.getResultList();
             if (!results.isEmpty()) {
-                return 0;
+                return (BigDecimal) results.get(0);
             }
-            return 0;
+            return BigDecimal.ZERO;
         } catch (Exception x) {
-            return 0;
+            return BigDecimal.ZERO;
         } finally {
             em.close();
         }

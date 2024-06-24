@@ -154,13 +154,15 @@ public class Guest extends HotelEntity  {
     }
 
     private static void changePlz(Guest entity) {
-        HotelEntityHandler.printAllAsIndexedList(Plz.class);
+        List<Plz> listAllPlz = HotelEntityHandler.readAll(Plz.class);
+        ColorHelper.printBlue("The following PLZ are already in the system:");
+        HotelEntityHandler.printAsNeutralList(listAllPlz);
         Plz plz = new Plz();
         boolean choosing = true;
         while (choosing) {
-            ColorHelper.printBlue("Choose existing Plz?");
+            ColorHelper.printBlue("Choose an existing PLZ for the new Guest?");
             ColorHelper.printYellow("Y - yes (choose from list)");
-            ColorHelper.printYellow("N - no (enter new Plz)");
+            ColorHelper.printYellow("N - no (enter new PLZ)");
             String line = scanner.nextLine();
             switch (line) {
                 case "Y", "y" -> {
@@ -173,6 +175,7 @@ public class Guest extends HotelEntity  {
                         choosing = false;
                     } else {
                         plz = new Plz();
+                        ColorHelper.printRed("This PLZ already exists in the system!");
                     }
                 }
                 default -> ColorHelper.printRed("Invalid input!");

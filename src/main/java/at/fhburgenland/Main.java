@@ -17,7 +17,9 @@ public class Main {
 
     private static void showMainMenu() {
         while(true) {
+            ColorHelper.printBlue("----------------------------------------------------------------------");
             ColorHelper.printBlue("Welcome to the Hotel Management System! Please choose an option below:");
+            ColorHelper.printBlue("----------------------------------------------------------------------");
             ColorHelper.printYellow("1 - Manage hotel entities (CRUD)");
             ColorHelper.printYellow("2 - Maintenance Analytics over time-span (Query 1)");
             ColorHelper.printYellow("3 - Room Analytics for a day (Query 2)");

@@ -56,9 +56,19 @@ public class CrudMenu {
                 case "X", "x" -> {
                     return;
                 }
-                case "1" -> HotelEntityHandler.create(entity.createFromUserInput());
-                case "2" -> readEntityByIdPromt(entity);
-                case "3" -> HotelEntityHandler.update(entity.updateFromUserInput());
+                case "1" -> {
+                    HotelEntity e = entity.createFromUserInput();
+                    if (e != null) {
+                        HotelEntityHandler.create(e);
+                    }
+                }
+                case "2" -> readEntityByIdPrompt(entity);
+                case "3" -> {
+                    HotelEntity e = entity.updateFromUserInput();
+                    if (e != null) {
+                        HotelEntityHandler.update(e);
+                    }
+                }
                 case "4" -> {
                     ColorHelper.printBlue("Choose the " + entity.getClass().getSimpleName() + " to delete. Be careful, deleting one entity can have a cascading effect on others! Like deleting a room will also delete all associated reservations.");
                     HotelEntityHandler.delete(HotelEntityHandler.selectEntityFromFullList(entity.getClass()));
@@ -68,7 +78,7 @@ public class CrudMenu {
         }
     }
 
-    private static void readEntityByIdPromt(HotelEntity entity) {
+    private static void readEntityByIdPrompt(HotelEntity entity) {
         while(true) {
             ColorHelper.printBlue("Please enter the ID of the " + entity.getClass().getSimpleName() + " to read.");
             ColorHelper.printBlue("Or press L to print list of all " + entity.getClass().getSimpleName() + "s" );
