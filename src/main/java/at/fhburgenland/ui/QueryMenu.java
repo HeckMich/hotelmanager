@@ -51,6 +51,7 @@ public class QueryMenu {
         //  Y -> Choose from list
         //  N -> Query user for new guest
         Guest guest = fetchGuestFromUserInput();
+        HotelEntityHandler.create(guest);
         ColorHelper.printGreen("The following guest was selected / registered: " + guest);
         //Book Event(s)  -> List
         ColorHelper.printBlue("Now optionally add events for the guest to attend:");
