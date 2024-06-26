@@ -57,7 +57,6 @@ public class QueryMenu {
         ColorHelper.printBlue("Now optionally add events for the guest to attend:");
         HashSet<Event> eventHashSet = new HashSet<>();
         eventHashSet.addAll(fetchEventListFromUserInput(dateList.get(0), dateList.get(1)));
-        //TODO: Create reservation
         Reservation reservation = new Reservation(guest, selectedRoom, dateList.get(0), dateList.get(1), eventHashSet);
         if (createReservationUserInput(reservation)) {
             ColorHelper.printGreen("Reservation confirmed: " + reservation);
