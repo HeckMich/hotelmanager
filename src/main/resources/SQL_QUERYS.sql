@@ -36,6 +36,28 @@ WHERE
 	'2024-07-09' BETWEEN START_DATE AND END_DATE
 
 
+SELECT
+     COUNT(*) NUMBER_BOOKED_ROOMS,
+         (
+             SELECT
+             COUNT(*) -- -> 17 Rooms total
+             FROM
+             room
+         ) - COUNT(*) NUMBER_EMPTY_ROOMS, -- -> 17 - count(found reservations) = number_empty_rooms
+    COALESCE(SUM(cost), 0) EXPECTED_EARNINGS, -- -> Sum cost of all found reservations
+         (
+            SELECT
+            SUM(cost)
+            FROM
+            room
+         ) - COALESCE(SUM(cost), 0) LOST_EARNINGS
+FROM
+    reservation A
+full outer JOIN room B ON A.room_nr = B.room_nr
+WHERE
+    '2024-01-01' BETWEEN start_date AND end_date
+
+
 	--Query 3
 	--Part 1 - see available rooms for date
 SELECT DISTINCT

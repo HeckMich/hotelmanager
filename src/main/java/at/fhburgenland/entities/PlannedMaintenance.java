@@ -80,8 +80,7 @@ public class PlannedMaintenance extends HotelEntity  {
     }
 
 
-    public PlannedMaintenance(int maint_id, int m_type_id, Date start_date, Date end_date, int room_nr, int employee_id) {
-        this.maint_id = maint_id;
+    public PlannedMaintenance(int m_type_id, Date start_date, Date end_date, int room_nr, int employee_id) {
         this.m_type_id = m_type_id;
         this.start_date = start_date;
         this.end_date = end_date;

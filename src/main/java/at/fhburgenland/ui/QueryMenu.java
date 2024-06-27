@@ -12,18 +12,27 @@ import java.util.*;
 
 public class QueryMenu {
     private static final Scanner scanner = new Scanner(System.in);
-    public static void queryOne() {
-        String instructions = "Please enter the Start Date in the format dd.MM.yyy like 18.03.2024";
-        String errorMessage = "Invalid Input!";
-        Date startDate = HotelEntity.parseDateFromUser(instructions, errorMessage);
 
-        String instructions2 = "Please enter the End Date in the format dd.MM.yyy like 18.03.2024";
-        Date endDate = HotelEntity.parseDateFromUser(instructions2, errorMessage);
+    /**
+     * Performs a query for Maintenances on a given date based on user input.
+     * Displays a list of all Maintenances planned in the provided date range.
+     */
+    public static void queryOne() {
+        List<Date> datelist = fetchDatesFromUserInput();
+
+        Date startDate = datelist.get(0);
+        Date endDate = datelist.get(1);
 
         List<PlannedMaintenance> list = findMaintenanceBetweenDates(startDate, endDate);
-        ColorHelper.printBlue("The following Maintenances are schedueled in between " + startDate + " and " + endDate + ":");
+        ColorHelper.printBlue("The following Maintenances are scheduled in between " + startDate + " and " + endDate + ":");
+        if (list.isEmpty()) ColorHelper.printRed("No maintenances scheduled in this time span.");
         list.forEach(x -> ColorHelper.printGreen(x.toString()));
     }
+
+    /**
+     * Performs a query analyzing the number of booked and empty rooms and the lost/earned costs.
+     * Prints the results to console
+     */
     public static void queryTwo() {
         String instructions = "Please enter the Date to inspect in the format dd.MM.yyy like 18.03.2024";
         String errorMessage = "Invalid Input!";
@@ -33,6 +42,11 @@ public class QueryMenu {
         printRoomStats(choosenDate);
     }
 
+    /**
+     * Processes a new reservation by querying the user for all the necessary information.
+     * Creates the reservation on DB if all information is okay.
+     * Can also create new Guest and Plz in process
+     */
     public static void reservationProcess() {
         ColorHelper.printGreen("Starting Reservation Process!");
         //Check if a room is free for date-range
@@ -165,9 +179,9 @@ public class QueryMenu {
     }
 
     private static List<Date> fetchDatesFromUserInput() {
-        String instructions = "Please enter the desired Start Date of the reservation in the format dd.MM.yyyy like 18.03.2024";
+        String instructions = "Please enter the desired Start Date in the format dd.MM.yyyy like 18.03.2024";
         String errorMessage = "Invalid Input!";
-        String instructions2 = "Please enter the desired End Date of the reservation in the format dd.MM.yyyy like 18.03.2024";
+        String instructions2 = "Please enter the desired End Date in the format dd.MM.yyyy like 18.03.2024";
         Date startDate;
         Date endDate;
         while (true) {

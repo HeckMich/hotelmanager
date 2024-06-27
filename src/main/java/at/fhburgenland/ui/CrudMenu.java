@@ -8,6 +8,10 @@ import java.util.Scanner;
 
 public class CrudMenu {
     private static Scanner scanner = new Scanner(System.in);
+
+    /**
+     * Shows a menu in which the user selects an entity type to interact with
+     */
     public static void showCrudMenu() {
         while(true) {
             ColorHelper.printBlue("Please choose an entity to view or edit:");
@@ -43,6 +47,10 @@ public class CrudMenu {
         }
     }
 
+    /**
+     * Displays a Menu with the 4 CRUD options to possibly perform
+     * @param entity an entity of the type to perform the CRUD operations on
+     */
     private static void showCrudOptions(HotelEntity entity) {
         while(true) {
             ColorHelper.printBlue("Choose the CRUD option to perform on " + entity.getClass().getSimpleName() + ":");

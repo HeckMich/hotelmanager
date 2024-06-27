@@ -16,7 +16,16 @@ import java.util.Scanner;
 public abstract class HotelEntity {
     protected static Scanner scanner = new Scanner(System.in);
     protected static String e1 = "Invalid input!";
+
+    /**
+     * Defines an abstract methode which creates a new object of the specific Hotel Entity and returns it (User input likely to be involved)
+     * @return The created HotelEntity
+     */
     public abstract HotelEntity createFromUserInput();
+    /**
+     * Defines an abstract methode which updates this Hotel Entity and returns itself (User input likely to be involved)
+     * @return The updated HotelEntity
+     */
     public abstract HotelEntity updateFromUserInput();
 
     /**

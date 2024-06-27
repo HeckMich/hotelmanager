@@ -176,12 +176,6 @@ public class BookedService extends HotelEntity {
         entity.setReservation(reservation);
     }
 
-    private static void changeEmployee(BookedService entity) {
-        System.out.println("Here is a List of Employees: ");
-        Employee employee = HotelEntityHandler.selectEntityFromFullList(Employee.class);
-        entity.setEmployee(employee);
-    }
-
     /**
      * shows List of qualified and available employees
      * @param entity
@@ -200,6 +194,11 @@ public class BookedService extends HotelEntity {
     }
 
 
+    /**
+     * Creates a BookedService from user input in a manner suitable for the Reservation process (query 3)
+     * @param reservation
+     * @return (BookedService)
+     */
     public static BookedService createFromUserInputForReservationProcess(Reservation reservation) {
         BookedService entity = new BookedService();
         //Reservation

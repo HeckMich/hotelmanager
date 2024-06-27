@@ -11,7 +11,15 @@ import jakarta.persistence.TypedQuery;
 import java.util.List;
 import java.util.Scanner;
 
+/**
+ * A class containing generic CRUD methods which can be applied to all objects extending HotelEntity
+ */
 public class HotelEntityHandler {
+    /**
+     * Takes an object extending HotelEntity and persists it on the Database.
+     * @param entity an generic object extending HotelEntity like Room or Guest
+     * @return Returns the HotelEntity which was just persisted or null in case of an error.
+     */
     public static HotelEntity create(HotelEntity entity) {
         EntityManager em = EMFSingleton.getEntityManager();
         EntityTransaction et = null;
@@ -21,7 +29,6 @@ public class HotelEntityHandler {
             et.begin();
             em.persist(entity);
             et.commit();
-            
             ColorHelper.printGreen("Created " + entity.getClass().getSimpleName() + ": " + entity);
         } catch (Exception ex) {
             if (et != null) {
@@ -35,6 +42,11 @@ public class HotelEntityHandler {
         return entity;
     }
 
+    /**
+     * Takes an object extending HotelEntity and removes it from the Database.
+     * @param entity an generic object extending HotelEntity like Room or Guest
+     * @return true if deletion was successful, false if not
+     */
     public static boolean delete(HotelEntity entity) {
         EntityManager em = EMFSingleton.getEntityManager();
         EntityTransaction et = null;
@@ -60,13 +72,18 @@ public class HotelEntityHandler {
         return true;
     }
 
+    /**
+     * Takes an object extending HotelEntity and updates it on the Database, committing any changes.
+     * @param entity an generic object extending HotelEntity like Room or Guest
+     * @return the HotelEntity which was updated
+     */
     public static HotelEntity update(HotelEntity entity) {
         EntityManager em = EMFSingleton.getEntityManager();
         EntityTransaction et = null;
         try {
             et = em.getTransaction();
             et.begin();
-            entity = em.merge(entity); //Merge entity to implement changes (can create new entity if PK is not found!)
+            entity = em.merge(entity); //Merge entity to implement changes
             et.commit();
             ColorHelper.printGreen("Updated " + entity);
         } catch (Exception ex) {
@@ -81,6 +98,12 @@ public class HotelEntityHandler {
         return entity;
     }
 
+    /**
+     * Reads a HotelEntity with the provided class and ID from the DB
+     * @param entityClass The class (extending HotelEntity) from which to read
+     * @param id the ID of the object to read
+     * @return Returns the matching DB entity or null if none was found
+     */
     public static <T extends HotelEntity> T read(Class<T> entityClass, int id) {
         EntityManager em = EMFSingleton.getEntityManager();
         EntityTransaction et = null;
@@ -102,6 +125,11 @@ public class HotelEntityHandler {
         }
     }
 
+    /**
+     * Reads a list of all objects of a class from DB
+     * @param entityClass The class extending HotelEntity to be returned as a list
+     * @return A List of HoteEntity objects
+     */
     public static <T extends HotelEntity> List<T> readAll(Class<T> entityClass){
         EntityManager em = EMFSingleton.getEntityManager();
         String query = "SELECT x FROM " + entityClass.getAnnotation(Entity.class).name() + " x";
@@ -117,27 +145,35 @@ public class HotelEntityHandler {
         return list;
     }
 
-    public static void printAllAsIndexedList(Class<? extends HotelEntity> entityClass) {
-        List<? extends HotelEntity> list = readAll(entityClass);
-        printAsIndexedList(list);
-    }
-    public static void printAsIndexedList(List<? extends HotelEntity> list) {
+    private static void printAsIndexedList(List<? extends HotelEntity> list) {
         for (int i = 0; i < list.size(); i++) {
             ColorHelper.printYellow(i + " - " + list.get(i).toString());
         }
     }
-
+    /**
+     * Prints a list of HotelEntity objects as a neutral list for display
+     * @param list list to print
+     */
     public static void printAsNeutralList(List<? extends HotelEntity> list) {
         for (int i = 0; i < list.size(); i++) {
             System.out.println((list.get(i).toString()));
         }
     }
 
+    /**
+     *  Prints a list of all HotelEnteties of the provided class and lets user select one
+     * @param entityClass Class extending HotelEntity which to select from
+     * @return the selected HotelEntity object
+     */
     public static <T extends HotelEntity> T selectEntityFromFullList(Class<T> entityClass) {
         List<T> list = readAll(entityClass);
         return selectEntityFromList(list);
     }
-
+    /**
+     *  Prints the provided list of HotelEnteties lets user select one
+     * @param list list of objects extending HotelEntity from which to select from
+     * @return the selected HotelEntity object
+     */
     public static <T extends HotelEntity> T selectEntityFromList(List<T> list) {
         if (list == null || list.isEmpty()) {
             ColorHelper.printRed("No entities in list.");
