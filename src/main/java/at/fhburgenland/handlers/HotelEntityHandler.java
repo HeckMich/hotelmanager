@@ -21,6 +21,7 @@ public class HotelEntityHandler {
             et.begin();
             em.persist(entity);
             et.commit();
+            
             ColorHelper.printGreen("Created " + entity.getClass().getSimpleName() + ": " + entity);
         } catch (Exception ex) {
             if (et != null) {

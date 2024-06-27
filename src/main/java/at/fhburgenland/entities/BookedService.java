@@ -9,21 +9,37 @@ import jakarta.persistence.*;
 import java.security.Provider;
 import java.util.List;
 
+/**
+ * Class for Entity "booked_service"
+ */
 @Entity(name = "booked_service")
 @Table(name = "booked_service")
 public class BookedService extends HotelEntity {
 
+    /**
+     * PK of BookedService
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "booked_service_id", updatable = false, nullable = false)
     private int bookedserviceid;
 
+
     @ManyToOne
     @JoinColumn(name = "reservation_id", nullable = false)
     private Reservation reservation;
 
+    /**
+     * FK here
+     * PK in Reservation
+     */
     @Column(name = "reservation_id", insertable = false, updatable = false)
     private int reservation_id;
+
+    /**
+     * FK here
+     * PK in Service
+     */
     @Column(name = "service_id", insertable = false, updatable = false)
     private int service_id;
 
@@ -31,6 +47,11 @@ public class BookedService extends HotelEntity {
     @JoinColumn(name = "service_id", nullable = false)
     private ServiceType serviceType;
 
+
+    /**
+     * FK here
+     * PK in Employee
+     */
     @ManyToOne
     @JoinColumn(name = "employee_id", nullable = false)
     private Employee employee;
@@ -48,6 +69,11 @@ public class BookedService extends HotelEntity {
         return reservation;
     }
 
+    /**
+     * sets Reservation by searching first for an existing Reservation
+     * if no matching Reservation is found, Error will be thrown
+     * @param reservation_id
+     */
     public void setReservation(int reservation_id) {
         EntityManager EM = EMFSingleton.getEntityManager();
         Reservation reservation1 = EM.find(Reservation.class, reservation_id);
@@ -62,6 +88,11 @@ public class BookedService extends HotelEntity {
         return serviceType;
     }
 
+    /**
+     * sets ServiceType by searching first for an existing ServiceType
+     *  if no matching ServiceType is found, Error will be thrown
+     * @param service_id
+     */
     public void setServiceType(int service_id) {
         EntityManager EM = EMFSingleton.getEntityManager();
         ServiceType serviceType1 = EM.find(ServiceType.class, service_id);
@@ -80,6 +111,11 @@ public class BookedService extends HotelEntity {
         this.employee = employee;
     }
 
+    /**
+     * sets Eployee by searching first for an existing Employee
+     * if no matching Employee is found, Error will be thrown
+     * @param employee_id
+     */
     public void setEmployee(int employee_id) {
         EntityManager EM = EMFSingleton.getEntityManager();
         Employee employee1 = EM.find(Employee.class, employee_id);
@@ -98,6 +134,11 @@ public class BookedService extends HotelEntity {
         this.serviceType = serviceType;
     }
 
+    /**
+     * new BookedService is created by prompting the user.
+     * For this: other methods are called (see below)
+     * @return (BookedService)
+     */
     @Override
     public HotelEntity createFromUserInput() {
         BookedService entity = new BookedService();
@@ -141,6 +182,12 @@ public class BookedService extends HotelEntity {
         entity.setEmployee(employee);
     }
 
+    /**
+     * shows List of qualified and available employees
+     * @param entity
+     * @param serviceType
+     * @return (Employee)
+     */
     private static Employee getEmployeeRestricted(BookedService entity, ServiceType serviceType) {
         System.out.println("Please choose which qualified employee should perform the service: ");
         List<Employee> employeeOptions = QueryMenu.getEmployeesForServiceType(serviceType);

@@ -6,15 +6,26 @@ import jakarta.persistence.*;
 
 import java.util.Date;
 
+/**
+ * class for entity "planned_maintenance"
+ */
 @Entity(name = "planned_maintenance")
 @Table(name = "planned_maintenance")
 public class PlannedMaintenance extends HotelEntity  {
 
+    /**
+     * PK here
+     * [FK nowhere]
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "maint_id", nullable = false)
     private int maint_id;
 
+    /**
+     * FK here
+     * PK in MaintenanceType
+     */
     @Column(name = "m_type_id", nullable = false, insertable = false, updatable = false)
     private int m_type_id;
 
@@ -26,20 +37,40 @@ public class PlannedMaintenance extends HotelEntity  {
     @Temporal(TemporalType.DATE)
     private Date end_date;
 
+    /**
+     * FK here
+     * PK in Room
+     */
     @Column(name = "room_nr", nullable = false, updatable = false, insertable = false)
     private int room_nr;
 
+
+    /**
+     * FK here
+     * PK in Employee
+     */
     @Column(name = "employee_id", nullable = false, updatable = false, insertable = false)
     private int employee_id;
 
+    /**
+     * Many PlannedMaintenances can be connected to one Employee
+     */
     @ManyToOne
     @JoinColumn(name = "employee_id")
     private Employee employee;
 
+
+    /**
+     * Many PlannedMaintenances can be from one MaintenanceType
+     */
     @ManyToOne
     @JoinColumn(name = "m_type_id")
     private MaintenanceType maintenanceType;
 
+
+    /**
+     * Many PlannedMaintenaces can be done in one Room
+     */
     @ManyToOne
     @JoinColumn(name = "room_nr")
     private Room room;
@@ -116,6 +147,11 @@ public class PlannedMaintenance extends HotelEntity  {
         this.room = room;
     }
 
+    /**
+     * Crate-Method.
+     * Calls helper-methods, that prompt user.
+     * @return (PlannedMaintenance)
+     */
     public HotelEntity createFromUserInput() {
         PlannedMaintenance entity = new PlannedMaintenance();
 
@@ -156,6 +192,12 @@ public class PlannedMaintenance extends HotelEntity  {
         entity.setMaintenanceType(mt);
     }
 
+    /**
+     * Update-Method.
+     * User gets prompted with menu, what to update.
+     * Calls helper-methods.
+     * @return
+     */
     public HotelEntity updateFromUserInput() {
         // Select from index
         ColorHelper.printBlue("Please select the " + this.getClass().getSimpleName() +" to update:");

@@ -9,10 +9,17 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * class for entity "maintenance_type"
+ */
 @Entity(name = "maintenance_type")
 @Table(name = "maintenance_type")
 public class MaintenanceType extends HotelEntity  {
 
+    /**
+     * PK here
+     * FK in PlannedMaintenance and "can_do_maintenance" (no class, because between-table)
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "m_type_id", nullable = false)
@@ -21,10 +28,16 @@ public class MaintenanceType extends HotelEntity  {
     @Column(name = "maintenance_type", length = 40, nullable = false)
     private String maintenance_type;
 
+    /**
+     * Many MaintenanceTypes can be done by many Jobs
+     */
     @ManyToMany
     @JoinTable(name = "can_do_maintenance", joinColumns = {@JoinColumn(name = "m_type_id")}, inverseJoinColumns = {@JoinColumn(name = "job_id")})
     private Set<Job> jobs = new HashSet<>();
 
+    /**
+     * One MaintenanceType can show up in many different PlannedMaintenaces
+     */
     @OneToMany(mappedBy = "maintenanceType", cascade = CascadeType.REMOVE)
     private List<PlannedMaintenance> plannedMaintenances = new ArrayList<>();
 
@@ -51,6 +64,11 @@ public class MaintenanceType extends HotelEntity  {
         this.maintenance_type = maintenance_type;
     }
 
+    /**
+     * Create-Method.
+     * Calls helper-method, that prompts user.
+     * @return (MaintenanceType)
+     */
     @Override
     public HotelEntity createFromUserInput() {
         MaintenanceType entity = new MaintenanceType();
@@ -67,6 +85,11 @@ public class MaintenanceType extends HotelEntity  {
         entity.setMaintenance_type(parseStringFixedLengthFromUser(i1, e1, 1, 40));
     }
 
+    /**
+     * Update-Methos.
+     * User gets prompted by menu, what to update.
+     * @return (MaintenanceType)
+     */
     public HotelEntity updateFromUserInput() {
         // Select from index
         ColorHelper.printBlue("Please select the " + this.getClass().getSimpleName() +" to update:");

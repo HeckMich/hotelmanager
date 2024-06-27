@@ -10,10 +10,17 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * class for entity "guest"
+ */
 @Entity(name = "guest")
 @Table(name = "guest")
 public class Guest extends HotelEntity  {
 
+    /**
+     * PK here
+     * FK in Invoice and Reservation
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "guest_id", nullable = false)
@@ -31,16 +38,29 @@ public class Guest extends HotelEntity  {
     @Column(name = "street", length = 100, nullable = false)
     private String street;
 
+    /**
+     * FK here
+     * PK in PLZ
+     */
     @Column(name = "plz", nullable = false, insertable = false, updatable = false)
     private String plz_;
 
+    /**
+     * one Guest can have many Reservations
+     */
     @OneToMany(mappedBy = "guest", cascade = CascadeType.REMOVE)
     private Set<Reservation> reservations = new HashSet<>();
 
+    /**
+     * Many Guests can have the same PLZ
+     */
     @ManyToOne
     @JoinColumn(name = "plz")
     private Plz plz;
 
+    /**
+     * One Guest can have many Invoices
+     */
     @OneToMany(mappedBy = "guest", cascade = CascadeType.REMOVE)
     private List<Invoice> invoices = new ArrayList<>();
 
@@ -117,6 +137,11 @@ public class Guest extends HotelEntity  {
     }
 
 
+    /**
+     * Crate-method.
+     * Calls various helper-methods, that prompt the user.
+     * @return (Guest)
+     */
     @Override
     public HotelEntity createFromUserInput() {
         Guest entity = new Guest();
@@ -153,6 +178,12 @@ public class Guest extends HotelEntity  {
         entity.setFirst_name(parseStringFixedLengthFromUser(i1, e1, 1, 50));
     }
 
+    /**
+     * update-method to change the PLZ.
+     * User has the choice between choosing a PLz from PLZs already in the Database,
+     * or enter a new one.
+     * @param entity
+     */
     private static void changePlz(Guest entity) {
         List<Plz> listAllPlz = HotelEntityHandler.readAll(Plz.class);
         ColorHelper.printBlue("The following PLZ are already in the system:");
@@ -184,6 +215,12 @@ public class Guest extends HotelEntity  {
         entity.setPlz(plz);
     }
 
+    /**
+     * Update-Method.
+     * User gets prompted by menu, what to change.
+     * Calls various helper-methods, that prompt the user.
+     * @return (Guest)
+     */
     public HotelEntity updateFromUserInput() {
         // Select Room from index
         ColorHelper.printBlue("Please select the guest to update:");

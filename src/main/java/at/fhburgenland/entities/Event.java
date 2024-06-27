@@ -10,9 +10,17 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * class for entity "event"
+ */
 @Entity(name = "event")
 @Table(name = "event")
 public class Event extends HotelEntity  {
+
+    /**
+     * PK here
+     * FK in "will_attend" (no class for it, because between-table)
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "event_id")
@@ -24,6 +32,9 @@ public class Event extends HotelEntity  {
     @Temporal(TemporalType.DATE)
     private Date date;
 
+    /**
+     * between-table to connect Event and Reservation
+     */
     @ManyToMany(cascade = CascadeType.REMOVE)
     @JoinTable(name = "will_attend", joinColumns = {@JoinColumn(name = "event_id")}, inverseJoinColumns = {@JoinColumn(name = "reservation_id")})
     private Set<Reservation> reservation = new HashSet<>();
@@ -37,6 +48,12 @@ public class Event extends HotelEntity  {
 
     }
 
+    /**
+     * provides List of Events that take Place in a certain time-frame
+     * @param startDate
+     * @param endDate
+     * @return (List<Event>)
+     */
     public static List<Event> getEventsForReservation(Date startDate, Date endDate) {
         EntityManager em = EMFSingleton.getEntityManager();
         String jpql = "SELECT a FROM event a " +
@@ -87,6 +104,11 @@ public class Event extends HotelEntity  {
         reservation.getEvents().remove(this);
     }
 
+    /**
+     * Crate-method.
+     * Calls varios helper-methods, that prompt the user (see below)
+     * @return (Event)
+     */
     @Override
     public HotelEntity createFromUserInput() {
         Event entity = new Event();
@@ -108,6 +130,12 @@ public class Event extends HotelEntity  {
         entity.setName(parseStringFixedLengthFromUser(i1,e1, 1, 100));
     }
 
+    /**
+     * Update-Method.
+     * Prompts user with menu, what to update.
+     * Calls various helper-methods.
+     * @return
+     */
     @Override
     public HotelEntity updateFromUserInput() {
         // Select Room from index

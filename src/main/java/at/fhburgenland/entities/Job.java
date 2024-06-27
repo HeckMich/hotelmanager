@@ -9,10 +9,17 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * class for entity "jobs"
+ */
 @Entity(name = "job")
 @Table(name = "job")
 public class Job extends HotelEntity  {
 
+    /**
+     * PK here
+     * FK in Employee and "can_do_maintenance" (no class, because between-table) and "can_do_service"(no class, because between-table)
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "job_id", nullable = false)
@@ -21,13 +28,22 @@ public class Job extends HotelEntity  {
     @Column(name = "name", length = 20, nullable = false)
     private String name;
 
+    /**
+     * between-table that connects Job and Service
+     */
     @ManyToMany
     @JoinTable(name = "can_do_service", joinColumns = {@JoinColumn(name = "job_id")}, inverseJoinColumns = {@JoinColumn(name = "service_id")})
     private Set<ServiceType> serviceTypes = new HashSet<>();
 
+    /**
+     * One Job can have many Employees, who can do that Job
+     */
     @OneToMany(mappedBy = "job")
     private List<Employee> employees = new ArrayList<>();
 
+    /**
+     * Many Jobs can do many different MaintenanceTypes
+     */
     @ManyToMany(mappedBy = "jobs")
     private Set<MaintenanceType> maintenanceTypes = new HashSet<>();
 
@@ -77,6 +93,11 @@ public class Job extends HotelEntity  {
         serviceType.getJobs().remove(this);
     }
 
+    /**
+     * Create-Method.
+     * Calls helper-method, that prompts user.
+     * @return (Job)
+     */
     @Override
     public HotelEntity createFromUserInput() {
         Job entity = new Job();
@@ -91,6 +112,12 @@ public class Job extends HotelEntity  {
         entity.setName(parseStringFromUser(i1,e1));
     }
 
+    /**
+     * Update-Method.
+     * Prompts user with menu, what to change.
+     * Calls helper-method.
+     * @return
+     */
     public HotelEntity updateFromUserInput() {
         // Select from index
         ColorHelper.printBlue("Please select the " + this.getClass().getSimpleName() +" to update:");

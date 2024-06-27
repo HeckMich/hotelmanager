@@ -9,10 +9,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+/**
+ * class for entity "room"
+ */
 @Entity(name = "room")
 @Table( name = "room")
 public class Room extends HotelEntity  {
 
+    /**
+     * PK here
+     * FK in PlannedMaintenance and Reservation
+     */
     @Id
     @Column(name = "room_nr", nullable = false)
     private int room_nr;
@@ -23,15 +30,22 @@ public class Room extends HotelEntity  {
     @Column(name = "cost", nullable = false, precision = 5, scale = 2)
     private BigDecimal cost;
 
+    /**
+     * One Room can be linked to many Reservations.
+     */
     @OneToMany(mappedBy = "room", cascade = CascadeType.REMOVE)
     private List<Reservation> reservations = new ArrayList<>();
 
+
+    /**
+     * One Room can have many PlannedMaintenances
+     */
     @OneToMany(mappedBy = "room", cascade = CascadeType.REMOVE)
     private List<PlannedMaintenance> plannedMaintenances = new ArrayList<>();
 
 
     public Room() {
-        // TODO Initialization of fields of Room
+
     }
 
     public Room(int room_nr, int max_occupants, BigDecimal cost) {
@@ -64,6 +78,11 @@ public class Room extends HotelEntity  {
         this.cost = cost;
     }
 
+    /**
+     * Create-Method.
+     * Calls helper-methods that prompt the user.
+     * @return (Room)
+     */
     @Override
     public HotelEntity createFromUserInput() {
         Room entity = new Room();
@@ -76,6 +95,12 @@ public class Room extends HotelEntity  {
         return entity;
     }
 
+    /**
+     * Update-Method.
+     * Menu prompts user, what to update.
+     * Calls helper-methods.
+     * @return (Room)
+     */
     public HotelEntity updateFromUserInput() {
         // Select from index
         ColorHelper.printBlue("Please select the " + this.getClass().getSimpleName() +" to update:");

@@ -10,12 +10,21 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.Scanner;
 
+/**
+ * Blueprint for all Entities
+ */
 public abstract class HotelEntity {
     protected static Scanner scanner = new Scanner(System.in);
     protected static String e1 = "Invalid input!";
     public abstract HotelEntity createFromUserInput();
     public abstract HotelEntity updateFromUserInput();
 
+    /**
+     * gets called if Integer-Input is needed
+     * @param instructions
+     * @param errorMessage
+     * @return (int)
+     */
     public static int parseIntFromUser(String instructions, String errorMessage) {
         while (true) {
             ColorHelper.printBlue(instructions);
@@ -31,6 +40,12 @@ public abstract class HotelEntity {
         }
     }
 
+    /**
+     * gets called if BigDecimal-Input is needed
+     * @param instructions
+     * @param errorMessage
+     * @return (BigDecimal)
+     */
     public static BigDecimal parseBigDecimalFromUser(String instructions, String errorMessage) {
         while (true) {
             ColorHelper.printBlue(instructions);
@@ -46,6 +61,12 @@ public abstract class HotelEntity {
         }
     }
 
+    /**
+     * gets called if Date-input is needed.
+     * @param instructions
+     * @param errorMessage
+     * @return (Date)
+     */
     public static Date parseDateFromUser(String instructions, String errorMessage) {
         while (true) {
             ColorHelper.printBlue(instructions);
@@ -64,6 +85,12 @@ public abstract class HotelEntity {
     }
 
 
+    /**
+     * gets called if String-input is needed
+     * @param instructions
+     * @param errorMessage
+     * @return (String)
+     */
     public static String parseStringFromUser(String instructions, String errorMessage) {
         while (true) {
             ColorHelper.printBlue(instructions);
@@ -74,6 +101,15 @@ public abstract class HotelEntity {
             ColorHelper.printRed(errorMessage);
         }
     }
+
+    /**
+     * gets called if String-input with fixed length (as defined in SQL-Creates) is needed
+     * @param instructions
+     * @param errorMessage
+     * @param minLength
+     * @param maxLength
+     * @return (String)
+     */
     public static String parseStringFixedLengthFromUser(String instructions, String errorMessage, int minLength, int maxLength) {
         while (true) {
             ColorHelper.printBlue(instructions);

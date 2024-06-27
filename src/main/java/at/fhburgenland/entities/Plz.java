@@ -7,10 +7,18 @@ import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * class for entity "plz"
+ */
 @Entity(name = "plz")
 @Table(name = "plz")
 public class Plz extends HotelEntity  {
 
+
+    /**
+     * PK here
+     * FK in Guest
+     */
     @Id
     @Column(name = "plz", nullable = false, length = 10)
     private String plz;
@@ -18,6 +26,9 @@ public class Plz extends HotelEntity  {
     @Column(name = "city", nullable = false, length = 100)
     private String city;
 
+    /**
+     * One PLZ can be connected to many different Guests (see Guest)
+     */
     @OneToMany(mappedBy = "plz", cascade = CascadeType.REMOVE)
     private List<Guest> guests = new ArrayList<>();
 
@@ -44,6 +55,12 @@ public class Plz extends HotelEntity  {
         this.city = city;
     }
 
+    /**
+     * Update-Method.
+     * User gets prompted with menu, what to change.
+     * Calls helper-method.
+     * @return (Plz)
+     */
     public HotelEntity updateFromUserInput() {
         // Select from index
         ColorHelper.printBlue("Please select the " + this.getClass().getSimpleName() +" to update:");
@@ -65,6 +82,12 @@ public class Plz extends HotelEntity  {
         }
     }
 
+    /**
+     * Create-Method.
+     * User can input desired plz for new entry.
+     * Calls helper-method to input name of city.
+     * @return
+     */
     @Override
     public HotelEntity createFromUserInput() {
         Plz entity = new Plz();

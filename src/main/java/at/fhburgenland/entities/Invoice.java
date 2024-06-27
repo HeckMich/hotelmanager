@@ -9,30 +9,51 @@ import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * class for entity "invoice"
+ */
 @Entity(name = "invoice")
 @Table(name = "invoice")
 public class Invoice extends HotelEntity  {
 
     //TODO: Should reservation_id be PK???
 
+    /**
+     * PK here
+     * (FK nowhere)
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "invoice_id", nullable = false, insertable = false, updatable = false)
     private int invoice_id;
 
+    /**
+     * FK here
+     * PK in Guest
+     */
     @Column(name = "guest_id", nullable = false, insertable = false, updatable = false)
     private int guest_id;
 
+    /**
+     * FK here
+     * PK in Reservation
+     */
     @Column(name = "reservation_id", nullable = false, insertable = false, updatable = false)
     private int reservation_id;
 
     @Column(name = "sum", nullable = false)
     private BigDecimal sum;
 
+    /**
+     * Many Invoices can be connected to one Guest
+     */
     @ManyToOne
     @JoinColumn(name = "guest_id", nullable = false)
     private Guest guest;
 
+    /**
+     * Many invoices can be connected to one Reservation
+     */
     @ManyToOne
     @JoinColumn(name = "reservation_id", nullable = false)
     private Reservation reservation;
@@ -93,6 +114,12 @@ public class Invoice extends HotelEntity  {
         this.reservation = reservation;
     }
 
+    /**
+     * Create-Method.
+     * Ivoice is created by choosing Reservation.
+     * Sum is calculated automatically by calling helper-method
+     * @return (Invoice)
+     */
     @Override
     public HotelEntity createFromUserInput() {
         Invoice entity = new Invoice();
@@ -130,6 +157,10 @@ public class Invoice extends HotelEntity  {
         return true;
     }
 
+    /**
+     * Returns List of Reservations that don't have a Invoice yet.
+     * @return (List<Reservation>)
+     */
     private static List<Reservation> getReservationsWithoutInvoice() {
         EntityManager em = EMFSingleton.getEntityManager();
         try {
@@ -148,6 +179,12 @@ public class Invoice extends HotelEntity  {
     }
 
 
+    /**
+     * Update-Method.
+     * prompts user with menu, what to update.
+     * By choosing 1 - a new invoice will be created to matching Reservation.
+     * @return (Invoice)
+     */
     public HotelEntity updateFromUserInput() {
         // Select from index
         ColorHelper.printBlue("Please select the " + this.getClass().getSimpleName() +" to update:");
@@ -168,6 +205,11 @@ public class Invoice extends HotelEntity  {
         }
     }
 
+    /**
+     * Calculates sum by getting room-prices and booked Services from Database.
+     * @param entity (Invoice)
+     * @return (BigDecimal)
+     */
     private BigDecimal calculateSumCosts(Invoice entity) {
         EntityManager em = EMFSingleton.getEntityManager();
         try {

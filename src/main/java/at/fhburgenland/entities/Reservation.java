@@ -7,9 +7,18 @@ import jakarta.persistence.*;
 
 import java.util.*;
 
+/**
+ * class for entity "reservation"
+ */
 @Entity(name = "reservation")
 @Table(name = "reservation")
 public class Reservation extends HotelEntity  {
+
+
+    /**
+     * PK here
+     * FK in Invoice
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "reservation_id")
@@ -23,26 +32,51 @@ public class Reservation extends HotelEntity  {
     @Temporal(TemporalType.DATE)
     private Date end_date;
 
+    /**
+     * Many Reservations can be linked to many Events (see Event)
+     */
     @ManyToMany(mappedBy = "reservation", cascade = CascadeType.REMOVE)
     private Set<Event> event = new HashSet<>();
 
+    /**
+     * Many Reservations can be linked to same Room.
+     */
     @ManyToOne
     @JoinColumn(name = "room_nr")
     private Room room;
 
+    /**
+     * FK here
+     * PK in Room
+     */
     @Column(name = "room_nr", nullable = false, insertable = false, updatable = false)
     private int room_nr;
 
+
+    /**
+     * Many Reservations can be linked to same Guest.
+     */
     @ManyToOne
     @JoinColumn(name = "guest_id")
     private Guest guest;
 
+
+    /**
+     * FK here
+     * PK in Guest
+     */
     @Column(name = "guest_id", nullable = false, insertable = false, updatable = false)
     private int guest_id;
 
+    /**
+     * One Reservation can be linked to many Invoices
+     */
     @OneToMany(mappedBy = "reservation", cascade = CascadeType.REMOVE)
     private List<Invoice> invoices = new ArrayList<>();
 
+    /**
+     * A Reservation can have many BookedServices linked to it.
+     */
     @OneToMany(mappedBy = "reservation", cascade = CascadeType.REMOVE)
     private List<BookedService> bookedServices  = new ArrayList<>();
 
@@ -77,6 +111,12 @@ public class Reservation extends HotelEntity  {
         return guest;
     }
 
+
+    /**
+     * Before setting a Guest, one has to look, if the Guest exists.
+     * If there is no matching Guest, Error/Exception will be thrown
+     * @param guest_id
+     */
     public void setGuest(int guest_id) {
         EntityManager EM = EMFSingleton.getEntityManager();
         Guest guest = EM.find(Guest.class, guest_id);
@@ -107,6 +147,11 @@ public class Reservation extends HotelEntity  {
         return this.room.getRoom_nr();
     }
 
+    /**
+     * Before Room is set, on hase to look, if mathcin Room exists.
+     * If not, Error/Exception will be thrown.
+     * @param roomNr
+     */
     public void setRoom(int roomNr) {
         EntityManager EM = EMFSingleton.getEntityManager();
         Room room = EM.find(Room.class, roomNr);
@@ -142,6 +187,11 @@ public class Reservation extends HotelEntity  {
         this.guest = guest;
     }
 
+    /**
+     * Create-Method.
+     * Calls helper-methods, that prompt the user.
+     * @return (Reservation)
+     */
     @Override
     public HotelEntity createFromUserInput() {
         Reservation entity = new Reservation();
@@ -159,7 +209,12 @@ public class Reservation extends HotelEntity  {
         return entity;
     }
 
-
+    /**
+     * Update-Method.
+     * Menu that prompts user, what to update.
+     * Calls helper-methods.
+     * @return (Reservation)
+     */
     public HotelEntity updateFromUserInput() {
         // Select from index
         ColorHelper.printBlue("Please select the " + this.getClass().getSimpleName() +" to update:");

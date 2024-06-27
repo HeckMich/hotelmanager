@@ -7,15 +7,26 @@ import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Class for entity "employee"
+ */
 @Entity(name = "employee")
 @Table(name = "employee")
 public class Employee extends HotelEntity  {
 
+    /**
+     * PK here
+     * FK in BookedService and PlannedMaintenance
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "employee_id", nullable = false)
     private int employee_id;
 
+    /**
+     * FK here
+     * PK in Job
+     */
     @Column(name = "job_id", nullable = false, updatable = false, insertable = false)
     private int job_id;
 
@@ -97,6 +108,11 @@ public class Employee extends HotelEntity  {
         this.plannedMaintenances = plannedMaintenances;
     }
 
+    /**
+     * Create-Method
+     * calls various helper-methods (see below)
+     * @return (Employee)
+     */
     @Override
     public HotelEntity createFromUserInput() {
         Employee entity = new Employee();
@@ -128,6 +144,12 @@ public class Employee extends HotelEntity  {
         entity.setJob(job);
     }
 
+    /**
+     * Update-Method.
+     * User gets prompted by menu.
+     * Calls various helper-methods
+     * @return (Employee)
+     */
     @Override
     public HotelEntity updateFromUserInput() {
         // Select Room from index

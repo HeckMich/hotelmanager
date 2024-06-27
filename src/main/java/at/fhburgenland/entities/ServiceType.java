@@ -10,10 +10,17 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * class for entity "service_type"
+ */
 @Entity(name = "service_type")
 @Table(name = "service_type")
 public class ServiceType extends HotelEntity  {
 
+    /**
+     * PK here
+     * FK in BookedService and "can_do_service" (no class, because between-table)
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "service_id", nullable = false)
@@ -26,9 +33,15 @@ public class ServiceType extends HotelEntity  {
     @Column(name = "cost", nullable = false, precision = 5, scale = 2)
     private BigDecimal cost;
 
+    /**
+     * One ServiceType can be linked to many different BookedServices
+     */
     @OneToMany(mappedBy = "serviceType", cascade = CascadeType.REMOVE)
     private List<BookedService> bookedServices  = new ArrayList<>();
 
+    /**
+     * Many ServiceTypes can be done by many different Jobs (between-table "can_do_service")
+     */
     @ManyToMany(mappedBy = "serviceTypes", cascade = CascadeType.REMOVE)
     private Set<Job> jobs = new HashSet<>();
 
@@ -86,6 +99,11 @@ public class ServiceType extends HotelEntity  {
         job.getServiceTypes().remove(this);
     }
 
+    /**
+     * Create-Method.
+     * Calls helper-methods, that ptompt user.
+     * @return (ServiceType)
+     */
     @Override
     public HotelEntity createFromUserInput() {
         ServiceType entity = new ServiceType();
@@ -107,6 +125,12 @@ public class ServiceType extends HotelEntity  {
         entity.setName(parseStringFromUser(i1,e1));
     }
 
+    /**
+     * Update-Method.
+     * Menu prompts user, what to update.
+     * Calls helper-methods.
+     * @return (ServiceType)
+     */
     public HotelEntity updateFromUserInput() {
         // Select from index
         ColorHelper.printBlue("Please select the " + this.getClass().getSimpleName() +" to update:");
