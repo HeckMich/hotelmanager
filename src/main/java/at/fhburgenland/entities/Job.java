@@ -143,7 +143,7 @@ public class Job extends HotelEntity  {
     public String toString() {
         return "[" +
                 "job_id : " + job_id +
-                ", name : '" + name + '\'' +
+                ", job name : '" + name + '\'' +
                 "]";
     }
 }

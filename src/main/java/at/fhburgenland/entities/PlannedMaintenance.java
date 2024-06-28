@@ -228,11 +228,11 @@ public class PlannedMaintenance extends HotelEntity  {
     public String toString() {
         return "[" +
                 "maint_id : " + maint_id +
-                ", maintenance-type : " + (maintenanceType == null ? m_type_id : maintenanceType.getMaintenance_type() + " (ID: " + maintenanceType.getM_type_id() + ")") +
+                ", maintenance-type : " + (maintenanceType == null ? m_type_id : "[Maintenance Type: " +maintenanceType.getMaintenance_type() + ", ID: " + maintenanceType.getM_type_id() + "]") +
                 ", start_date : " + start_date +
                 ", end_date : " + end_date +
-                ", room_nr : " + (room == null ? room_nr : room.getRoom_nr()+"") +
-                ", employee : " + (employee == null ? employee_id : employee.getFirst_name() +" " + employee.getLast_name() + " (ID: " + employee.getEmployee_id() + ")") +
+                ", room_nr : " + (room == null ? room_nr : "[" + room.getRoom_nr()+"]") +
+                ", employee : " + (employee == null ? employee_id : "[First Name: " + employee.getFirst_name() +", Last Name: " + employee.getLast_name() + ", ID: " + employee.getEmployee_id() + "]") +
                 "]";
     }
 }
