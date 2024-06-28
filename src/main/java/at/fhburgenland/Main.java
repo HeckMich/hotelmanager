@@ -1,5 +1,5 @@
 package at.fhburgenland;
-x
+
 import at.fhburgenland.helpers.EMFSingleton;
 import at.fhburgenland.ui.MainMenu;
 
