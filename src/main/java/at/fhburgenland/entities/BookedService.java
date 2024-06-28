@@ -245,9 +245,9 @@ public class BookedService extends HotelEntity {
     @Override
     public String toString() {
         return "[" +
-                "bookedserviceid : " + bookedserviceid +
+                "ID : " + bookedserviceid +
                 ", reservation : " + (reservation == null ? reservation_id : "[ ID: "+reservation.getReservation_id()) + ", RoomNr: " + reservation.getRoom_nr() + "]" +
-                ", serviceType : " + (serviceType == null ? service_id : serviceType.getService_id()) +
+                ", serviceType : " + (serviceType == null ? service_id : "[ ID" + serviceType.getService_id() + ", Type: " + serviceType.getName() + "]") +
                 ", employee : " + employee +
                 "]";
     }
