@@ -267,8 +267,8 @@ public class Reservation extends HotelEntity  {
                 "reservation_id : " + reservation_id +
                 ", start_date : " + start_date +
                 ", end_date : " + end_date +
-                ", room_nr : " + room_nr +
-                ", guest : " + guest +
+                ", room_nr : " + (room == null ? room_nr : ""+room.getRoom_nr()) +
+                ", guest : " + (guest == null ? guest_id+"" : guest.toString()) +
                 "]";
     }
 }

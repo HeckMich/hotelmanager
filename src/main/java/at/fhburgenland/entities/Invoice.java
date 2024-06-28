@@ -252,8 +252,8 @@ public class Invoice extends HotelEntity  {
     public String toString() {
         return "[" +
                 "invoice_id : " + invoice_id +
-                ", guest_id : " + guest_id +
-                ", reservation_id : " + reservation_id +
+                ", guest_id : " + (guest == null ? guest_id : guest.getGuest_id()+"") +
+                ", reservation_id : " + (reservation == null ?  reservation_id : reservation.getReservation_id()+"") +
                 ", sum : " + sum +
                 "]";
     }

@@ -104,10 +104,10 @@ public class HotelEntityHandler {
      * @param id the ID of the object to read
      * @return Returns the matching DB entity or null if none was found
      */
-    public static <T extends HotelEntity> T read(Class<T> entityClass, int id) {
+    public static HotelEntity read(Class<HotelEntity> entityClass, int id) {
         EntityManager em = EMFSingleton.getEntityManager();
         EntityTransaction et = null;
-        T entity = null;
+        HotelEntity entity;
         try {
             et = em.getTransaction();
             et.begin();
@@ -155,8 +155,8 @@ public class HotelEntityHandler {
      * @param list list to print
      */
     public static void printAsNeutralList(List<? extends HotelEntity> list) {
-        for (int i = 0; i < list.size(); i++) {
-            System.out.println((list.get(i).toString()));
+        for (HotelEntity entity : list) {
+            System.out.println((entity.toString()));
         }
     }
 
@@ -182,7 +182,7 @@ public class HotelEntityHandler {
 
         Scanner scanner = new Scanner(System.in);
         int index;
-        T selectedEntity = null;
+        T selectedEntity;
 
         while (true) {
             ColorHelper.printBlue("Enter the index of the " + list.get(0).getClass().getSimpleName() + " to select:");

@@ -259,7 +259,7 @@ public class Guest extends HotelEntity  {
                 ", first_name : '" + first_name + '\'' +
                 ", house_number : " + house_number +
                 ", street : '" + street + '\'' +
-                ", plz : '" + plz_ + '\'' +
+                ", plz : '" + (plz == null ? plz_ : plz.getPlz()) + '\'' +
                 "]";
     }
 }

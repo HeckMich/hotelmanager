@@ -7,7 +7,7 @@ import at.fhburgenland.helpers.ColorHelper;
 import java.util.Scanner;
 
 public class CrudMenu {
-    private static Scanner scanner = new Scanner(System.in);
+    private static final Scanner scanner = new Scanner(System.in);
 
     /**
      * Shows a menu in which the user selects an entity type to interact with
@@ -79,7 +79,9 @@ public class CrudMenu {
                 }
                 case "4" -> {
                     ColorHelper.printBlue("Choose the " + entity.getClass().getSimpleName() + " to delete. Be careful, deleting one entity can have a cascading effect on others! Like deleting a room will also delete all associated reservations.");
-                    HotelEntityHandler.delete(HotelEntityHandler.selectEntityFromFullList(entity.getClass()));
+                    if (!HotelEntityHandler.delete(HotelEntityHandler.selectEntityFromFullList(entity.getClass()))){
+                        ColorHelper.printRed("Error while deleting!");
+                    }
                 }
                 default -> ColorHelper.printRed("Invalid input. Try again.");
             }
@@ -102,7 +104,7 @@ public class CrudMenu {
                 default -> {
                     try {
                         int i = Integer.parseInt(line);
-                        HotelEntity result = HotelEntityHandler.read(entity.getClass(), i);
+                        HotelEntity result = HotelEntityHandler.read((Class<HotelEntity>) entity.getClass(), i);
                         if (result != null) {
                             ColorHelper.printGreen("The following " + entity.getClass().getSimpleName() + " was read from DB:");
                             ColorHelper.printGreen(result.toString());
@@ -119,20 +121,20 @@ public class CrudMenu {
     }
 
     private static HotelEntity emptyEntityFromType(int type) {
-        switch (type) {
-            case 1  : return new Room();
-            case 2  : return new Reservation();
-            case 3  : return new Invoice();
-            case 4  : return new Event();
-            case 5  : return new Plz();
-            case 6  : return new Guest();
-            case 7  : return new MaintenanceType();
-            case 8  : return new Job();
-            case 9  : return new ServiceType();
-            case 10 : return new BookedService();
-            case 11 : return new Employee();
-            case 12 : return new PlannedMaintenance();
-            default: throw new IllegalArgumentException("Not a valid type");
-        }
+        return switch (type) {
+            case 1 -> new Room();
+            case 2 -> new Reservation();
+            case 3 -> new Invoice();
+            case 4 -> new Event();
+            case 5 -> new Plz();
+            case 6 -> new Guest();
+            case 7 -> new MaintenanceType();
+            case 8 -> new Job();
+            case 9 -> new ServiceType();
+            case 10 -> new BookedService();
+            case 11 -> new Employee();
+            case 12 -> new PlannedMaintenance();
+            default -> throw new IllegalArgumentException("Not a valid type");
+        };
     }
 }
