@@ -16,8 +16,6 @@ import java.util.concurrent.TimeUnit;
 @Table(name = "invoice")
 public class Invoice extends HotelEntity  {
 
-    //TODO: Should reservation_id be PK???
-
     /**
      * PK here
      * (FK nowhere)

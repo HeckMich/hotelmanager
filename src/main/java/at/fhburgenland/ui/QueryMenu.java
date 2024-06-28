@@ -194,6 +194,7 @@ public class QueryMenu {
                 return list;
             }
             ColorHelper.printRed("The Start Date needs to be before the End Date or on the same day! Try again!");
+            ColorHelper.printRed("Chosen start date: " + startDate + ", Chosen end date: " + endDate);
         }
     }
 
@@ -266,7 +267,10 @@ public class QueryMenu {
     private static List<PlannedMaintenance> findMaintenanceBetweenDates(Date startDate, Date endDate) {
         EntityManager em = EMFSingleton.getEntityManager();
         try {
-            String query = "SELECT pm FROM planned_maintenance pm WHERE pm.start_date <= :endDate AND pm.end_date >= :startDate";
+            //Joining to employee so employee name can be displayed (Feedback in lesson)
+            String query = "SELECT x FROM planned_maintenance x " +
+                    "JOIN FETCH x.employee e " +
+                    "WHERE x.start_date <= :endDate AND x.end_date >= :startDate";
             TypedQuery<PlannedMaintenance> tq = em.createQuery(query, PlannedMaintenance.class);
             tq.setParameter("startDate", startDate);
             tq.setParameter("endDate", endDate);
