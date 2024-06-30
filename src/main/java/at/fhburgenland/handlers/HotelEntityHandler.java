@@ -29,7 +29,7 @@ public class HotelEntityHandler {
             et.begin();
             em.persist(entity);
             et.commit();
-            ColorHelper.printGreen("Created " + entity.getClass().getSimpleName() + ": " + entity);
+            ColorHelper.printGreen("Created " + entity.getClass().getSimpleName() + ": " + entity.getClass().getSimpleName() + ": " + entity);
         } catch (Exception ex) {
             if (et != null) {
                 et.rollback();
@@ -59,7 +59,7 @@ public class HotelEntityHandler {
             }
             em.remove(entity);
             et.commit();
-            ColorHelper.printGreen("Deleted " + entity);
+            ColorHelper.printGreen("Deleted " + entity.getClass().getSimpleName() + ": " + entity);
         } catch (Exception ex) {
             if (et != null) {
                 et.rollback();
@@ -85,7 +85,7 @@ public class HotelEntityHandler {
             et.begin();
             entity = em.merge(entity); //Merge entity to implement changes
             et.commit();
-            ColorHelper.printGreen("Updated " + entity);
+            ColorHelper.printGreen("Updated " + entity.getClass().getSimpleName() + ": " + entity);
         } catch (Exception ex) {
             if (et != null) {
                 et.rollback();

@@ -1,7 +1,13 @@
 package at.fhburgenland;
 
+import at.fhburgenland.entities.HotelEntity;
+import at.fhburgenland.entities.Room;
+import at.fhburgenland.handlers.HotelEntityHandler;
 import at.fhburgenland.helpers.EMFSingleton;
 import at.fhburgenland.ui.MainMenu;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class Main {

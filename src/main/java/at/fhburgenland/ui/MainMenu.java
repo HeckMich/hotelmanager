@@ -1,7 +1,11 @@
 package at.fhburgenland.ui;
 
+import at.fhburgenland.entities.*;
+import at.fhburgenland.handlers.HotelEntityHandler;
 import at.fhburgenland.helpers.ColorHelper;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class MainMenu {
