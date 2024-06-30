@@ -146,6 +146,7 @@ public class HotelEntityHandler {
     }
 
     private static void printAsIndexedList(List<? extends HotelEntity> list) {
+        if (list.isEmpty())ColorHelper.printRed("List is empty.");
         for (int i = 0; i < list.size(); i++) {
             ColorHelper.printYellow(i + " - " + list.get(i).toString());
         }
@@ -155,6 +156,7 @@ public class HotelEntityHandler {
      * @param list list to print
      */
     public static void printAsNeutralList(List<? extends HotelEntity> list) {
+        if (list.isEmpty())ColorHelper.printRed("List is empty.");
         for (HotelEntity entity : list) {
             System.out.println((entity.toString()));
         }

@@ -198,7 +198,11 @@ public class Guest extends HotelEntity  {
             switch (line) {
                 case "Y", "y" -> {
                     plz =  HotelEntityHandler.selectEntityFromFullList(Plz.class);
-                    choosing = false;
+                    if (plz != null) choosing = false;
+                    else {
+                        ColorHelper.printRed("No PLZ available to select!");
+                        plz = new Plz();
+                    }
                 }
                 case "N", "n" -> {
                     plz = (Plz)HotelEntityHandler.create(plz.createFromUserInput());

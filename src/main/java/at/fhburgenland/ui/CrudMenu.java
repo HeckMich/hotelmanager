@@ -73,17 +73,26 @@ public class CrudMenu {
                 }
                 case "2" -> readEntityByIdPrompt(entity);
                 case "3" -> {
-                    ColorHelper.printRed("Be careful when using CRUD to update: Not all logical restrictions are checked by the program.");
-                    HotelEntity e = entity.updateFromUserInput();
-                    if (e != null) {
-                        HotelEntityHandler.update(e);
+                    if (HotelEntityHandler.readAll(entity.getClass()).isEmpty()) {
+                        ColorHelper.printRed("No " + entity.getClass().getSimpleName() + " found to update!");
+                    } else {
+                        ColorHelper.printRed("Be careful when using CRUD to update: Not all logical restrictions are checked by the program.");
+                        HotelEntity e = entity.updateFromUserInput();
+                        if (e != null) {
+                            HotelEntityHandler.update(e);
+                        }
                     }
                 }
                 case "4" -> {
-                    ColorHelper.printBlue("Choose the " + entity.getClass().getSimpleName() + " to delete.");
-                    ColorHelper.printRed("Be careful, deleting one entity can have a cascading effect on others! For example deleting a room will also delete all associated reservations.");
-                    if (!HotelEntityHandler.delete(HotelEntityHandler.selectEntityFromFullList(entity.getClass()))){
-                        ColorHelper.printRed("Error while deleting!");
+                    if (HotelEntityHandler.readAll(entity.getClass()).isEmpty()) {
+                        ColorHelper.printRed("No " + entity.getClass().getSimpleName() + " found to delete!");
+                    } else {
+                        ColorHelper.printBlue("Choose the " + entity.getClass().getSimpleName() + " to delete.");
+                        ColorHelper.printRed("Be careful, deleting one entity can have a cascading effect on others! For example deleting a room will also delete all associated reservations.");
+                        HotelEntity x = HotelEntityHandler.selectEntityFromFullList(entity.getClass());
+                        if (x == null || !HotelEntityHandler.delete(x)){
+                            ColorHelper.printRed("Error while deleting!");
+                        }
                     }
                 }
                 default -> ColorHelper.printRed("Invalid input. Try again.");

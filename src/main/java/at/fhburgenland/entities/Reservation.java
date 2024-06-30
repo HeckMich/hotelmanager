@@ -248,10 +248,10 @@ public class Reservation extends HotelEntity  {
 
     private static void changeDatesFromUser(Reservation entity) {
         // Start date
-        String i1 = "Please enter the Start Date in the format dd.MM.yyy like 18.03.2024";
+        String i1 = "Please enter the Start Date in the format dd.MM.yyyy like 18.03.2024";
         entity.setStart_date(parseDateFromUser(i1,e1));
         // End date
-        String i2 = "Please enter the End Date in the format dd.MM.yyy like 18.03.2024";
+        String i2 = "Please enter the End Date in the format dd.MM.yyyy like 18.03.2024";
         entity.setEnd_date(parseDateFromUser(i2,e1));
     }
 
