@@ -250,9 +250,9 @@ public class Invoice extends HotelEntity  {
     public String toString() {
         return "[" +
                 "invoice_id : " + invoice_id +
-                ", guest_id : " + (guest == null ? guest_id : "[GuestID: " + guest.getGuest_id()+", FirstName" + guest.getFirst_name() + "Last Name:  " + guest.getLast_name() + "]") +
-                ", reservation_id : " + (reservation == null ?  reservation_id : "[ID: " + reservation.getReservation_id()+"RoomNr: " + reservation.getRoom_nr() + "]") +
-                ", sum : " + sum +
+                ", guest_id : " + (guest == null ? guest_id : "[GuestID: " + guest.getGuest_id()+", FirstName: " + guest.getFirst_name() + ", Last Name:  " + guest.getLast_name() + "]") +
+                ", reservation_id : " + (reservation == null ?  reservation_id : "[ReservationID: " + reservation.getReservation_id()+", RoomNr: " + reservation.getRoom_nr() + "]") +
+                ", sum: " + sum +
                 "]";
     }
 }

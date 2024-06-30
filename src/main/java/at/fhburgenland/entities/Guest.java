@@ -164,7 +164,7 @@ public class Guest extends HotelEntity  {
     }
 
     private static void changeStreet(Guest entity) {
-        String i3 = "Please enter the Name of the Streeet the Guest is living on";
+        String i3 = "Please enter the Name of the Street the Guest is living on";
         entity.setStreet(parseStringFixedLengthFromUser(i3, e1, 1, 100));
     }
 
