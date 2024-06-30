@@ -65,7 +65,6 @@ public class QueryMenu {
         //  Y -> Choose from list
         //  N -> Query user for new guest
         Guest guest = fetchGuestFromUserInput();
-        HotelEntityHandler.create(guest);
         ColorHelper.printGreen("The following guest was selected / registered: " + guest);
         //Book Event(s)  -> List
         ColorHelper.printBlue("Now optionally add events for the guest to attend:");
@@ -171,7 +170,9 @@ public class QueryMenu {
                 }
                 case "N", "n" -> {
                     Guest g = new Guest();
-                    return (Guest)g.createFromUserInput();
+                    g = (Guest)g.createFromUserInput();
+                    HotelEntityHandler.create(g); //persist new guest on database
+                    return g;
                 }
                 default -> ColorHelper.printRed("Invalid input!");
             }
