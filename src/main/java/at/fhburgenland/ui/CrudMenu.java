@@ -65,6 +65,7 @@ public class CrudMenu {
                     return;
                 }
                 case "1" -> {
+                    ColorHelper.printRed("Be careful when using CRUD to create: Not all logical restrictions are checked by the program.");
                     HotelEntity e = entity.createFromUserInput();
                     if (e != null) {
                         HotelEntityHandler.create(e);
@@ -72,13 +73,15 @@ public class CrudMenu {
                 }
                 case "2" -> readEntityByIdPrompt(entity);
                 case "3" -> {
+                    ColorHelper.printRed("Be careful when using CRUD to update: Not all logical restrictions are checked by the program.");
                     HotelEntity e = entity.updateFromUserInput();
                     if (e != null) {
                         HotelEntityHandler.update(e);
                     }
                 }
                 case "4" -> {
-                    ColorHelper.printBlue("Choose the " + entity.getClass().getSimpleName() + " to delete. Be careful, deleting one entity can have a cascading effect on others! Like deleting a room will also delete all associated reservations.");
+                    ColorHelper.printBlue("Choose the " + entity.getClass().getSimpleName() + " to delete.");
+                    ColorHelper.printRed("Be careful, deleting one entity can have a cascading effect on others! For example deleting a room will also delete all associated reservations.");
                     if (!HotelEntityHandler.delete(HotelEntityHandler.selectEntityFromFullList(entity.getClass()))){
                         ColorHelper.printRed("Error while deleting!");
                     }
