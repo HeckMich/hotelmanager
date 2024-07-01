@@ -10,6 +10,10 @@ import jakarta.persistence.TypedQuery;
 
 import java.util.*;
 
+/**
+ * Contains the logic for the three User Queries defined in the assignment.
+ * Queries are implemented as a combination of user input and SQL selects.
+ */
 public class QueryMenu {
     private static final Scanner scanner = new Scanner(System.in);
 
@@ -18,12 +22,13 @@ public class QueryMenu {
      * Displays a list of all Maintenances planned in the provided date range.
      */
     public static void queryOne() {
+        //Parse start and end date from user
         List<Date> datelist = fetchDatesFromUserInput();
-
         Date startDate = datelist.get(0);
         Date endDate = datelist.get(1);
-
+        //Fetch list of maintenances from DB
         List<PlannedMaintenance> list = findMaintenanceBetweenDates(startDate, endDate);
+        //Print result to console
         ColorHelper.printBlue("The following Maintenances are scheduled in between " + startDate + " and " + endDate + ":");
         if (list.isEmpty()) ColorHelper.printRed("No maintenances scheduled in this time span.");
         list.forEach(x -> ColorHelper.printGreen(x.toString()));
@@ -31,64 +36,81 @@ public class QueryMenu {
 
     /**
      * Performs a query analyzing the number of booked and empty rooms and the lost/earned costs.
-     * Prints the results to console
+     * Prints the results to console.
      */
     public static void queryTwo() {
         String instructions = "Please enter the Date to inspect in the format dd.MM.yyy like 18.03.2024";
         String errorMessage = "Invalid Input!";
+        //Parse date to analyze from user
         Date choosenDate = HotelEntity.parseDateFromUser(instructions, errorMessage);
-
         ColorHelper.printBlue("Analyzing reservations for date " + choosenDate + ":");
+        //Fetch stats from SQL and print to console
         printRoomStats(choosenDate);
     }
 
     /**
+     * "QUERY 3"
      * Processes a new reservation by querying the user for all the necessary information.
-     * Creates the reservation on DB if all information is okay.
-     * Can also create new Guest and Plz in process
+     * Creates the reservation on DB if all information is valid.
+     * Can also create new Guest and Plz in the process
      */
     public static void reservationProcess() {
         ColorHelper.printGreen("Starting Reservation Process!");
+        //Parse reservation Dates from user
+        List<Date> dateList = fetchDatesFromUserInput();
+        //Fetch free rooms in date-range from DB
+        List<Room> availableRooms = fetchAvailableRoomsFromUserInput(dateList.get(0), dateList.get(1));
         //Check if a room is free for date-range
         //  N -> end
         //  Y -> return lis of rooms
-        List<Date> dateList = fetchDatesFromUserInput();
-        List<Room> availableRooms = fetchAvailableRoomsFromUserInput(dateList.get(0), dateList.get(1));
         if (availableRooms == null || availableRooms.isEmpty()) {
-            ColorHelper.printRed("No room is available for the desired period! Canceling reservation process.");
+            ColorHelper.printRed("No room is available (not reserved or in maintenance) for the desired period. Canceling reservation process.");
             return;
         }
+        //Let user select one of available rooms
         ColorHelper.printBlue("Now select one of the available rooms!");
         Room selectedRoom = HotelEntityHandler.selectEntityFromList(availableRooms);
         ColorHelper.printGreen("The following room was selected: " + selectedRoom.toString());
-        //Ask if preexisting guest?
-        //  Y -> Choose from list
-        //  N -> Query user for new guest
+        // Parse guest to use from user input
+        // -> optionally create new and persist on DB
         Guest guest = fetchGuestFromUserInput();
         ColorHelper.printGreen("The following guest was selected / registered: " + guest);
-        //Book Event(s)  -> List
+        //Book Event(s)
+        // -> Get list from user and add to reservation
         ColorHelper.printBlue("Now optionally add events for the guest to attend:");
         HashSet<Event> eventHashSet = new HashSet<>();
         eventHashSet.addAll(fetchEventListFromUserInput(dateList.get(0), dateList.get(1)));
         Reservation reservation = new Reservation(guest, selectedRoom, dateList.get(0), dateList.get(1), eventHashSet);
+        //Persist reservation if user agrees
         if (createReservationUserInput(reservation)) {
             ColorHelper.printGreen("Reservation confirmed: " + reservation);
+            //Fetch BookedServices from user and persist
             List<BookedService> bookedServices = fetchBookedServiceListFromUserInput(reservation);
             if (bookedServices != null && !bookedServices.isEmpty()) {
                 ColorHelper.printGreen("Saving selected services:");
-                bookedServices.forEach(x -> HotelEntityHandler.create(x));
+                bookedServices.forEach(HotelEntityHandler::create);
             }
+            ColorHelper.printGreen("------------------------------------------");
             ColorHelper.printGreen("Successfully finished reservation process!");
         } else {
             ColorHelper.printRed("Reservation canceled.");
         }
     }
 
+    /**
+     * Persist passed reservation on DB if user agrees. Cancel otherwise
+     *
+     * @param reservation reservation to persist
+     * @return true if user agreed and persist was successful, false otherwise
+     */
     private static boolean createReservationUserInput(Reservation reservation) {
         while (true) {
             ColorHelper.printGreen("The following Reservation was prepared based on your input: " + reservation.toString());
-            ColorHelper.printGreen("The following Events were booked for the reservation: ");
-            HotelEntityHandler.printAsNeutralList(reservation.getEvents().stream().toList());
+            List<Event> events = reservation.getEvents().stream().toList();
+            if (!events.isEmpty()) {
+                ColorHelper.printGreen("The following Events were booked for the reservation: ");
+                HotelEntityHandler.printAsNeutralList(reservation.getEvents().stream().toList());
+            }
             ColorHelper.printBlue("Do you want to confirm this reservation and save it to the Hotel Management System? (Services will be booked after confirmation)");
             ColorHelper.printYellow("Y - Yes (Save reservation to database)");
             ColorHelper.printYellow("N - No (Cancel and return to menu)");
@@ -105,6 +127,13 @@ public class QueryMenu {
         }
     }
 
+    /**
+     * Create a list of BookedServices with reservation based on user input.
+     * User can book one or more services
+     *
+     * @param reservation Reservation to use in new BookedServices
+     * @return List of BookedServices (can be empty)
+     */
     private static List<BookedService> fetchBookedServiceListFromUserInput(Reservation reservation) {
         List<BookedService> bookedServices = new ArrayList<>();
         while (true) {
@@ -131,6 +160,13 @@ public class QueryMenu {
         }
     }
 
+    /**
+     * Lets user choose available events in defined date range and returns them as a list.
+     *
+     * @param startDate start date
+     * @param endDate   end date
+     * @return A list of Events (can be empty)
+     */
     private static List<Event> fetchEventListFromUserInput(Date startDate, Date endDate) {
         List<Event> events = new ArrayList<>();
         while (true) {
@@ -158,6 +194,11 @@ public class QueryMenu {
         }
     }
 
+    /**
+     * Lets user choose a guest from list or create a new one
+     *
+     * @return Chosen or created guest
+     */
     private static Guest fetchGuestFromUserInput() {
         while (true) {
             ColorHelper.printBlue("Is the Guest already registered in the Hotel Management System?");
@@ -170,7 +211,7 @@ public class QueryMenu {
                 }
                 case "N", "n" -> {
                     Guest g = new Guest();
-                    g = (Guest)g.createFromUserInput();
+                    g = (Guest) g.createFromUserInput();
                     HotelEntityHandler.create(g); //persist new guest on database
                     return g;
                 }
@@ -179,6 +220,13 @@ public class QueryMenu {
         }
     }
 
+    /**
+     * Get a start and end date from user input.
+     * Dates have to be valid and start date must be before (or at) end date. No other conditions are checked.
+     * (Dates like 01.01.0000 or 31.12.12912 are valid)
+     *
+     * @return a List containing exactly 2 dates. start is at index 0 and end at 1
+     */
     private static List<Date> fetchDatesFromUserInput() {
         String instructions = "Please enter the desired Start Date in the format dd.MM.yyyy like 18.03.2024";
         String errorMessage = "Invalid Input!";
@@ -199,16 +247,32 @@ public class QueryMenu {
         }
     }
 
+    /**
+     * Fetch a list of available rooms in given date range.
+     * Rooms are available if there is no overlapping reservation or PlannedMaintenance.
+     *
+     * @param startDate start date
+     * @param endDate   end date
+     * @return A list of Rooms which are not reserved  or under maintenance during defined time range.
+     */
     private static List<Room> fetchAvailableRoomsFromUserInput(Date startDate, Date endDate) {
         EntityManager em = EMFSingleton.getEntityManager();
         try {
-            String query = "SELECT a FROM room a " +
-                    "WHERE NOT EXISTS (" +
-                    "SELECT 1 FROM reservation b " +
-                    "WHERE b.room = a AND " +
-                    "b.start_date <= :endDate AND " +
-                    "b.end_date >= :startDate" +
-                    ") ORDER BY a.room_nr";
+            String query = """
+                    SELECT a FROM room a
+                        WHERE NOT EXISTS (
+                            SELECT 1 FROM reservation b
+                                WHERE b.room = a AND
+                                b.start_date <= :endDate AND
+                                b.end_date >= :startDate
+                    )
+                    AND NOT EXISTS (
+                            SELECT 1 FROM planned_maintenance c
+                                WHERE c.room = a AND
+                                c.start_date <= :endDate AND
+                                c.end_date >= :startDate
+                    )
+                     ORDER BY a.room_nr""";
             TypedQuery<Room> tq = em.createQuery(query, Room.class);
             tq.setParameter("startDate", startDate);
             tq.setParameter("endDate", endDate);
@@ -222,30 +286,41 @@ public class QueryMenu {
 
     }
 
+    /**
+     * Fetches and prints analytics for all rooms on a defined Date (Query 2)
+     * The following data is analyzed:
+     * -> Number of booked rooms on date
+     * -> Number of empty rooms
+     * -> Sum of "lost earnings" (cost of all empty rooms)
+     * -> Sum of earnings (cost of all reserved rooms)
+     *
+     * @param date day for which to do the analysis
+     */
     private static void printRoomStats(Date date) {
         EntityManager em = EMFSingleton.getEntityManager();
         try {
             String sql =
-                    "SELECT\n" +
-                            "\tCOUNT(*) NUMBER_BOOKED_ROOMS,\n" +
-                            "\t(\n" +
-                            "\t\tSELECT\n" +
-                            "\t\t\tCOUNT(*)\n" +
-                            "\t\tFROM\n" +
-                            "\t\t\troom\n" +
-                            "\t) - COUNT(*) NUMBER_EMPTY_ROOMS,\n" +
-                            "\tCOALESCE(SUM(cost), 0) EXPECTED_EARNINGS,\n" +
-                            "\t(\n" +
-                            "\t\tSELECT\n" +
-                            "\t\t\tSUM(cost)\n" +
-                            "\t\tFROM\n" +
-                            "\t\t\troom\n" +
-                            "\t) - COALESCE(SUM(cost), 0) LOST_EARNINGS\n" +
-                            "FROM\n" +
-                            "\treservation A\n" +
-                            "\tfull outer JOIN room B ON A.room_nr = B.room_nr\n" +
-                            "WHERE\n" +
-                            "\t:targetDate BETWEEN start_date AND end_date";
+                    """
+                            SELECT
+                            COUNT(*) NUMBER_BOOKED_ROOMS,
+                                (
+                                    SELECT
+                                        COUNT(*)
+                                    FROM
+                                        room
+                                ) - COUNT(*) NUMBER_EMPTY_ROOMS,
+                                COALESCE(SUM(cost), 0) EXPECTED_EARNINGS,
+                                (
+                                SELECT
+                                        SUM(cost)
+                                    FROM
+                                        room
+                                ) - COALESCE(SUM(cost), 0) LOST_EARNINGS
+                            FROM
+                                reservation A
+                                full outer JOIN room B ON A.room_nr = B.room_nr
+                            WHERE
+                                :targetDate BETWEEN start_date AND end_date""";
 
             Query query = em.createQuery(sql);
             query.setParameter("targetDate", date);
@@ -265,13 +340,22 @@ public class QueryMenu {
         }
     }
 
+    /**
+     * Fetch a list of all PlannedMaintenances and associate employees in the defined date range
+     *
+     * @param startDate start date
+     * @param endDate   end date
+     * @return A list of PlannedMaintenances (also containing linked employees). Can be empty.
+     */
     private static List<PlannedMaintenance> findMaintenanceBetweenDates(Date startDate, Date endDate) {
         EntityManager em = EMFSingleton.getEntityManager();
         try {
-            //Joining to employee so employee name can be displayed (Feedback in lesson)
-            String query = "SELECT x FROM planned_maintenance x " +
-                    "JOIN FETCH x.employee e " +
-                    "WHERE x.start_date <= :endDate AND x.end_date >= :startDate";
+            //Joining to employee so employee name can be displayed (Feedback in last FOGL lesson)
+            String query = """
+                    SELECT x FROM planned_maintenance x
+                    JOIN FETCH x.employee e
+                        WHERE x.start_date <= :endDate
+                        AND x.end_date >= :startDate""";
             TypedQuery<PlannedMaintenance> tq = em.createQuery(query, PlannedMaintenance.class);
             tq.setParameter("startDate", startDate);
             tq.setParameter("endDate", endDate);
@@ -284,15 +368,23 @@ public class QueryMenu {
         }
     }
 
+    /**
+     * Get a list of Employees which have the right job to perform the given ServiceType.
+     *
+     * @param serviceType needed to perform
+     * @return List of Employees (can be empty)
+     */
     public static List<Employee> getEmployeesForServiceType(ServiceType serviceType) {
         EntityManager em = EMFSingleton.getEntityManager();
         int serviceTypeId = serviceType.getService_id();
 
-        String jpql = "SELECT a FROM employee a " +
-                "WHERE EXISTS (" +
-                "SELECT b FROM job b " +
-                "JOIN b.serviceTypes c " +
-                "WHERE c.id = :serviceTypeId AND a.job = b)";
+        String jpql = """
+                SELECT a FROM employee a
+                    WHERE EXISTS (
+                        SELECT b FROM job b
+                        JOIN b.serviceTypes c
+                            WHERE c.id = :serviceTypeId AND a.job = b
+                    )""";
 
         TypedQuery<Employee> query = em.createQuery(jpql, Employee.class);
         query.setParameter("serviceTypeId", serviceTypeId);

@@ -11,7 +11,7 @@ import java.util.Date;
  */
 @Entity(name = "planned_maintenance")
 @Table(name = "planned_maintenance")
-public class PlannedMaintenance extends HotelEntity  {
+public class PlannedMaintenance extends HotelEntity {
 
     /**
      * PK here
@@ -79,59 +79,13 @@ public class PlannedMaintenance extends HotelEntity  {
 
     }
 
-
-    public PlannedMaintenance(int m_type_id, Date start_date, Date end_date, int room_nr, int employee_id) {
-        this.m_type_id = m_type_id;
-        this.start_date = start_date;
-        this.end_date = end_date;
-        this.room_nr = room_nr;
-        this.employee_id = employee_id;
-    }
-
-    public int getMaint_id() {
-        return maint_id;
-    }
-
-
-
-    public int getM_type_id() {
-        return m_type_id;
-    }
-
-    public void setM_type_id(int m_type_id) {
-        this.m_type_id = m_type_id;
-    }
-
-    public Date getStart_date() {
-        return start_date;
-    }
-
     public void setStart_date(Date start_date) {
         this.start_date = start_date;
     }
 
-    public Date getEnd_date() {
-        return end_date;
-    }
 
     public void setEnd_date(Date end_date) {
         this.end_date = end_date;
-    }
-
-    public int getRoom_nr() {
-        return room_nr;
-    }
-
-    public void setRoom_nr(int room_nr) {
-        this.room_nr = room_nr;
-    }
-
-    public int getEmployee_id() {
-        return employee_id;
-    }
-
-    public void setEmployee_id(int employee_id) {
-        this.employee_id = employee_id;
     }
 
     public void setEmployee(Employee employee) {
@@ -149,6 +103,7 @@ public class PlannedMaintenance extends HotelEntity  {
     /**
      * Crate-Method.
      * Calls helper-methods, that prompt user.
+     *
      * @return (PlannedMaintenance)
      */
     public HotelEntity createFromUserInput() {
@@ -169,10 +124,10 @@ public class PlannedMaintenance extends HotelEntity  {
     private static void changeDates(PlannedMaintenance entity) {
         // Start date
         String i1 = "Please enter the Start Date in the format dd.MM.yyy like 18.03.2024";
-        entity.setStart_date(parseDateFromUser(i1,e1));
+        entity.setStart_date(parseDateFromUser(i1, e1));
         // End date
         String i2 = "Please enter the End Date in the format dd.MM.yyy like 18.03.2024";
-        entity.setEnd_date(parseDateFromUser(i2,e1));
+        entity.setEnd_date(parseDateFromUser(i2, e1));
     }
 
     private static void changeEmployee(PlannedMaintenance entity) {
@@ -195,11 +150,12 @@ public class PlannedMaintenance extends HotelEntity  {
      * Update-Method.
      * User gets prompted with menu, what to update.
      * Calls helper-methods.
+     *
      * @return
      */
     public HotelEntity updateFromUserInput() {
         // Select from index
-        ColorHelper.printBlue("Please select the " + this.getClass().getSimpleName() +" to update:");
+        ColorHelper.printBlue("Please select the " + this.getClass().getSimpleName() + " to update:");
         PlannedMaintenance entity = HotelEntityHandler.selectEntityFromFullList(this.getClass());
         // -> Query user which attribute they want to change
         while (true) {
@@ -211,14 +167,14 @@ public class PlannedMaintenance extends HotelEntity  {
             ColorHelper.printYellow("X - Finish");
             String line = scanner.nextLine();
             switch (line) {
-                case "x","X" -> {
+                case "x", "X" -> {
                     return entity;
                 }
-                case "1" ->  changeMType(entity);
-                case "2" ->  changeRoomNr(entity);
-                case "3" ->  changeEmployee(entity);
-                case "4" ->  changeDates(entity);
-                default ->  ColorHelper.printRed(e1);
+                case "1" -> changeMType(entity);
+                case "2" -> changeRoomNr(entity);
+                case "3" -> changeEmployee(entity);
+                case "4" -> changeDates(entity);
+                default -> ColorHelper.printRed(e1);
             }
 
         }
@@ -228,11 +184,11 @@ public class PlannedMaintenance extends HotelEntity  {
     public String toString() {
         return "[" +
                 "maint_id : " + maint_id +
-                ", maintenance-type : " + (maintenanceType == null ? m_type_id : "[Maintenance Type: " +maintenanceType.getMaintenance_type() + ", ID: " + maintenanceType.getM_type_id() + "]") +
+                ", maintenance-type : " + (maintenanceType == null ? m_type_id : "[Maintenance Type: " + maintenanceType.getMaintenance_type() + ", ID: " + maintenanceType.getM_type_id() + "]") +
                 ", start_date : " + start_date +
                 ", end_date : " + end_date +
-                ", room_nr : " + (room == null ? room_nr : "[" + room.getRoom_nr()+"]") +
-                ", employee : " + (employee == null ? employee_id : "[First Name: " + employee.getFirst_name() +", Last Name: " + employee.getLast_name() + ", ID: " + employee.getEmployee_id() + "]") +
+                ", room_nr : " + (room == null ? room_nr : "[" + room.getRoom_nr() + "]") +
+                ", employee : " + (employee == null ? employee_id : "[First Name: " + employee.getFirst_name() + ", Last Name: " + employee.getLast_name() + ", ID: " + employee.getEmployee_id() + "]") +
                 "]";
     }
 }

@@ -6,14 +6,20 @@ import at.fhburgenland.helpers.ColorHelper;
 
 import java.util.Scanner;
 
+/**
+ * Contains the central menu for all CRUD operations.
+ * The actual creation of objects happens in HotelEntity.
+ * All DB-interaction for CRUD happens in HotelEntityHandler.
+ */
 public class CrudMenu {
     private static final Scanner scanner = new Scanner(System.in);
 
     /**
-     * Shows a menu in which the user selects an entity type to interact with
+     * Shows a menu in which the user selects an entity type to interact with.
+     * Based on this available CRUD operations are displayed as options and triggered depending on user input.
      */
     public static void showCrudMenu() {
-        while(true) {
+        while (true) {
             ColorHelper.printBlue("Please choose an entity to view or edit:");
             ColorHelper.printYellow("1  - Room");
             ColorHelper.printYellow("2  - Reservation");
@@ -37,6 +43,7 @@ public class CrudMenu {
                 }
                 int type = Integer.parseInt(line);
                 if (type > 0 && type <= 12) {
+                    //match user input to HGotelEntity and pass it to showCrudOptions() which displays further steps.
                     showCrudOptions(emptyEntityFromType(type));
                 } else {
                     throw new NumberFormatException();
@@ -48,11 +55,13 @@ public class CrudMenu {
     }
 
     /**
-     * Displays a Menu with the 4 CRUD options to possibly perform
-     * @param entity an entity of the type to perform the CRUD operations on
+     * Displays a Menu with the 4 CRUD options to select from.
+     * Triggers methods in HotelEntityHandler and/or HotelEntity to perform actual CRUD operations.
+     *
+     * @param entity an entity of the type to perform the CRUD operations on (can be an empty entity of type)
      */
     private static void showCrudOptions(HotelEntity entity) {
-        while(true) {
+        while (true) {
             ColorHelper.printBlue("Choose the CRUD option to perform on " + entity.getClass().getSimpleName() + ":");
             ColorHelper.printYellow("1 - CREATE");
             ColorHelper.printYellow("2 - READ");
@@ -61,21 +70,29 @@ public class CrudMenu {
             ColorHelper.printOrange("X - Return");
             String line = scanner.nextLine();
             switch (line) {
+                //RETURN
                 case "X", "x" -> {
                     return;
                 }
+                //CREATE
                 case "1" -> {
                     ColorHelper.printRed("Be careful when using CRUD to create: Not all logical restrictions are checked by the program.");
+                    //Call createFromUserInput() for specific entity type
                     HotelEntity e = entity.createFromUserInput();
                     if (e != null) {
+                        //Only create if an entity was returned
                         HotelEntityHandler.create(e);
                     }
                 }
+                //READ
                 case "2" -> readEntityByIdPrompt(entity);
+                //UPDATE
                 case "3" -> {
                     if (HotelEntityHandler.readAll(entity.getClass()).isEmpty()) {
+                        //Cancel if no entities exist
                         ColorHelper.printRed("No " + entity.getClass().getSimpleName() + " found to update!");
                     } else {
+                        //Call updateFromUserInput() for specific entity type
                         ColorHelper.printRed("Be careful when using CRUD to update: Not all logical restrictions are checked by the program.");
                         HotelEntity e = entity.updateFromUserInput();
                         if (e != null) {
@@ -83,14 +100,17 @@ public class CrudMenu {
                         }
                     }
                 }
+                //DELETE
                 case "4" -> {
                     if (HotelEntityHandler.readAll(entity.getClass()).isEmpty()) {
+                        //Cancel if no entities exist
                         ColorHelper.printRed("No " + entity.getClass().getSimpleName() + " found to delete!");
                     } else {
+                        //Delete selected entity
                         ColorHelper.printBlue("Choose the " + entity.getClass().getSimpleName() + " to delete.");
                         ColorHelper.printRed("Be careful, deleting one entity can have a cascading effect on others! For example deleting a room will also delete all associated reservations.");
                         HotelEntity x = HotelEntityHandler.selectEntityFromFullList(entity.getClass());
-                        if (x == null || !HotelEntityHandler.delete(x)){
+                        if (x == null || !HotelEntityHandler.delete(x)) {
                             ColorHelper.printRed("Error while deleting!");
                         }
                     }
@@ -100,10 +120,15 @@ public class CrudMenu {
         }
     }
 
+    /**
+     * Lets user read a specific entity by ID or a list of all entities of a type.
+     *
+     * @param entity of type to read
+     */
     private static void readEntityByIdPrompt(HotelEntity entity) {
-        while(true) {
+        while (true) {
             ColorHelper.printBlue("Please enter the ID of the " + entity.getClass().getSimpleName() + " to read.");
-            ColorHelper.printBlue("Or press L to print list of all " + entity.getClass().getSimpleName() + "s" );
+            ColorHelper.printBlue("Or press L to print list of all " + entity.getClass().getSimpleName() + "s");
             String line = scanner.nextLine();
             switch (line) {
                 case "X", "x" -> {

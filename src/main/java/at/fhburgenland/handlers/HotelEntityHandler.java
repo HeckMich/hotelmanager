@@ -12,11 +12,15 @@ import java.util.List;
 import java.util.Scanner;
 
 /**
- * A class containing generic CRUD methods which can be applied to all objects extending HotelEntity
+ * A class containing generic CRUD methods which can be applied to all objects extending HotelEntity.
+ * Also implements methods to select entities from a list.
  */
 public class HotelEntityHandler {
     /**
      * Takes an object extending HotelEntity and persists it on the Database.
+     * Will write an error message to the console and return null, if technical restrictions like FK are violated.
+     * Does NOT check for logical constraints!
+     *
      * @param entity an generic object extending HotelEntity like Room or Guest
      * @return Returns the HotelEntity which was just persisted or null in case of an error.
      */
@@ -44,6 +48,8 @@ public class HotelEntityHandler {
 
     /**
      * Takes an object extending HotelEntity and removes it from the Database.
+     * Writes an error to the console if entity does not exist on DB or a constraint inhibits deletion.
+     *
      * @param entity an generic object extending HotelEntity like Room or Guest
      * @return true if deletion was successful, false if not
      */
@@ -74,6 +80,9 @@ public class HotelEntityHandler {
 
     /**
      * Takes an object extending HotelEntity and updates it on the Database, committing any changes.
+     * Will write an error message to the console and return null, if technical restrictions like FK are violated.
+     * Does NOT check for logical constraints!
+     *
      * @param entity an generic object extending HotelEntity like Room or Guest
      * @return the HotelEntity which was updated
      */
@@ -99,9 +108,11 @@ public class HotelEntityHandler {
     }
 
     /**
-     * Reads a HotelEntity with the provided class and ID from the DB
-     * @param entityClass The class (extending HotelEntity) from which to read
-     * @param id the ID of the object to read
+     * Reads a HotelEntity which matches the provided class and ID from the DB.
+     * Writes an error to the console if entity does not exist on DB.
+     *
+     * @param entityClass The class (extending HotelEntity) matching the DB Table to read from
+     * @param id          the ID of the object to read
      * @return Returns the matching DB entity or null if none was found
      */
     public static HotelEntity read(Class<HotelEntity> entityClass, int id) {
@@ -112,7 +123,8 @@ public class HotelEntityHandler {
             et = em.getTransaction();
             et.begin();
             entity = em.find(entityClass, id);
-            if (entity == null) throw new IllegalArgumentException("The HotelEntity with id : " + id + " was not found in DB." );
+            if (entity == null)
+                throw new IllegalArgumentException("The HotelEntity with id : " + id + " was not found in DB.");
             return entity;
         } catch (Exception ex) {
             if (et != null) {
@@ -126,11 +138,12 @@ public class HotelEntityHandler {
     }
 
     /**
-     * Reads a list of all objects of a class from DB
+     * Reads a list of all objects of a given class from DB
+     *
      * @param entityClass The class extending HotelEntity to be returned as a list
-     * @return A List of HoteEntity objects
+     * @return A List of HotelEntity objects (empty if none are found)
      */
-    public static <T extends HotelEntity> List<T> readAll(Class<T> entityClass){
+    public static <T extends HotelEntity> List<T> readAll(Class<T> entityClass) {
         EntityManager em = EMFSingleton.getEntityManager();
         String query = "SELECT x FROM " + entityClass.getAnnotation(Entity.class).name() + " x";
         List<T> list = null;
@@ -138,7 +151,7 @@ public class HotelEntityHandler {
             TypedQuery<T> tq = em.createQuery(query, entityClass);
             list = tq.getResultList();
         } catch (Exception ex) {
-            ex.printStackTrace();
+            System.err.println("ERROR in HotelEntityHandler readAll: " + ex.getMessage());
         } finally {
             em.close();
         }
@@ -146,24 +159,27 @@ public class HotelEntityHandler {
     }
 
     private static void printAsIndexedList(List<? extends HotelEntity> list) {
-        if (list.isEmpty())ColorHelper.printRed("List is empty.");
+        if (list.isEmpty()) ColorHelper.printRed("List is empty.");
         for (int i = 0; i < list.size(); i++) {
             ColorHelper.printYellow(i + " - " + list.get(i).toString());
         }
     }
+
     /**
-     * Prints a list of HotelEntity objects as a neutral list for display
+     * Prints a list of HotelEntity objects as a neutral list for display.
+     *
      * @param list list to print
      */
     public static void printAsNeutralList(List<? extends HotelEntity> list) {
-        if (list.isEmpty())ColorHelper.printRed("List is empty.");
+        if (list.isEmpty()) ColorHelper.printRed("List is empty.");
         for (HotelEntity entity : list) {
             System.out.println((entity.toString()));
         }
     }
 
     /**
-     *  Prints a list of all HotelEnteties of the provided class and lets user select one
+     * Prints a list of all HotelEntities of the provided class and lets user select one.
+     *
      * @param entityClass Class extending HotelEntity which to select from
      * @return the selected HotelEntity object
      */
@@ -171,8 +187,10 @@ public class HotelEntityHandler {
         List<T> list = readAll(entityClass);
         return selectEntityFromList(list);
     }
+
     /**
-     *  Prints the provided list of HotelEnteties lets user select one
+     * Prints the provided list of HotelEntities lets user select one
+     *
      * @param list list of objects extending HotelEntity from which to select from
      * @return the selected HotelEntity object
      */
@@ -181,7 +199,6 @@ public class HotelEntityHandler {
             ColorHelper.printRed("No entities in list.");
             return null;
         }
-
         Scanner scanner = new Scanner(System.in);
         int index;
         T selectedEntity;

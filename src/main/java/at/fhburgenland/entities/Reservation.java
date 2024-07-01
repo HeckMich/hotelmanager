@@ -12,7 +12,7 @@ import java.util.*;
  */
 @Entity(name = "reservation")
 @Table(name = "reservation")
-public class Reservation extends HotelEntity  {
+public class Reservation extends HotelEntity {
 
 
     /**
@@ -78,20 +78,12 @@ public class Reservation extends HotelEntity  {
      * A Reservation can have many BookedServices linked to it.
      */
     @OneToMany(mappedBy = "reservation", cascade = CascadeType.REMOVE)
-    private List<BookedService> bookedServices  = new ArrayList<>();
+    private List<BookedService> bookedServices = new ArrayList<>();
 
     public Reservation() {
     }
-    
-    public Reservation(Guest guest,Room room, Date start_date, Date end_date) {
-        this.guest = guest;
-        this.room = room;
-        this.start_date = start_date;
-        this.end_date = end_date;
-        this.event = new HashSet<>();
-    }
 
-    public Reservation(Guest guest,Room room, Date start_date, Date end_date, HashSet<Event> events) {
+    public Reservation(Guest guest, Room room, Date start_date, Date end_date, HashSet<Event> events) {
         this.guest = guest;
         this.room = room;
         this.start_date = start_date;
@@ -111,21 +103,6 @@ public class Reservation extends HotelEntity  {
         return guest;
     }
 
-
-    /**
-     * Before setting a Guest, one has to look, if the Guest exists.
-     * If there is no matching Guest, Error/Exception will be thrown
-     * @param guest_id
-     */
-    public void setGuest(int guest_id) {
-        EntityManager EM = EMFSingleton.getEntityManager();
-        Guest guest = EM.find(Guest.class, guest_id);
-        if (guest != null) {
-            this.guest = guest;
-        } else {
-            throw new IllegalArgumentException("No guest found with guest_id: " + guest_id);
-        }
-    }
 
     public Date getStart_date() {
         return start_date;
@@ -150,6 +127,7 @@ public class Reservation extends HotelEntity  {
     /**
      * Before Room is set, on hase to look, if mathcin Room exists.
      * If not, Error/Exception will be thrown.
+     *
      * @param roomNr
      */
     public void setRoom(int roomNr) {
@@ -166,19 +144,6 @@ public class Reservation extends HotelEntity  {
         return event;
     }
 
-    public void setEvent(Set<Event> event) {
-        this.event = event;
-    }
-
-    public void addEvent(Event event) {
-        this.event.add(event);
-        event.getReservations().add(this);
-    }
-    public void removeEvent(Event event) {
-        this.event.remove(event);
-        event.getReservations().remove(this);
-    }
-
     public void setRoom(Room room) {
         this.room = room;
     }
@@ -190,6 +155,7 @@ public class Reservation extends HotelEntity  {
     /**
      * Create-Method.
      * Calls helper-methods, that prompt the user.
+     *
      * @return (Reservation)
      */
     @Override
@@ -205,7 +171,6 @@ public class Reservation extends HotelEntity  {
         changeDatesFromUser(entity);
 
 
-
         return entity;
     }
 
@@ -213,11 +178,12 @@ public class Reservation extends HotelEntity  {
      * Update-Method.
      * Menu that prompts user, what to update.
      * Calls helper-methods.
+     *
      * @return (Reservation)
      */
     public HotelEntity updateFromUserInput() {
         // Select from index
-        ColorHelper.printBlue("Please select the " + this.getClass().getSimpleName() +" to update:");
+        ColorHelper.printBlue("Please select the " + this.getClass().getSimpleName() + " to update:");
         Reservation entity = HotelEntityHandler.selectEntityFromFullList(this.getClass());
         // -> Query user which attribute they want to change
         while (true) {
@@ -228,13 +194,13 @@ public class Reservation extends HotelEntity  {
             ColorHelper.printYellow("X - Finish");
             String line = scanner.nextLine();
             switch (line) {
-                case "x","X" -> {
+                case "x", "X" -> {
                     return entity;
                 }
-                case "1" ->  changeRoomFromUser(entity);
-                case "2" ->  changeGuestFromUser(entity);
-                case "3" ->  changeDatesFromUser(entity);
-                default ->  ColorHelper.printRed(e1);
+                case "1" -> changeRoomFromUser(entity);
+                case "2" -> changeGuestFromUser(entity);
+                case "3" -> changeDatesFromUser(entity);
+                default -> ColorHelper.printRed(e1);
             }
 
         }
@@ -249,10 +215,10 @@ public class Reservation extends HotelEntity  {
     private static void changeDatesFromUser(Reservation entity) {
         // Start date
         String i1 = "Please enter the Start Date in the format dd.MM.yyyy like 18.03.2024";
-        entity.setStart_date(parseDateFromUser(i1,e1));
+        entity.setStart_date(parseDateFromUser(i1, e1));
         // End date
         String i2 = "Please enter the End Date in the format dd.MM.yyyy like 18.03.2024";
-        entity.setEnd_date(parseDateFromUser(i2,e1));
+        entity.setEnd_date(parseDateFromUser(i2, e1));
     }
 
     private static void changeGuestFromUser(Reservation entity) {
@@ -267,8 +233,8 @@ public class Reservation extends HotelEntity  {
                 "reservation_id : " + reservation_id +
                 ", start_date : " + start_date +
                 ", end_date : " + end_date +
-                ", room_nr : " + (room == null ? room_nr : ""+room.getRoom_nr()) +
-                ", guest : " + (guest == null ? guest_id :"[GuestID: " + guest.getGuest_id() + ", First Name: " + guest.getFirst_name() + ", Last Name: " + guest.getLast_name() + "]") +
+                ", room_nr : " + (room == null ? room_nr : "" + room.getRoom_nr()) +
+                ", guest : " + (guest == null ? guest_id : "[GuestID: " + guest.getGuest_id() + ", First Name: " + guest.getFirst_name() + ", Last Name: " + guest.getLast_name() + "]") +
                 "]";
     }
 }

@@ -15,7 +15,7 @@ import java.util.Set;
  */
 @Entity(name = "event")
 @Table(name = "event")
-public class Event extends HotelEntity  {
+public class Event extends HotelEntity {
 
     /**
      * PK here
@@ -39,20 +39,15 @@ public class Event extends HotelEntity  {
     @JoinTable(name = "will_attend", joinColumns = {@JoinColumn(name = "event_id")}, inverseJoinColumns = {@JoinColumn(name = "reservation_id")})
     private Set<Reservation> reservation = new HashSet<>();
 
-    public Event(String name, Date date) {
-        this.name = name;
-        this.date = date;
-    }
-
-    public Event(){
-
+    public Event() {
     }
 
     /**
      * provides List of Events that take Place in a certain time-frame
-     * @param startDate
-     * @param endDate
-     * @return (List<Event>)
+     *
+     * @param startDate start date
+     * @param endDate   end date
+     * @return (List < Event >) events between startdate and enddate
      */
     public static List<Event> getEventsForReservation(Date startDate, Date endDate) {
         EntityManager em = EMFSingleton.getEntityManager();
@@ -66,11 +61,6 @@ public class Event extends HotelEntity  {
         return query.getResultList();
     }
 
-    public int getEvent_id() {
-        return event_id;
-    }
-
-
     public String getName() {
         return name;
     }
@@ -79,34 +69,18 @@ public class Event extends HotelEntity  {
         this.name = name;
     }
 
-    public Date getDate() {
-        return date;
-    }
-
     public void setDate(Date date) {
         this.date = date;
-    }
-
-    public Set<Reservation> getReservations() {
-        return reservation;
     }
 
     public void setReservation(Set<Reservation> reservation) {
         this.reservation = reservation;
     }
 
-    public void addReservation(Reservation reservation) {
-        this.reservation.add(reservation);
-        reservation.getEvents().add(this);
-    }
-    public void removeReservation(Reservation reservation) {
-        this.reservation.remove(reservation);
-        reservation.getEvents().remove(this);
-    }
-
     /**
      * Crate-method.
      * Calls varios helper-methods, that prompt the user (see below)
+     *
      * @return (Event)
      */
     @Override
@@ -122,19 +96,20 @@ public class Event extends HotelEntity  {
 
     private static void changeDate(Event entity) {
         String i2 = "Please enter the Date in the format dd.MM.yyy like 18.03.2024";
-        entity.setDate(parseDateFromUser(i2,e1));
+        entity.setDate(parseDateFromUser(i2, e1));
     }
 
     private static void changeEventName(Event entity) {
         String i1 = "Please enter the name of the Event:";
-        entity.setName(parseStringFixedLengthFromUser(i1,e1, 1, 100));
+        entity.setName(parseStringFixedLengthFromUser(i1, e1, 1, 100));
     }
 
     /**
      * Update-Method.
      * Prompts user with menu, what to update.
      * Calls various helper-methods.
-     * @return
+     *
+     * @return updated HotelEntity as written to DB
      */
     @Override
     public HotelEntity updateFromUserInput() {
@@ -149,12 +124,12 @@ public class Event extends HotelEntity  {
             ColorHelper.printYellow("X - Finish");
             String line = scanner.nextLine();
             switch (line) {
-                case "x","X" -> {
+                case "x", "X" -> {
                     return entity;
                 }
-                case "1" ->  changeEventName(entity);
-                case "2" ->  changeDate(entity);
-                default ->  ColorHelper.printRed(e1);
+                case "1" -> changeEventName(entity);
+                case "2" -> changeDate(entity);
+                default -> ColorHelper.printRed(e1);
             }
         }
     }

@@ -1,7 +1,6 @@
 package at.fhburgenland.entities;
 
 import at.fhburgenland.helpers.ColorHelper;
-import at.fhburgenland.helpers.EMFSingleton;
 import at.fhburgenland.handlers.HotelEntityHandler;
 import jakarta.persistence.*;
 
@@ -15,7 +14,7 @@ import java.util.Set;
  */
 @Entity(name = "guest")
 @Table(name = "guest")
-public class Guest extends HotelEntity  {
+public class Guest extends HotelEntity {
 
     /**
      * PK here
@@ -67,37 +66,8 @@ public class Guest extends HotelEntity  {
     public Guest() {
     }
 
-    public Guest(String plz, String last_name, String first_name, int house_number, String street) {
-        this.plz_ = plz;
-        this.last_name = last_name;
-        this.first_name = first_name;
-        this.house_number = house_number;
-        this.street = street;
-    }
-    public Guest(Plz plz, String last_name, String first_name, int house_number, String street) {
-        this.plz = plz;
-        this.last_name = last_name;
-        this.first_name = first_name;
-        this.house_number = house_number;
-        this.street = street;
-    }
-
     public int getGuest_id() {
         return guest_id;
-    }
-
-    public String getPlz() {
-        return this.plz.getPlz();
-    }
-
-    public void setPlz(String plz) {
-        EntityManager EM = EMFSingleton.getEntityManager();
-        Plz plz_obj = EM.find(Plz.class, plz);
-        if (plz != null) {
-            this.plz = plz_obj;
-        } else {
-            throw new IllegalArgumentException("No plz found with: " + plz);
-        }
     }
 
     public String getLast_name() {
@@ -116,16 +86,8 @@ public class Guest extends HotelEntity  {
         this.first_name = first_name;
     }
 
-    public int getHouse_number() {
-        return house_number;
-    }
-
     public void setHouse_number(int house_number) {
         this.house_number = house_number;
-    }
-
-    public String getStreet() {
-        return street;
     }
 
     public void setStreet(String street) {
@@ -140,6 +102,7 @@ public class Guest extends HotelEntity  {
     /**
      * Crate-method.
      * Calls various helper-methods, that prompt the user.
+     *
      * @return (Guest)
      */
     @Override
@@ -182,7 +145,8 @@ public class Guest extends HotelEntity  {
      * update-method to change the PLZ.
      * User has the choice between choosing a PLz from PLZs already in the Database,
      * or enter a new one.
-     * @param entity
+     *
+     * @param entity guest to change Plz for
      */
     private static void changePlz(Guest entity) {
         List<Plz> listAllPlz = HotelEntityHandler.readAll(Plz.class);
@@ -197,7 +161,7 @@ public class Guest extends HotelEntity  {
             String line = scanner.nextLine();
             switch (line) {
                 case "Y", "y" -> {
-                    plz =  HotelEntityHandler.selectEntityFromFullList(Plz.class);
+                    plz = HotelEntityHandler.selectEntityFromFullList(Plz.class);
                     if (plz != null) choosing = false;
                     else {
                         ColorHelper.printRed("No PLZ available to select!");
@@ -205,8 +169,8 @@ public class Guest extends HotelEntity  {
                     }
                 }
                 case "N", "n" -> {
-                    plz = (Plz)HotelEntityHandler.create(plz.createFromUserInput());
-                    if(plz != null) {
+                    plz = (Plz) HotelEntityHandler.create(plz.createFromUserInput());
+                    if (plz != null) {
                         choosing = false;
                     } else {
                         plz = new Plz();
@@ -223,6 +187,7 @@ public class Guest extends HotelEntity  {
      * Update-Method.
      * User gets prompted by menu, what to change.
      * Calls various helper-methods, that prompt the user.
+     *
      * @return (Guest)
      */
     public HotelEntity updateFromUserInput() {
@@ -240,15 +205,15 @@ public class Guest extends HotelEntity  {
             ColorHelper.printYellow("X - Finish");
             String line = scanner.nextLine();
             switch (line) {
-                case "x","X" -> {
+                case "x", "X" -> {
                     return entity;
                 }
-                case "1" ->  changePlz(entity);
-                case "2" ->  changeFirstName(entity);
-                case "3" ->  changeLastName(entity);
-                case "4" ->  changeStreet(entity);
-                case "5" ->  changeHouseNumber(entity);
-                default ->  ColorHelper.printRed(e1);
+                case "1" -> changePlz(entity);
+                case "2" -> changeFirstName(entity);
+                case "3" -> changeLastName(entity);
+                case "4" -> changeStreet(entity);
+                case "5" -> changeHouseNumber(entity);
+                default -> ColorHelper.printRed(e1);
             }
 
         }

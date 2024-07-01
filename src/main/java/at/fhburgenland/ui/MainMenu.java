@@ -1,17 +1,18 @@
 package at.fhburgenland.ui;
 
-import at.fhburgenland.entities.*;
-import at.fhburgenland.handlers.HotelEntityHandler;
 import at.fhburgenland.helpers.ColorHelper;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
+/**
+ * Main menu displayed on program start.
+ * All functionality is initially triggered from here.
+ */
 public class MainMenu {
-    private static Scanner scanner = new Scanner(System.in);
+    private static final Scanner scanner = new Scanner(System.in);
+
     public static void showMainMenu() {
-        while(true) {
+        while (true) {
             ColorHelper.printBlue("----------------------------------------------------------------------");
             ColorHelper.printBlue("Welcome to the Hotel Management System! Please choose an option below:");
             ColorHelper.printBlue("----------------------------------------------------------------------");

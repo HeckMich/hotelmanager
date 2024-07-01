@@ -14,7 +14,7 @@ import java.util.Set;
  */
 @Entity(name = "maintenance_type")
 @Table(name = "maintenance_type")
-public class MaintenanceType extends HotelEntity  {
+public class MaintenanceType extends HotelEntity {
 
     /**
      * PK here
@@ -45,15 +45,9 @@ public class MaintenanceType extends HotelEntity  {
 
     }
 
-    public MaintenanceType(int m_type_id, String maintenance_type) {
-        this.m_type_id = m_type_id;
-        this.maintenance_type = maintenance_type;
-    }
-
     public int getM_type_id() {
         return m_type_id;
     }
-
 
 
     public String getMaintenance_type() {
@@ -67,6 +61,7 @@ public class MaintenanceType extends HotelEntity  {
     /**
      * Create-Method.
      * Calls helper-method, that prompts user.
+     *
      * @return (MaintenanceType)
      */
     @Override
@@ -88,11 +83,12 @@ public class MaintenanceType extends HotelEntity  {
     /**
      * Update-Methos.
      * User gets prompted by menu, what to update.
+     *
      * @return (MaintenanceType)
      */
     public HotelEntity updateFromUserInput() {
         // Select from index
-        ColorHelper.printBlue("Please select the " + this.getClass().getSimpleName() +" to update:");
+        ColorHelper.printBlue("Please select the " + this.getClass().getSimpleName() + " to update:");
         MaintenanceType entity = HotelEntityHandler.selectEntityFromFullList(this.getClass());
         // -> Query user which attribute they want to change
         while (true) {
@@ -101,11 +97,11 @@ public class MaintenanceType extends HotelEntity  {
             ColorHelper.printYellow("X - Finish");
             String line = scanner.nextLine();
             switch (line) {
-                case "x","X" -> {
+                case "x", "X" -> {
                     return entity;
                 }
-                case "1" ->  changeType(entity);
-                default ->  ColorHelper.printRed(e1);
+                case "1" -> changeType(entity);
+                default -> ColorHelper.printRed(e1);
             }
 
         }

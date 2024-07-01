@@ -15,7 +15,7 @@ import java.util.Set;
  */
 @Entity(name = "service_type")
 @Table(name = "service_type")
-public class ServiceType extends HotelEntity  {
+public class ServiceType extends HotelEntity {
 
     /**
      * PK here
@@ -37,7 +37,7 @@ public class ServiceType extends HotelEntity  {
      * One ServiceType can be linked to many different BookedServices
      */
     @OneToMany(mappedBy = "serviceType", cascade = CascadeType.REMOVE)
-    private List<BookedService> bookedServices  = new ArrayList<>();
+    private List<BookedService> bookedServices = new ArrayList<>();
 
     /**
      * Many ServiceTypes can be done by many different Jobs (between-table "can_do_service")
@@ -54,14 +54,6 @@ public class ServiceType extends HotelEntity  {
         this.cost = cost;
     }
 
-    public List<BookedService> getBookedServices() {
-        return bookedServices;
-    }
-
-    public void setBookedServices(List<BookedService> bookedServices) {
-        this.bookedServices = bookedServices;
-    }
-
     public int getService_id() {
         return service_id;
     }
@@ -74,34 +66,15 @@ public class ServiceType extends HotelEntity  {
         this.name = name;
     }
 
-    public BigDecimal getCost() {
-        return cost;
-    }
 
     public void setCost(BigDecimal cost) {
         this.cost = cost;
     }
 
-    public Set<Job> getJobs() {
-        return jobs;
-    }
-
-    public void setJobs(Set<Job> jobs) {
-        this.jobs = jobs;
-    }
-
-    public void addJob(Job job) {
-        this.jobs.add(job);
-        job.getServiceTypes().add(this);
-    }
-    public void removeJob(Job job) {
-        this.jobs.remove(job);
-        job.getServiceTypes().remove(this);
-    }
-
     /**
      * Create-Method.
      * Calls helper-methods, that ptompt user.
+     *
      * @return (ServiceType)
      */
     @Override
@@ -117,23 +90,24 @@ public class ServiceType extends HotelEntity  {
 
     private static void changeCostFromUser(ServiceType entity) {
         String i2 = "Please enter the cost of the Service Type. Only enter a number using '.' for up to two decimal points! To a Maximum of 999.99";
-        entity.setCost(parseBigDecimalFromUser(i2,e1));
+        entity.setCost(parseBigDecimalFromUser(i2, e1));
     }
 
     private void changeNameFromUser(ServiceType entity) {
         String i1 = "Please enter the name of the Service Type:";
-        entity.setName(parseStringFromUser(i1,e1));
+        entity.setName(parseStringFromUser(i1, e1));
     }
 
     /**
      * Update-Method.
      * Menu prompts user, what to update.
      * Calls helper-methods.
+     *
      * @return (ServiceType)
      */
     public HotelEntity updateFromUserInput() {
         // Select from index
-        ColorHelper.printBlue("Please select the " + this.getClass().getSimpleName() +" to update:");
+        ColorHelper.printBlue("Please select the " + this.getClass().getSimpleName() + " to update:");
         ServiceType entity = HotelEntityHandler.selectEntityFromFullList(this.getClass());
         // -> Query user which attribute they want to change
         while (true) {
@@ -143,12 +117,12 @@ public class ServiceType extends HotelEntity  {
             ColorHelper.printYellow("X - Finish");
             String line = scanner.nextLine();
             switch (line) {
-                case "x","X" -> {
+                case "x", "X" -> {
                     return entity;
                 }
-                case "1" ->  changeNameFromUser(entity);
-                case "2" ->  changeCostFromUser(entity);
-                default ->  ColorHelper.printRed(e1);
+                case "1" -> changeNameFromUser(entity);
+                case "2" -> changeCostFromUser(entity);
+                default -> ColorHelper.printRed(e1);
             }
         }
     }

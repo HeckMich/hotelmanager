@@ -14,7 +14,7 @@ import java.util.Set;
  */
 @Entity(name = "job")
 @Table(name = "job")
-public class Job extends HotelEntity  {
+public class Job extends HotelEntity {
 
     /**
      * PK here
@@ -38,13 +38,13 @@ public class Job extends HotelEntity  {
     /**
      * One Job can have many Employees, who can do that Job
      */
-    @OneToMany(mappedBy = "job")
+    @OneToMany(mappedBy = "job", cascade = CascadeType.REMOVE)
     private List<Employee> employees = new ArrayList<>();
 
     /**
      * Many Jobs can do many different MaintenanceTypes
      */
-    @ManyToMany(mappedBy = "jobs")
+    @ManyToMany(mappedBy = "jobs", cascade = CascadeType.REMOVE)
     private Set<MaintenanceType> maintenanceTypes = new HashSet<>();
 
     public Job() {
@@ -55,19 +55,6 @@ public class Job extends HotelEntity  {
         this.name = name;
     }
 
-    public int getJob_id() {
-        return job_id;
-    }
-
-
-    public Set<ServiceType> getServiceTypes() {
-        return serviceTypes;
-    }
-
-    public void setServiceTypes(Set<ServiceType> serviceTypes) {
-        this.serviceTypes = serviceTypes;
-    }
-
     public String getName() {
         return name;
     }
@@ -76,26 +63,11 @@ public class Job extends HotelEntity  {
         this.name = name;
     }
 
-    public List<Employee> getEmployees() {
-        return employees;
-    }
-
-    public void setEmployees(List<Employee> employees) {
-        this.employees = employees;
-    }
-
-    public void addServiceType(ServiceType serviceType) {
-        this.serviceTypes.add(serviceType);
-        serviceType.getJobs().add(this);
-    }
-    public void removeServiceType(ServiceType serviceType) {
-        this.serviceTypes.remove(serviceType);
-        serviceType.getJobs().remove(this);
-    }
 
     /**
      * Create-Method.
      * Calls helper-method, that prompts user.
+     *
      * @return (Job)
      */
     @Override
@@ -109,18 +81,19 @@ public class Job extends HotelEntity  {
 
     private void changeName(Job entity) {
         String i1 = "Please enter the name of the Job:";
-        entity.setName(parseStringFromUser(i1,e1));
+        entity.setName(parseStringFromUser(i1, e1));
     }
 
     /**
      * Update-Method.
      * Prompts user with menu, what to change.
      * Calls helper-method.
+     *
      * @return
      */
     public HotelEntity updateFromUserInput() {
         // Select from index
-        ColorHelper.printBlue("Please select the " + this.getClass().getSimpleName() +" to update:");
+        ColorHelper.printBlue("Please select the " + this.getClass().getSimpleName() + " to update:");
         Job entity = HotelEntityHandler.selectEntityFromFullList(this.getClass());
         // -> Query user which attribute they want to change
         while (true) {
@@ -129,11 +102,11 @@ public class Job extends HotelEntity  {
             ColorHelper.printYellow("X - Finish");
             String line = scanner.nextLine();
             switch (line) {
-                case "x","X" -> {
+                case "x", "X" -> {
                     return entity;
                 }
-                case "1" ->  changeName(entity);
-                default ->  ColorHelper.printRed(e1);
+                case "1" -> changeName(entity);
+                default -> ColorHelper.printRed(e1);
             }
 
         }

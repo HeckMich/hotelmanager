@@ -12,7 +12,7 @@ import java.util.List;
  */
 @Entity(name = "employee")
 @Table(name = "employee")
-public class Employee extends HotelEntity  {
+public class Employee extends HotelEntity {
 
     /**
      * PK here
@@ -37,7 +37,7 @@ public class Employee extends HotelEntity  {
     private String last_name;
 
     @OneToMany(mappedBy = "employee", cascade = CascadeType.REMOVE)
-    private List<BookedService> bookedServices  = new ArrayList<>();
+    private List<BookedService> bookedServices = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "job_id")
@@ -50,22 +50,8 @@ public class Employee extends HotelEntity  {
 
     }
 
-    public Employee(int job_id, String first_name, String last_name) {
-        this.job_id = job_id;
-        this.first_name = first_name;
-        this.last_name = last_name;
-    }
-
     public int getEmployee_id() {
         return employee_id;
-    }
-
-    public int getJob_id() {
-        return job_id;
-    }
-
-    public void setJob_id(int job_id) {
-        this.job_id = job_id;
     }
 
     public String getFirst_name() {
@@ -84,33 +70,14 @@ public class Employee extends HotelEntity  {
         this.last_name = last_name;
     }
 
-    public List<BookedService> getBookedServices() {
-        return bookedServices;
-    }
-
-    public void setBookedServices(List<BookedService> bookedServices) {
-        this.bookedServices = bookedServices;
-    }
-
-    public Job getJob() {
-        return job;
-    }
-
     public void setJob(Job job) {
         this.job = job;
-    }
-
-    public List<PlannedMaintenance> getPlannedMaintenances() {
-        return plannedMaintenances;
-    }
-
-    public void setPlannedMaintenances(List<PlannedMaintenance> plannedMaintenances) {
-        this.plannedMaintenances = plannedMaintenances;
     }
 
     /**
      * Create-Method
      * calls various helper-methods (see below)
+     *
      * @return (Employee)
      */
     @Override
@@ -148,6 +115,7 @@ public class Employee extends HotelEntity  {
      * Update-Method.
      * User gets prompted by menu.
      * Calls various helper-methods
+     *
      * @return (Employee)
      */
     @Override
@@ -164,13 +132,13 @@ public class Employee extends HotelEntity  {
             ColorHelper.printYellow("X - Finish");
             String line = scanner.nextLine();
             switch (line) {
-                case "x","X" -> {
+                case "x", "X" -> {
                     return entity;
                 }
-                case "1" ->  changeJob(entity);
-                case "2" ->  changeFirstName(entity);
-                case "3" ->  changeLastName(entity);
-                default ->  ColorHelper.printRed(e1);
+                case "1" -> changeJob(entity);
+                case "2" -> changeFirstName(entity);
+                case "3" -> changeLastName(entity);
+                default -> ColorHelper.printRed(e1);
             }
 
         }

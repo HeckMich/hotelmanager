@@ -6,7 +6,6 @@ import at.fhburgenland.handlers.HotelEntityHandler;
 import at.fhburgenland.ui.QueryMenu;
 import jakarta.persistence.*;
 
-import java.security.Provider;
 import java.util.List;
 
 /**
@@ -59,11 +58,6 @@ public class BookedService extends HotelEntity {
     public BookedService() {
 
     }
-    public BookedService(Reservation reservation, ServiceType serviceType, Employee employee) {
-        this.reservation = reservation;
-        this.serviceType = serviceType;
-        this.employee = employee;
-    }
 
     public Reservation getReservation() {
         return reservation;
@@ -72,7 +66,8 @@ public class BookedService extends HotelEntity {
     /**
      * sets Reservation by searching first for an existing Reservation
      * if no matching Reservation is found, Error will be thrown
-     * @param reservation_id
+     *
+     * @param reservation_id id to set
      */
     public void setReservation(int reservation_id) {
         EntityManager EM = EMFSingleton.getEntityManager();
@@ -88,42 +83,8 @@ public class BookedService extends HotelEntity {
         return serviceType;
     }
 
-    /**
-     * sets ServiceType by searching first for an existing ServiceType
-     *  if no matching ServiceType is found, Error will be thrown
-     * @param service_id
-     */
-    public void setServiceType(int service_id) {
-        EntityManager EM = EMFSingleton.getEntityManager();
-        ServiceType serviceType1 = EM.find(ServiceType.class, service_id);
-        if (serviceType1 != null) {
-            this.serviceType = serviceType1;
-        } else {
-            throw new IllegalArgumentException("No serviceType found with id: " + service_id);
-        }
-    }
-
-    public Employee getEmployee() {
-        return employee;
-    }
-
     public void setEmployee(Employee employee) {
         this.employee = employee;
-    }
-
-    /**
-     * sets Eployee by searching first for an existing Employee
-     * if no matching Employee is found, Error will be thrown
-     * @param employee_id
-     */
-    public void setEmployee(int employee_id) {
-        EntityManager EM = EMFSingleton.getEntityManager();
-        Employee employee1 = EM.find(Employee.class, employee_id);
-        if (employee1 != null) {
-            this.employee = employee1;
-        } else {
-            throw new IllegalArgumentException("No employee found with id: " + employee_id);
-        }
     }
 
     public void setReservation(Reservation reservation) {
@@ -137,6 +98,7 @@ public class BookedService extends HotelEntity {
     /**
      * new BookedService is created by prompting the user.
      * For this: other methods are called (see below)
+     *
      * @return (BookedService)
      */
     @Override
@@ -153,7 +115,7 @@ public class BookedService extends HotelEntity {
             //Service ID
             ServiceType stype = changeServiceType(entity);
             //Employe ID
-            Employee e = getEmployeeRestricted(entity,stype);
+            Employee e = getEmployeeRestricted(stype);
             if (e == null) {
                 ColorHelper.printRed("Please choose a different service.");
             } else {
@@ -176,28 +138,28 @@ public class BookedService extends HotelEntity {
         entity.setReservation(reservation);
     }
 
+
     /**
-     * shows List of qualified and available employees
-     * @param entity
-     * @param serviceType
-     * @return (Employee)
+     * Shows List of qualified and available employees
+     *
+     * @param serviceType service which employees are qualified for
+     * @return list of employees
      */
-    private static Employee getEmployeeRestricted(BookedService entity, ServiceType serviceType) {
+    private static Employee getEmployeeRestricted(ServiceType serviceType) {
         System.out.println("Please choose which qualified employee should perform the service: ");
         List<Employee> employeeOptions = QueryMenu.getEmployeesForServiceType(serviceType);
         if (employeeOptions == null || employeeOptions.isEmpty()) {
             ColorHelper.printRed("No employees available!");
             return null;
         }
-        Employee employee = HotelEntityHandler.selectEntityFromList(employeeOptions);
-        return employee;
+        return HotelEntityHandler.selectEntityFromList(employeeOptions);
     }
-
 
     /**
      * Creates a BookedService from user input in a manner suitable for the Reservation process (query 3)
-     * @param reservation
-     * @return (BookedService)
+     *
+     * @param reservation Reservation to set for
+     * @return (BookedService) finished BookedService
      */
     public static BookedService createFromUserInputForReservationProcess(Reservation reservation) {
         BookedService entity = new BookedService();
@@ -232,12 +194,12 @@ public class BookedService extends HotelEntity {
             ColorHelper.printYellow("X - Finish");
             String line = scanner.nextLine();
             switch (line) {
-                case "x","X" -> {
+                case "x", "X" -> {
                     return entity;
                 }
-                case "1" ->  changeServiceTypeAndEmployee(entity);
-                case "2" ->  changeReservationID(entity);
-                default ->  ColorHelper.printRed(e1);
+                case "1" -> changeServiceTypeAndEmployee(entity);
+                case "2" -> changeReservationID(entity);
+                default -> ColorHelper.printRed(e1);
             }
         }
     }
@@ -246,7 +208,7 @@ public class BookedService extends HotelEntity {
     public String toString() {
         return "[" +
                 "ID: " + bookedserviceid +
-                ", reservation : " + (reservation == null ? reservation_id : "[ ID: "+reservation.getReservation_id()) + ", RoomNr: " + reservation.getRoom_nr() + "]" +
+                ", reservation : " + (reservation == null ? reservation_id : "[ ID: " + reservation.getReservation_id()) + ", RoomNr: " + reservation.getRoom_nr() + "]" +
                 ", serviceType : " + (serviceType == null ? service_id : "[ ID: " + serviceType.getService_id() + ", Type: " + serviceType.getName() + "]") +
                 ", employee : " + employee +
                 "]";
