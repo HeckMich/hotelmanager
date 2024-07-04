@@ -1,4 +1,8 @@
-TRUNCATE TABLE INVOICE,
+--Script to fill the tables for the Hotel Management System with test-data
+--IMPORTANT: Please run the SQL_CREATE.sql script first!
+
+TRUNCATE TABLE
+INVOICE,
 BOOKED_SERVICE,
 WILL_ATTEND,
 RESERVATION,

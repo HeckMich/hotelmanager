@@ -1,3 +1,11 @@
+--Script to create the tables needed for the Hotel Management System to work
+--IMPORTANT: Please also run the SQL_INSERT.sql script afterwards in order for the system to work as intended.
+
+--Optionally run the following commands (separately) in pgAdmin to create the Database if not yet set up:
+--  drop database if exists "Gruppe12";
+--  create database "Gruppe12";
+
+
 DROP TABLE IF EXISTS INVOICE;
 
 DROP TABLE IF EXISTS BOOKED_SERVICE;

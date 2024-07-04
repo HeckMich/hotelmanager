@@ -230,8 +230,8 @@ public class Reservation extends HotelEntity {
     @Override
     public String toString() {
         return "[" +
-                (reservation_id == 0 ? "" : "reservation_id : " + reservation_id) +
-                ", start_date : " + start_date +
+                (reservation_id == 0 ? "" : "reservation_id : " + reservation_id+ ", ") +
+                "start_date : " + start_date +
                 ", end_date : " + end_date +
                 ", room_nr : " + (room == null ? room_nr : "" + room.getRoom_nr()) +
                 ", guest : " + (guest == null ? guest_id : "[GuestID: " + guest.getGuest_id() + ", First Name: " + guest.getFirst_name() + ", Last Name: " + guest.getLast_name() + "]") +
