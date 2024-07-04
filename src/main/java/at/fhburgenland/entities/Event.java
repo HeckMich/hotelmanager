@@ -5,10 +5,7 @@ import at.fhburgenland.helpers.ColorHelper;
 import at.fhburgenland.helpers.EMFSingleton;
 import jakarta.persistence.*;
 
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * class for entity "event"
@@ -135,11 +132,27 @@ public class Event extends HotelEntity {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Event event)) return false;
+        return event_id == event.event_id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(event_id);
+    }
+
+    @Override
     public String toString() {
         return "[" +
                 "event_id : " + event_id +
                 ", name : '" + name + '\'' +
                 ", date : " + date +
                 "]";
+    }
+
+    public Collection<Reservation> getReservation() {
+        return this.reservation;
     }
 }

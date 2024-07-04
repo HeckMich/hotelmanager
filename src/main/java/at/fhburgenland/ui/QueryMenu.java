@@ -5,6 +5,7 @@ import at.fhburgenland.handlers.HotelEntityHandler;
 import at.fhburgenland.helpers.EMFSingleton;
 import at.fhburgenland.helpers.ColorHelper;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.Query;
 import jakarta.persistence.TypedQuery;
 
@@ -76,12 +77,14 @@ public class QueryMenu {
         Guest guest = fetchGuestFromUserInput();
         ColorHelper.printGreen("The following guest was selected / registered: " + guest);
         //Book Event(s)
-        // -> Get list from user and add to reservation
+        // -> Get list from user
         ColorHelper.printBlue("Now optionally add events for the guest to attend:");
+        List<Event> fetchedEvents = fetchEventListFromUserInput(dateList.get(0), dateList.get(1));
+        // -> Add to reservation
         HashSet<Event> eventHashSet = new HashSet<>();
-        eventHashSet.addAll(fetchEventListFromUserInput(dateList.get(0), dateList.get(1)));
+        eventHashSet.addAll(fetchedEvents);
         Reservation reservation = new Reservation(guest, selectedRoom, dateList.get(0), dateList.get(1), eventHashSet);
-        //Persist reservation if user agrees
+        //Persist reservation and events if user agrees
         if (createReservationUserInput(reservation)) {
             ColorHelper.printGreen("Reservation confirmed: " + reservation);
             //Fetch BookedServices from user and persist
@@ -117,13 +120,51 @@ public class QueryMenu {
             String line = scanner.nextLine();
             switch (line) {
                 case "Y", "y" -> {
-                    return (HotelEntityHandler.create(reservation) != null);
+                    return createReservationWithEvents(reservation); //Persist reservation and linked events
                 }
                 case "N", "n" -> {
                     return false;
                 }
                 default -> ColorHelper.printRed("Invalid input!");
             }
+        }
+    }
+
+    /**
+     * Takes a Reservation entity, extracts its Event set, manages each event, and then persists the reservation (including events).
+     * @param reservation a Reservation entity containing a set of Event entities
+     * @return true if reservation (including events) was successfully added to DB, false if not
+     */
+    public static boolean createReservationWithEvents(Reservation reservation) {
+        Set<Event> events = reservation.getEvents();
+        EntityManager em = EMFSingleton.getEntityManager();
+        EntityTransaction et = em.getTransaction();
+        try {
+            et.begin();
+
+            // Manage events and update both sides of the relationship
+            // -> Otherwise will_attend table (manyToMany) is not updated correctly
+            Set<Event> managedEvents = new HashSet<>();
+            for (Event event : events) {
+                Event managedEvent = em.contains(event) ? event : em.merge(event); //manage event with em
+                managedEvents.add(managedEvent);
+                managedEvent.getReservation().add(reservation);
+            }
+            reservation.setEvents(managedEvents);  // add fully managed events to reservation
+
+            // Persist reservation on DB
+            em.persist(reservation);
+            et.commit();
+            ColorHelper.printGreen("Reservation and events successfully saved.");
+            return true;
+        } catch (Exception ex) {
+            if (et != null) {
+                et.rollback();
+            }
+            ColorHelper.printRed("Error in QueryMenu / createReservationWithEvents: " + ex.getMessage());
+            return false;
+        } finally {
+            em.close();
         }
     }
 
@@ -182,8 +223,12 @@ public class QueryMenu {
                         return events;
                     } else {
                         Event e = HotelEntityHandler.selectEntityFromList(availableEvents);
-                        events.add(e);
-                        ColorHelper.printGreen("Added the following event to reservation: " + e);
+                        if (!events.contains(e)) {
+                            events.add(e);
+                            ColorHelper.printGreen("Added the following event to the reservation: " + e);
+                        } else {
+                            ColorHelper.printRed("The following event was has already been added to the reservation and can not be added again: " + e);
+                        }
                     }
                 }
                 case "N", "n" -> {

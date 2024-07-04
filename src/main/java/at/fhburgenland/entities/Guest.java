@@ -122,7 +122,7 @@ public class Guest extends HotelEntity {
     }
 
     private static void changeHouseNumber(Guest entity) {
-        String i4 = "Please enter the House Number of the Guest";
+        String i4 = "Please enter the House Number of the Guest. Only enter a number.";
         entity.setHouse_number(parseIntFromUser(i4, e1));
     }
 
